@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, init-scale=1, user-scalable=no">
+    <title>在线报名</title>
+
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <!--<link href="css/font-awesome.css" rel="stylesheet">-->
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/jquerysctipttop.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        #tablist{
+            margin: 30px 0;
+        }
+        .feature{
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<!--导航-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img alt="Brand" class="navbar-brand hover" src="///png.icons8.com/html/win8/50/5B5B5B"/>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; 首页 <span class="sr-only">(current)</span></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><i class="fa fa-mortar-board" aria-hidden="true"></i>&nbsp;资格考试 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;考试动态 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+                <li><a href="#"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp;关于我们</a></li>
+                <li><a href="#"><i class="fa fa-phone fa-fw" aria-hidden="true"></i>&nbsp;联系我们</a></li>
+            </ul>
+            <form class="navbar-form navbar-left">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="搜索">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><span class="fa fa-search"/></button>
+                    </span>
+                </div>
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><i class="fa fa-id-card-o" aria-hidden="true"></i>&nbsp;&nbsp;<strong>您好，XXX</strong></a></li>
+                <li><a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;个人中心</a></li>
+                <li><a href="#"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;登录</a></li>
+                <li><a href="#"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;注册</a></li>
+                <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true">&nbsp;&nbsp;退出</i></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--导航-->
+
+<!--内容-->
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="item active"> <img src="../images/a1.jpg" style="width:100%" alt="First slide">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>Slide 1</h1>
+                    <p>Aenean a rutrum nulla. Vestibulum a arcu at nisi tristique pretium.</p>
+                    <p><a class="btn btn-lg btn-primary" href="http://618cj.com" role="button">adward_z</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="item"> <img src="../images/b1.jpg" style="width:100%" data-src="" alt="Second    slide">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>Slide 2</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae egestas purus. </p>
+                    <p><a class="btn btn-lg btn-primary" href="http://618cj.com" role="button">adward_z</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="item"> <img src="../images/c1.jpg" style="width:100%" data-src="" alt="Third slide">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h1>Slide 3</h1>
+                    <p>Donec sit amet mi imperdiet mauris viverra accumsan ut at libero.</p>
+                    <p><a class="btn btn-lg btn-primary" href="http://618cj.com" role="button">adward_z</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
+</div>
+<div class="container" style="margin-top: -20px;padding-bottom: 20px;">
+
+    <div class="row">
+        <div class="col-md-9 col-xs-12">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" id="tablist">
+                <li role="presentation" class="active"><a href="#action-1" role="tab" data-toggle="tab"><i class="fa fa-calendar" aria-hidden="true"></i> 动态1</a></li>
+                <li role="presentation"><a href="#action-2" role="tab" data-toggle="tab"><i class="fa fa-calendar" aria-hidden="true"></i> 动态2</a></li>
+                <li role="presentation"><a href="#action-3" role="tab" data-toggle="tab"><i class="fa fa-calendar" aria-hidden="true"></i> 动态3</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="action-1">
+                    <div class="row feature">
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="action-2">
+                    <div class="row feature">
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="action-3">
+                    <div class="row feature">
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                        <div class="padding-enlg"><a href="#">Google Chrome<span class="pull-right">2018-01-30</span></a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-3 col-xs-12">
+            <div class="panel panel-default panel-margin">
+                <div class="panel-body panel-body-margin">
+                    <h2 class="text-center">
+                        <img src="../images/suit1.png" style="width: 20px;height: 20px;">
+                        <span>最新通知</span>
+                    </h2>
+                    <hr>
+                    <ul>
+                        <li><a href="#"><i></i><span>浮动效果待添加浮动效果待添加浮动效果待添加</span></a></li>
+                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                    </ul>
+                    <a href="#" class="pull-right">More></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <strong>要闻速递</strong>
+            <a href="#" class="pull-right">More></a>
+            <div id="content2">
+                <ul style="display:block;">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            <img src="../images/b1.jpg" alt="pic"/>
+                        </dt>
+                        <dd>
+                            <h3>2016年10月25日广播体操比赛</h3>
+                            <span>为了提高我校的广播操质量，激发同学们做广播操的积极性与热情，同时也为了丰富学生校园文化生活...<a href="#" class="more2">More></a></span>
+                        </dd>
+                    </dl>
+                    <li><a href="#">
+                        <h4>教学管理中心开展学期初教学培训活动</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年10月11日羽毛球比赛</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年10月6日国庆篮球赛</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年9月30日班主任座谈会</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年9月7日走进泰山医学院</h4>
+                        <span>2017/01/16</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+        <hr class="hr-hidden"/>
+        <div class="col-md-6 col-sm-12">
+            <strong>要闻速递</strong>
+            <a href="#" class="pull-right">More></a>
+            <div id="content3">
+                <ul style="display:block;">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            <img src="../images/b1.jpg" alt="pic"/>
+                        </dt>
+                        <dd>
+                            <h3>2016年10月25日广播体操比赛</h3>
+                            <span>为了提高我校的广播操质量，激发同学们做广播操的积极性与热情，同时也为了丰富学生校园文化生活...<a href="#" class="more2">More></a></span>
+                        </dd>
+                    </dl>
+                    <li><a href="#">
+                        <h4>教学管理中心开展学期初教学培训活动</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年10月11日羽毛球比赛</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年10月6日国庆篮球赛</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年9月30日班主任座谈会</h4>
+                        <span>2017/01/16</span></a></li>
+                    <li><a href="#">
+                        <h4>2016年9月7日走进泰山医学院</h4>
+                        <span>2017/01/16</span></a></li>
+                </ul>
+            </div></div>
+    </div>
+
+</div>
+<!--内容-->
+
+
+
+<!--底部-->
+<div class="footer">
+    <div class="container">
+        <div class="col-md-4 col-xs-12">
+            <ul class="li-align">
+                <h2 class="text-center"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;信息资讯</h2>
+                <p><a href="#">最新招考资讯</a></p>
+                <p><a href="#">最新开课通知</a></p>
+                <p><a href="#">报名点</a></p>
+                <p><a href="#">教学点</a></p>
+            </ul>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <ul class="li-align">
+                <h2 class="text-center"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp;书库</h2>
+                <p><a href="#">标题1</a></p>
+                <p><a href="#">免费课堂</a></p>
+                <p><a href="#">图书</a></p>
+            </ul>
+        </div>
+        <div class="col-md-4 col-xs-12">
+            <ul class="li-align">
+                <h2 class="text-center"><i class="fa fa-phone fa-fw" aria-hidden="true"></i>&nbsp;联系我们</h2>
+                <p><a href="#">联系我们</a></p>
+                <p><a href="#">在线留言</a></p>
+                <p><a href="#">招聘英才</a></p>
+            </ul>
+        </div>
+        <div class="social">
+            <ul>
+                <li><a href="#"><i class="fa fa-qq"></i></a></li>
+                <li><a href="#"><i class="fa fa-weixin"></i></a></li>
+                <li><a href="#"><i class="fa fa-weibo"></i></a></li>
+                <li><a href="#"><i class="fa fa-github"></i></a></li>
+            </ul>
+        </div>
+        <div class="border"></div>
+        <div class="agileits-w3layouts-copyright">
+            <p>©&nbsp;2018&nbsp;版权归Adward_Z所有&nbsp;<a href="#top">回到顶部</a></p>
+        </div>
+    </div>
+</div>
+<!--底部-->
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script>
+    // $(document).ready(function () {
+    //     $('#demo-navbar .navbar-collapse a'){
+    //         var href = $(this).attr('href');
+    //         $("#tablist a[href='" + href "']").tab("show");
+    //     }
+    // });
+</script>
+</body>
+</html>
