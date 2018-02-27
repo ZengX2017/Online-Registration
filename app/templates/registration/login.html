@@ -1,0 +1,34 @@
+{% extends "registration/registration.html" %}
+{% block title %}
+    登录
+{% endblock %}
+{% block content %}
+    <div class="container">
+    <div class="login_con">
+        <h1>登录/LOGIN</h1>
+        <form role="form" class="form-border">
+            <div class="form-group">
+                <label for="user_id"><i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;账号</label>
+                <input type="text" class="form-control" id="user_id" placeholder="请输入您的账号">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fa fa-lock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;密码</label>
+                <input type="password" class="form-control" id="password" placeholder="请输入您的密码">
+            </div>
+            <div class="form-group">
+                <label for="yzm"><i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;验证码</label>
+                <input type="text" class="form-control" id="yzm" placeholder="请输入图中的验证码">
+                <img src="images/yzm.png" alt="验证码pic">
+            </div>
+            <div class="fg-reg">
+                <a href="#" class="fg-reg-left">忘记密码</a>
+                &nbsp;
+                <a href="{{ url_for('registration.register') }}" class="fg-reg-right">免费注册</a>
+            </div>
+
+            <div class="text-center"><button type="submit" class="btn btn-default">登录</button></div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

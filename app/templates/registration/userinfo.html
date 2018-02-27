@@ -1,0 +1,58 @@
+{% extends 'registration/registration.html' %}
+{% block title %}
+    个人中心
+{% endblock %}
+{% block content %}
+    <div class="container">
+
+    <!--左侧栏-->
+    {% include 'registration/grid.html' %}
+
+    <!--右侧栏-->
+    <div class="col-md-9 info-right">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;个人中心</h3>
+            </div>
+            <div class="panel-body">
+                {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                <p class="login-box-msg" style="color:green">{{ msg }}</p>
+                {% endfor %}
+                {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                <p class="login-box-msg" style="color:red">{{ msg }}</p>
+                {% endfor %}
+            </div>
+            <div class="panel-body">
+                {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                <p class="login-box-msg" style="color:green">{{ msg }}</p>
+                {% endfor %}
+                {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                <p class="login-box-msg" style="color:red">{{ msg }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="text-center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">上一页</a></li>
+                    <li class="active"><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">下一页</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}

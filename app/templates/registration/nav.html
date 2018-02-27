@@ -1,0 +1,75 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img alt="Brand" class="navbar-brand hover" src="///png.icons8.com/html/win8/50/5B5B5B"/>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="#"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; 首页 <span
+                        class="sr-only">(current)</span></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><i class="fa fa-mortar-board" aria-hidden="true"></i>&nbsp;资格考试 <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">初级</a></li>
+                        <li><a href="#">中级</a></li>
+                        <li><a href="#">高级</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;考试动态 <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+                <li><a href="#"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp;关于我们</a></li>
+                <li><a href="#"><i class="fa fa-phone fa-fw" aria-hidden="true"></i>&nbsp;联系我们</a></li>
+            </ul>
+            <form class="navbar-form navbar-left">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="搜索">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><span class="fa fa-search"/></button>
+                    </span>
+                </div>
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if "user" not in session %}
+                    <li><a href="{{ url_for('registration.login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;登录</a>
+                    </li>
+                    <li><a href="{{ url_for('registration.register') }}"><i class="fa fa-user-plus"
+                                                                            aria-hidden="true"></i>&nbsp;注册</a></li>
+                {% else %}
+                    <li><a href="#"><i class="fa fa-id-card-o"
+                                       aria-hidden="true"></i>&nbsp;&nbsp;<strong>您好，XXX</strong></a></li>
+                    <li><a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;个人中心</a></li>
+
+                    <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true">&nbsp;&nbsp;退出</i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
