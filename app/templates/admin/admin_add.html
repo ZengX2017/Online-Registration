@@ -1,0 +1,58 @@
+{% extends 'admin/admin.html' %}
+{% block content %}
+    <!-- Page content -->
+    <div class="wraper container-fluid">
+
+        <div class="page-title">
+            <ol class="breadcrumb" id="breadcrumb">
+                <li><a href="{{ url_for('admin.index') }}">首页</a></li>
+                <li><a href="{{ url_for('admin.admin_list') }}">管理员管理</a></li>
+                <li class="active">添加管理员</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">添加管理员</h3></div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">账号</label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" placeholder="请输入账号">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="info-content">密码</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" placeholder="请输入密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="info-content">重复密码</label>
+                                <div class="col-md-10">
+                                    <input type="password" class="form-control" placeholder="请再次输入密码">
+                                </div>
+                            </div>
+{#                            <div class="form-group">#}
+{#                                <label class="col-md-2 control-label">是否超级管理员</label>#}
+{#                                <div class="col-md-10">#}
+{#                                    <select class="form-control">#}
+{#                                        <option>0</option>#}
+{#                                        <option>1</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+                            <button type="submit" class="btn btn-primary pull-right">添加</button>
+                        </form>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel -->
+            </div> <!-- col -->
+        </div>
+
+    </div>
+    <!-- Page content end -->
+
+{% endblock %}
+

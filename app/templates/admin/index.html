@@ -1,0 +1,136 @@
+{% extends 'admin/admin.html' %}
+{% block content %}
+    <div class="wraper container-fluid">
+        <div class="page-title">
+            <h3 class="title">Welcome !</h3>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-6">
+                <div class="widget-panel widget-style-2 white-bg">
+                    <i class="ion-wifi text-purple"></i>
+                    <h2 class="m-0 counter">8956</h2>
+                    <div>Sales</div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6">
+                <div class="widget-panel widget-style-2 white-bg">
+                    <i class="ion-android-contacts text-success"></i>
+                    <h2 class="m-0 counter">145</h2>
+                    <div>New Users</div>
+                </div>
+            </div>
+        </div> <!-- end row -->
+
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="portlet"><!-- /primary heading -->
+                    <div class="portlet-heading">
+                        <h3 class="portlet-title text-dark text-uppercase">
+                            Yearly Sales Report
+                        </h3>
+                        <div class="portlet-widgets">
+                            <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                            <span class="divider"></span>
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                    class="ion-minus-round"></i></a>
+                            <span class="divider"></span>
+                            <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="portlet2" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <div id="morris-area-example" style="height: 320px;"></div>
+                            <div class="row text-center m-t-30 m-b-30">
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 126</h4>
+                                    <small class="text-muted"> Today's Sales</small>
+                                </div>
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 967</h4>
+                                    <small class="text-muted">This Week's Sales</small>
+                                </div>
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 4500</h4>
+                                    <small class="text-muted">This Month's Sales</small>
+                                </div>
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 87,000</h4>
+                                    <small class="text-muted">This Year's Sales</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /Portlet -->
+
+            </div>
+
+            <div class="col-lg-6">
+                <div class="portlet"><!-- /primary heading -->
+                    <div class="portlet-heading">
+                        <h3 class="portlet-title text-dark text-uppercase">
+                            Weekly Sales Report
+                        </h3>
+                        <div class="portlet-widgets">
+                            <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                            <span class="divider"></span>
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#portlet1"><i
+                                    class="ion-minus-round"></i></a>
+                            <span class="divider"></span>
+                            <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="portlet1" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <div id="morris-bar-example" style="height: 320px;"></div>
+
+                            <div class="row text-center m-t-30 m-b-30">
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 126</h4>
+                                    <small class="text-muted"> Today's Sales</small>
+                                </div>
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 967</h4>
+                                    <small class="text-muted">This Week's Sales</small>
+                                </div>
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 4500</h4>
+                                    <small class="text-muted">This Month's Sales</small>
+                                </div>
+                                <div class="col-sm-3 col-xs-6">
+                                    <h4>$ 87,000</h4>
+                                    <small class="text-muted">This Year's Sales</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /Portlet -->
+
+            </div> <!-- end col -->
+        </div> <!-- End row -->
+
+    </div>
+{% endblock %}
+{% block js %}
+    <!-- Chat -->
+    <script src="{{ url_for('static', filename='js/jquery.chat.js') }}"></script>
+    <!-- Dashboard -->
+    <script src="{{ url_for('static', filename='js/jquery.dashboard.js') }}"></script>
+
+    <!-- EASY PIE CHART JS -->
+    <script src="{{ url_for('static', filename='assets/easypie-chart/easypiechart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/easypie-chart/jquery.easypiechart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/easypie-chart/example.js') }}"></script>
+
+    <!--C3 Chart-->
+    <script src="{{ url_for('static', filename='assets/c3-chart/d3.v3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/c3-chart/c3.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#g-1").addClass("active");
+        })
+    </script>
+{% endblock %}

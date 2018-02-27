@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc."/>
+    <meta name="author" content="Coderthemes"/>
+
+    <title>软件专业技术资格考试报名系统</title>
+
+    {% include 'admin/admin_css.html' %}
+    {% block css %}{% endblock %}
+
+</head>
+
+<body>
+<!-- Aside Start-->
+<aside class="left-panel">
+    <!-- brand -->
+    <div class="logo">
+        <a href="{{ url_for('admin.index') }}" class="logo-expanded">
+            <i class="ion-social-buffer"></i>
+            <span class="nav-label">Adward_Z</span>
+        </a>
+    </div>
+    <!-- / brand -->
+    {% include 'admin/grid.html' %}
+</aside>
+<!-- Aside Ends-->
+
+
+<!--Main Content Start -->
+<section class="content">
+    <!-- Header -->
+    <header class="top-head container-fluid">
+        <button type="button" class="navbar-toggle pull-left">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+
+        <!-- Left navbar -->
+        <nav class="navbar-default" role="navigation">
+            <!-- Right navbar -->
+            <ul class="nav navbar-nav navbar-right top-menu top-right-menu">
+                <!-- user login dropdown start-->
+                <li class="dropdown text-center">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <img alt="" src="{{ url_for('static', filename='images/avatar-2.jpg') }}"
+                             class="img-circle profile-img thumb-sm">
+                        <span class="username">Adward_Z</span> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu pro-menu fadeInUp animated" tabindex="5003"
+                        style="overflow: hidden; outline: none;">
+                        <li><a href="{{ url_for('admin.change_pwd') }}"><i class="fa fa-briefcase"></i> 修改密码</a></li>
+                        <li><a href="{{ url_for('admin.logout') }}"><i class="fa fa-sign-out"></i> 退出</a></li>
+                    </ul>
+                </li>
+                <!-- user login dropdown end -->
+            </ul>
+            <!-- End right navbar -->
+        </nav>
+    </header>
+    <!-- Header Ends -->
+
+    <!-- ================== -->
+    <!-- Page Content Start -->
+    {% block content %}
+
+    {% endblock %}
+    <!-- Page Content Ends -->
+    <!-- ================== -->
+
+    <!-- Footer Start -->
+    <footer class="footer">
+        2018 © Adward_Z.
+    </footer>
+    <!-- Footer Ends -->
+
+</section>
+<!-- Main Content Ends -->
+
+<!-- MODAL -->
+{% block modal %}{% endblock %}
+<!-- MODAL ENDS -->
+
+{% include 'admin/admin_script.html' %}
+{% block js %}{% endblock %}
+
+</body>
+</html>

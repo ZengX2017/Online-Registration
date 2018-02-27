@@ -1,0 +1,59 @@
+{% extends 'admin/admin.html' %}
+{% block content %}
+    <!-- Page content -->
+    <div class="wraper container-fluid">
+
+        <div class="page-title">
+            <ol class="breadcrumb" id="breadcrumb">
+                <li><a href="{{ url_for('admin.index') }}">首页</a></li>
+                <li><a href="{{ url_for('admin.newscategory_list') }}">考试科目管理</a></li>
+                <li class="active">添加考试科目</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <!-- 消息闪现提示 -->
+                        {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i>&nbsp;操作成功</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        <!-- 消息闪现提示 -->
+                        <form role="form" method="post">
+                            <!-- 验证提示 -->
+                            {% for err in form.subject.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <div class="form-group">
+                                {{ form.subject.label(class="form-margin") }}
+                                {{ form.subject }}
+                            </div>
+                            {{ form.csrf_token }}
+                            {{ form.submit }}
+                        </form>
+                    </div><!-- panel-body -->
+                </div>
+            </div>
+        </div> <!-- end row -->
+
+    </div>
+    <!-- Page content end -->
+{% endblock %}

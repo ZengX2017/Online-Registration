@@ -1,0 +1,219 @@
+{% extends 'admin/admin.html' %}
+{% block css %}
+    <!-- fileinput -->
+    <link href="{{ url_for('static', filename='assets/bootstrap-fileinput/fileinput.css') }}" rel="stylesheet"/>
+    <!-- datepicker -->
+    <link href="{{ url_for('static', filename='assets/timepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <!-- Page content -->
+    <div class="wraper container-fluid">
+
+        <div class="page-title">
+            <ol class="breadcrumb" id="breadcrumb">
+                <li><a href="{{ url_for('admin.index') }}">首页</a></li>
+                <li><a href="{{ url_for('admin.refbook_list') }}">参考书管理</a></li>
+                <li class="active">添加参考书</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">添加参考书</h3></div>
+                    <div class="panel-body">
+                        <!-- 消息闪现提示 -->
+                        {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i>&nbsp;操作成功</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        <!-- 消息闪现提示 -->
+                        <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+                            <!-- 验证提示 -->
+                            {% for err in form.title.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.author.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.ISBN.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.public.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.pages.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.logo.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.price.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.pubdate.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <div class="form-group">
+                                {{ form.title.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.title }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.author.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.author }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.ISBN.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.ISBN }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.public.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.public }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.pages.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.pages }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.logo.label(class="col-md-2 control-label", for="file-input") }}
+                                <div class="col-md-10">
+                                    {{ form.logo }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.price.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.price }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.pubdate.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.pubdate }}
+                                </div>
+                            </div>
+                            {{ form.csrf_token }}
+                            {{ form.submit }}
+                        </form>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel -->
+            </div> <!-- col -->
+        </div>
+
+    </div>
+    <!-- Page content end -->
+
+{% endblock %}
+{% block js %}
+    <!-- fileinput -->
+    <script src="{{ url_for('static', filename='assets/bootstrap-fileinput/fileinput.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap-fileinput/zh.js') }}"></script>
+    <!-- datepicker -->
+    <script src="{{ url_for('static', filename='assets/timepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/timepicker/bootstrap-datepicker.zh-CN.js') }}" charset="UTF-8"></script>
+    <script>
+        // Date Picker
+        jQuery('#datepicker').datepicker({
+            language: 'zh-CN'
+        });
+        jQuery('#datepicker-inline').datepicker();
+        jQuery('#datepicker-multiple').datepicker({
+            numberOfMonths: 3,
+            showButtonPanel: true
+        });
+
+        $('#file-input').fileinput({
+                language: 'zh', //设置语言
+                {#uploadUrl:"http://127.0.0.1/testDemo/fileupload/upload.do", //上传的地址#}
+                allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
+                uploadAsync: true, //默认异步上传
+                showUpload:true, //是否显示上传按钮
+                showRemove :true, //显示移除按钮
+                showPreview :true, //是否显示预览
+                {#showCaption:false,//是否显示标题#}
+                {#browseClass:"btn btn-primary btn-file", //按钮样式#}
+                dropZoneEnabled: false,//是否显示拖拽区域
+                maxFileCount:10, //表示允许同时上传的最大文件个数
+                {#enctype:'multipart/form-data',#}
+                validateInitialCount:true,
+                {#previewFileIcon: "<i class='glyphicon glyphicon-folder-open'></i>",#}
+                msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+           });
+    </script>
+
+{% endblock %}

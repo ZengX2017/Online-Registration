@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from coderthemes.com/velonic_3.0/admin_3/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 29 May 2016 14:53:39 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>登录</title>
+
+    {% include 'admin/admin_css.html' %}
+
+</head>
+<body>
+
+<div class="wrapper-page animated fadeInDown">
+    <div class="panel panel-color panel-primary">
+        <div class="panel-heading">
+            <h5 class="text-center m-t-10"><strong>软件专业技术资格考试报名后台管理系统</strong></h5>
+        </div>
+        <form class="form-horizontal m-t-40" method="post">
+            <!-- 消息闪现提示 -->
+            {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    {{ msg }}
+                </div>
+            {% endfor %}
+            <!-- 消息闪现提示 -->
+            <!-- 验证提示 -->
+            {% for err in form.name.errors %}
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                    </button>
+                    {{ err }}
+                </div>
+            {% endfor %}
+            <!-- 验证提示 -->
+            <!-- 验证提示 -->
+            {% for err in form.pwd.errors %}
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                    </button>
+                    {{ err }}
+                </div>
+            {% endfor %}
+            <!-- 验证提示 -->
+            <div class="form-group ">
+                <div class="col-xs-12">
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="form-group ">
+                <div class="col-xs-12">
+                    {{ form.pwd }}
+                </div>
+            </div>
+
+            <div class="form-group text-center">
+                <div class="col-xs-6">
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
+                </div>
+                <div class="col-xs-6">
+                    <button class="btn btn-info w-md" type="reset">重置</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% include 'admin/admin_script.html' %}
+
+</body>
+</html>

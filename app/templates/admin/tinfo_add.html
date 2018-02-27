@@ -1,0 +1,352 @@
+{% extends 'admin/admin.html' %}
+{% block css %}
+    <!-- bootstrap-time -->
+    <link href="{{ url_for('static', filename='assets/timepicker/bootstrap-datetimepicker.css') }}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <!-- Page content -->
+    <div class="wraper container-fluid">
+
+        <div class="page-title">
+            <ol class="breadcrumb" id="breadcrumb">
+                <li><a href="{{ url_for('admin.index') }}">首页</a></li>
+                <li><a href="{{ url_for('admin.newsinfo_list') }}">考试信息管理</a></li>
+                <li class="active">添加考试信息</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">添加考试信息</h3></div>
+                    <div class="panel-body">
+                        <!-- 消息闪现提示 -->
+                        {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i>&nbsp;操作成功</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        <!-- 消息闪现提示 -->
+                        <form class="form-horizontal" role="form" method="post">
+                            <!-- 验证提示 -->
+                            {% for err in form.tlevel.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.tsubject.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.ttime.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.province.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.city.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.school.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.examroom.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.personnum.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.price.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.ref_book.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <div class="form-group">
+                                {{ form.tlevel.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.tlevel }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.tsubject.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.tsubject }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.ttime.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.ttime }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">考试地点</label>
+                                <div class="col-md-3">
+                                    {{ form.province }}
+                                    <select class="form-control" id="province" name="province"></select>
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.city }}
+                                    <select class="form-control" id="city" name="city"></select>
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.school }}
+                                    <select class="form-control" id="school" name="school"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.examroom.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.examroom }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.personnum.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.personnum }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.price.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.price }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.ref_book.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.ref_book }}
+                                </div>
+                            </div>
+                            {{ form.csrf_token }}
+                            {{ form.submit }}
+                        </form>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel -->
+            </div> <!-- col -->
+        </div>
+
+    </div>
+    <!-- Page content end -->
+
+{% endblock %}
+{% block js %}
+    <!--form validation init-->
+    <script src="{{ url_for('static', filename='js/AllSchool.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/timepicker/bootstrap-datetimepicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/timepicker/bootstrap-datetimepicker.zh-CN.js') }}"
+            charset="UTF-8"></script>
+    <script>
+        jQuery(document).ready(function () {
+            var provinceArray = "";
+            var provicneSelectStr = "";
+            for (var i = 0, len = province.length; i < len; i++) {
+                provinceArray = province[i];
+                if (i == 0) {
+                    provicneSelectStr = provicneSelectStr + "<option value='" + provinceArray[0] + "' selected>" + provinceArray[1] + "</option>"
+                }
+                else provicneSelectStr = provicneSelectStr + "<option value='" + provinceArray[0] + "'>" + provinceArray[1] + "</option>"
+            }
+            $("#province").html(provicneSelectStr);
+            <!-- 获取值 -->
+            var provinceText = $("#province").find("option:selected").text(); //获取Select选择的Text
+            $("#hidden-province").val(provinceText)
+            <!-- 获取值 -->
+
+            var selectCity = $("#province").val();
+            var citylist = city[selectCity];
+            var cityArray = "";
+            var citySelectStr = "";
+            for (var i = 0, len = citylist.length; i < len; i++) {
+                cityArray = citylist[i];
+                if (i == 0) {
+                    citySelectStr = citySelectStr + "<option value='" + cityArray[0] + "' selected>" + cityArray[1] + "</option>"
+                }
+                else citySelectStr = citySelectStr + "<option value='" + cityArray[0] + "'>" + cityArray[1] + "</option>"
+            }
+            $("#city").html(citySelectStr);
+            <!-- 获取值 -->
+            var cityText = $("#city").find("option:selected").text(); //获取Select选择的Text
+            $("#hidden-city").val(cityText)
+            <!-- 获取值 -->
+            var selectschool = $("#city").val();
+            var schoolUlStr = "";
+            var schoolListStr = allschool[selectschool];
+            for (var i = 0, len = schoolListStr.length; i < len; i++) {
+                if (i == 0) {
+                    schoolUlStr = schoolUlStr + "<option value='" + schoolListStr[i][2] + "' selected>" + schoolListStr[i][2] + "</option>";
+                }
+                else schoolUlStr = schoolUlStr + "<option value='" + schoolListStr[i][2] + "' >" + schoolListStr[i][2] + "</option>";
+            }
+            schoolUlStr = schoolUlStr + "<option value='999'>其它</option>";
+            $("#school").html(schoolUlStr);
+            <!-- 获取值 -->
+            var schoolText = $("#school").find("option:selected").text(); //获取Select选择的Text
+            $("#hidden-school").val(schoolText)
+            <!-- 获取值 -->
+
+            //省切换事件
+            $("#province").change(function () {
+                <!-- 获取值 -->
+                var provinceText = $("#province").find("option:selected").text(); //获取Select选择的Text
+                $("#hidden-province").val(provinceText);
+                <!-- 获取值 -->
+                var selectCity = $("#province").val();
+                var citylist = city[selectCity];
+                var cityArray = "";
+                var citySelectStr = "";
+                if (citylist != null) {
+                    for (var i = 0, len = citylist.length; i < len; i++) {
+                        cityArray = citylist[i];
+                        {#if(i == 0){#}
+                        {#    citySelectStr = citySelectStr + "<option value='" + cityArray[0] + "' selected>" + cityArray[1] + "</option>"#}
+                        {##}
+                            citySelectStr = citySelectStr + "<option value='" + cityArray[0] + "'>" + cityArray[1] + "</option>"
+
+                    }
+                    $("#city").html(citySelectStr);
+                    <!-- 获取值 -->
+                    var cityText = $("#city").find("option:selected").text(); //获取Select选择的Text
+                    $("#hidden-city").val(cityText)
+                    <!-- 获取值 -->
+                    $("#school1").show();
+                    $("#school2").hide();
+                    var selectschool = $("#city").val();
+                    var schoolUlStr = "";
+                    var schoolListStr = allschool[selectschool];
+                    for (var i = 0, len = schoolListStr.length; i < len; i++) {
+                        if (i == 0) {
+                            schoolUlStr = schoolUlStr + "<option value='" + schoolListStr[i][2] + "' selected>" + schoolListStr[i][2] + "</option>";
+                        }
+                        else schoolUlStr = schoolUlStr + "<option value='" + schoolListStr[i][2] + "'>" + schoolListStr[i][2] + "</option>";
+                    }
+                    schoolUlStr = schoolUlStr + "<option value='999'>其它</option>";
+                    $("#school").html(schoolUlStr);
+                    <!-- 获取值 -->
+                    var schoolText = $("#school").find("option:selected").text(); //获取Select选择的Text
+                    $("#hidden-school").val(schoolText)
+                    <!-- 获取值 -->
+                }
+            });
+            //切换城市事件
+            $("#city").change(function () {
+                $("#school1").show();
+                $("#school2").hide();
+                <!-- 获取值 -->
+                var cityText = $("#city").find("option:selected").text(); //获取Select选择的Text
+                $("#hidden-city").val(cityText)
+                <!-- 获取值 -->
+                var selectschool = $("#city").val();
+                var schoolUlStr = "";
+                var schoolListStr = allschool[selectschool];
+                for (var i = 0, len = schoolListStr.length; i < len; i++) {
+                    if (i == 0) {
+                        schoolUlStr = schoolUlStr + "<option value='" + schoolListStr[i][2] + "' selected>" + schoolListStr[i][2] + "</option>";
+                    }
+                    else schoolUlStr = schoolUlStr + "<option value='" + schoolListStr[i][2] + "' >" + schoolListStr[i][2] + "</option>";
+                }
+                schoolUlStr = schoolUlStr + "<option value='999'>其它</option>";
+                $("#school").html(schoolUlStr);
+                <!-- 获取值 -->
+                var schoolText = $("#school").find("option:selected").text(); //获取Select选择的Text
+                $("#hidden-school").val(schoolText)
+                <!-- 获取值 -->
+            });
+            $("#school").change(function () {
+                <!-- 获取值 -->
+                var schoolText = $("#school").find("option:selected").text(); //获取Select选择的Text
+                $("#hidden-school").val(schoolText)
+                <!-- 获取值 -->
+                if ($("#school").val() == "999") {
+                    $("#school1").hide();
+                    $("#school2").show();
+                }
+            });
+            $("#second").show();
+            $("#restart").css("backgorund", "url('assets/images/chongxintijiao.jpg') no-repeat");
+
+            // DateTime Picker
+            $('#datetimepicker').datetimepicker({
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd hh:ii:ss'
+            });
+
+        });
+    </script>
+{% endblock %}
