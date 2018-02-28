@@ -14,43 +14,55 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class=""><a href="#"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp; 首页 <span
+                <li class=""><a href="{{ url_for('registration.index') }}"><i class="fa fa-home fa-fw"
+                                                                              aria-hidden="true"></i>&nbsp; 首页 <span
                         class="sr-only">(current)</span></a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false"><i class="fa fa-mortar-board" aria-hidden="true"></i>&nbsp;资格考试 <span
+                       aria-expanded="false"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp;工作动态 <span
                             class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">初级</a></li>
-                        <li><a href="#">中级</a></li>
-                        <li><a href="#">高级</a></li>
+                        <li><a href="#">公告栏</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        <li><a href="{{ url_for('registration.newscategory') }}">工作计划</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
+                        <li><a href="#">报名安排</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">考试安排</a></li>
                     </ul>
                 </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;考试动态 <span
+                       aria-expanded="false"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;考试概述 <span
                             class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                        <li><a href="#">考试介绍</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        <li><a href="#">资格介绍</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">One more separated link</a></li>
+                        <li><a href="#">考试教程和大纲</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">合格标准</a></li>
                     </ul>
                 </li>
-                <li><a href="#"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp;关于我们</a></li>
-                <li><a href="#"><i class="fa fa-phone fa-fw" aria-hidden="true"></i>&nbsp;联系我们</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"><i class="fa fa-mortar-board" aria-hidden="true"></i>&nbsp;政策法规 <span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">政策</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">法规</a></li>
+                    </ul>
+                </li>
+
             </ul>
             <form class="navbar-form navbar-left">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="搜索">
-                    <span class="input-group-btn">
+                    <input type="text" class="form-control" placeholder="搜索" style="width: 70%;">
+                    <span class="input-group-btn" style="float: left">
                         <button class="btn btn-default" type="button"><span class="fa fa-search"/></button>
                     </span>
                 </div>
@@ -63,11 +75,15 @@
                     <li><a href="{{ url_for('registration.register') }}"><i class="fa fa-user-plus"
                                                                             aria-hidden="true"></i>&nbsp;注册</a></li>
                 {% else %}
-                    <li><a href="#"><i class="fa fa-id-card-o"
-                                       aria-hidden="true"></i>&nbsp;&nbsp;<strong>您好，XXX</strong></a></li>
-                    <li><a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;个人中心</a></li>
+                    <li><span
+                            style="position: relative;display: block;padding: 10px 15px;line-height: 20px;color: #ffffff;padding-top: 15px;"><i
+                            class="fa fa-id-card-o"
+                            aria-hidden="true"></i>&nbsp;&nbsp;<strong>您好，{{ session["user"] }}</strong></span></li>
+                    <li><a href="{{ url_for('registration.userinfo') }}"><i class="fa fa-user-circle"
+                                                                            aria-hidden="true"></i>&nbsp;个人中心</a></li>
 
-                    <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true">&nbsp;&nbsp;退出</i></a></li>
+                    <li><a href="{{ url_for('registration.logout') }}"><i class="fa fa-sign-out" aria-hidden="true">&nbsp;&nbsp;退出</i></a>
+                    </li>
                 {% endif %}
             </ul>
         </div>

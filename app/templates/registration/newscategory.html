@@ -1,24 +1,57 @@
 {% extends 'registration/registration.html' %}
 {% block content %}
     <div class="container">
-    <div class="detail-div">
-        <ol class="breadcrumb">
-            <li><a href="#">报名相关</a></li>
-            <li class="active">工作计划</li>
-        </ol>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">工作计划</div>
-        <div class="panel-body">
-            <ul class="detail-ul">
-                <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知 [18-01-16]</a></li>
-                <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知 [18-01-16]</a></li>
-                <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知 [18-01-16]</a></li>
-                <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知 [18-01-16]</a></li>
-                <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知 [18-01-16]</a></li>
-            </ul>
+        <div class="detail-div">
+            <ol class="breadcrumb">
+                <li><a href="#">工作动态</a></li>
+                <li class="active">工作计划</li>
+            </ol>
         </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="panel panel-info">
+                <!-- Default panel contents -->
+                <div class="panel-heading text-center"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp;工作动态</div>
+
+                <!-- List group -->
+                <ul class="list-group text-center">
+                    <a href="#" class="list-group-item">
+                        公告栏
+                    </a>
+                    <a href="#" class="list-group-item active">
+                        工作计划
+                    </a>
+                    <a href="#" class="list-group-item">
+                        报名安排
+                    </a>
+                    <a href="#" class="list-group-item">
+                        考试安排
+                    </a>
+                </ul>
+
+            </div>
+            </div>
+            <div class="panel panel-default col-md-8">
+                <div class="panel-heading">工作计划</div>
+                <div class="panel-body">
+                    <ul class="detail-ul">
+                        <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知
+                            [18-01-16]</a></li>
+                        <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知
+                            [18-01-16]</a></li>
+                        <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知
+                            [18-01-16]</a></li>
+                        <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知
+                            [18-01-16]</a></li>
+                        <li><a href="#"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;关于印发2018年度计算机技术与软件专业技术资格（水平）考试工作安排的通知
+                            [18-01-16]</a></li>
+                    </ul>
+                    {% include 'ul/pagination.html' %}
+                </div>
+            </div>
+            {% include 'registration/affairs_public.html' %}
+        </div>
+
     </div>
-</div>
 {% endblock %}

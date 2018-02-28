@@ -480,7 +480,7 @@ class ChangePwdForm(FlaskForm):
         "修改",
         render_kw={
             "class": "btn btn-primary pull-right",
-        }  # 附加选项
+        }
     )
 
     def validate_pwd(self, field):

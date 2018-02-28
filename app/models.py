@@ -61,13 +61,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # 编号
     name = db.Column(db.String(100))
     pwd = db.Column(db.String(100))
-    gender = db.Column(db.SmallInteger)  # 0为女生，1为男生
+    gender = db.Column(db.SmallInteger)  # 0为女生，1为男生，默认为0
     email = db.Column(db.String(100), unique=True)
     id_card = db.Column(db.String(18), unique=True)
     phone = db.Column(db.String(11), unique=True)
     # info = db.Column(db.Text)  # 简介
     face = db.Column(db.String(255), unique=True)
     area = db.Column(db.String(200))
+    id_status = db.Column(db.SmallInteger)  # 0为身份证不合理，1为身份证合理，默认为0
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     userlogs = db.relationship('Userlog', backref='user')  # 会员日志外键
     urinfos = db.relationship('Urinfo', backref='user')

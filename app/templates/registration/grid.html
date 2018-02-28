@@ -1,21 +1,27 @@
 <!--左侧栏-->
-<div class="col-md-3 info-left">
+<div class="col-md-2 info-left">
+    <div class="panel panel-info">
+        <!-- Default panel contents -->
+        <div class="panel-heading text-center">
+        </div>
 
-    <div class="list-group">
-        <a id="m-1" href="{{ url_for('registration.userinfo') }}" class="list-group-item">
-            <span class="glyphicon glyphicon-user"></span>&nbsp;个人中心
-        </a>
-        <a id="m-2" href="#" class="list-group-item">
-            <span class="glyphicon glyphicon-lock"></span>&nbsp;修改密码
-        </a>
-        <a id="m-3" href="#" class="list-group-item">
-            <span class="glyphicon glyphicon-comment"></span>&nbsp;报名查询
-        </a>
-        <a id="m-4" href="#" class="list-group-item">
-            <span class="glyphicon glyphicon-calendar"></span>&nbsp;准考证打印
-        </a>
-        <a id="m-5" href="#" class="list-group-item">
-            <span class="glyphicon glyphicon-heart"></span>&nbsp;登录日志
-        </a>
+        <!-- List group -->
+        <ul class="list-group">
+            <a id="m-1" href="{{ url_for('registration.userinfo') }}" class="list-group-item">
+                <i class="fa fa-user fa-lg" aria-hidden="true"></i>&nbsp; 个人中心
+            </a>
+            <a id="m-2" href="#" class="list-group-item">
+                <i class="fa fa-lock fa-lg" aria-hidden="true"></i>&nbsp; 修改密码
+            </a>
+            <a id="m-3" href="#" class="list-group-item">
+                <i class="fa fa-comment" aria-hidden="true"></i>&nbsp; 报名查询
+            </a>
+            <a id="m-4" href="#" class="list-group-item">
+                <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; 准考证打印
+            </a>
+            <a id="m-5" href="#" class="list-group-item">
+                <i class="fa fa-heart" aria-hidden="true"></i>&nbsp; 登录日志
+            </a>
+        </ul>
     </div>
 </div>
