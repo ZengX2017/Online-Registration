@@ -1,0 +1,56 @@
+{#本页面用来存储替换过的东西#}
+
+<!-- userinfo.html 里面打算换一个错误提示，这是原来的错误提示  -->
+<!-- 验证提示 -->
+{% for err in form.id_card.errors %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+        </button>
+        <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+        {{ err }}
+    </div>
+{% endfor %}
+<!-- 验证提示 -->
+<!-- 验证提示 -->
+{% for err in form.phone.errors %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+        </button>
+        <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+        {{ err }}
+    </div>
+{% endfor %}
+<!-- 验证提示 -->
+<!-- 验证提示 -->
+{% for err in form.gender.errors %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+        </button>
+        <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+        {{ err }}
+    </div>
+{% endfor %}
+<!-- 验证提示 -->
+<!-- 验证提示 -->
+{% for err in form.name.errors %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+        </button>
+        <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+        {{ err }}
+    </div>
+{% endfor %}
+<!-- 验证提示 -->
+<!-- 验证提示 -->
+{% for err in form.email.errors %}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+        </button>
+        <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+        {{ err }}
+    </div>
+{% endfor %}
+<!-- 验证提示 -->
+<!-- userinfo.html 里面打算换一个错误提示，这是原来的错误提示  -->
+
+

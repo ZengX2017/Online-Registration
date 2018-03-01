@@ -73,7 +73,6 @@ class User(db.Model):
     userlogs = db.relationship('Userlog', backref='user')  # 会员日志外键
     urinfos = db.relationship('Urinfo', backref='user')
     admissions = db.relationship('Admission', backref='user')
-    # comments = db.relationship('Comment', backref='user')  # 评论外键
 
     def __repr__(self):
         return "<User %r>" % self.name
@@ -255,17 +254,6 @@ class NewsInfo(db.Model):
 
     def __repr__(self):
         return "<NewsInfo %r>" % self.title
-
-
-# TEST
-# class Test(db.Model):
-#     __tablename__ = "test"
-#     id = db.Column(db.Integer, primary_key=True)  # 编号
-#     name = db.Column(db.String(100), unique=True)  # 标题
-#     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-#
-#     def __repr__(self):
-#         return "<Test %r>" % self.name
 
 
 # if __name__ == "__main__":

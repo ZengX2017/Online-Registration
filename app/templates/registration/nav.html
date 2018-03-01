@@ -69,7 +69,7 @@
             </form>
 
             <ul class="nav navbar-nav navbar-right">
-                {% if "user" not in session %}
+                {% if "user_id" not in session %}
                     <li><a href="{{ url_for('registration.login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;登录</a>
                     </li>
                     <li><a href="{{ url_for('registration.register') }}"><i class="fa fa-user-plus"

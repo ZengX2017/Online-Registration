@@ -27,24 +27,14 @@
                     </tr>
                     </thead>
                     <tbody class="text-center">
+                    {% for value in page_data %}
                     <tr>
-                        <td>1</td>
-                        <td>Adward</td>
-                        <td>192.168.0.1</td>
-                        <td>2018-01-01</td>
+                        <td>{{ value.id }}</td>
+                        <td>{{ value.admin.name }}</td>
+                        <td>{{ value.ip }}</td>
+                        <td>{{ value.addtime }}</td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Adward</td>
-                        <td>192.168.0.1</td>
-                        <td>2018-01-01</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Adward</td>
-                        <td>192.168.0.1</td>
-                        <td>2018-01-01</td>
-                    </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
 

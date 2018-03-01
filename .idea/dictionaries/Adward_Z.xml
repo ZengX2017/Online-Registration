@@ -2,6 +2,7 @@
   <dictionary name="Adward_Z">
     <words>
       <w>addtime</w>
+      <w>datatables</w>
       <w>enctype</w>
       <w>infos</w>
       <w>navbar</w>
@@ -12,6 +13,7 @@
       <w>tablename</w>
       <w>tlevel</w>
       <w>tsubject</w>
+      <w>userlog</w>
     </words>
   </dictionary>
 </component>

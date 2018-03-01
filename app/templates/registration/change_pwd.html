@@ -1,0 +1,97 @@
+{% extends 'registration/registration.html' %}
+{% block title %}
+    修改密码
+{% endblock %}
+{% block content %}
+    <div class="container">
+
+        <!--左侧栏-->
+        {% include 'registration/grid.html' %}
+
+        <!--右侧栏-->
+        <div class="col-md-10 info-right">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;修改密码</h3>
+                </div>
+                <div class="panel-body">
+                    <!-- 消息闪现提示 -->
+                    {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                        <div class="alert alert-success alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-check"></i>&nbsp;操作成功</h4>
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                    {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                    <!-- 消息闪现提示 -->
+                    <form class="form-horizontal" role="form" method="post">
+                        <!-- 验证提示 -->
+                        {% for err in form.pwd.errors %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                </button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ err }}
+                            </div>
+                        {% endfor %}
+                        <!-- 验证提示 -->
+                        <!-- 验证提示 -->
+                        {% for err in form.new_pwd.errors %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                </button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ err }}
+                            </div>
+                        {% endfor %}
+                        <!-- 验证提示 -->
+                        <!-- 验证提示 -->
+                        {% for err in form.re_new_pwd.errors %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                </button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ err }}
+                            </div>
+                        {% endfor %}
+                        <!-- 验证提示 -->
+                        <div class="form-group">
+                            {{ form.pwd.label(class="col-md-2 control-label") }}
+                            <div class="col-md-10">
+                                {{ form.pwd }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form.new_pwd.label(class="col-md-2 control-label") }}
+                            <div class="col-md-10">
+                                {{ form.new_pwd }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form.re_new_pwd.label(class="col-md-2 control-label") }}
+                            <div class="col-md-10">
+                                {{ form.re_new_pwd(value=user.email) }}
+                            </div>
+                        </div>
+                        {{ form.csrf_token }}
+                        {{ form.submit }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $("#m-2").addClass("active")
+        });
+    </script>
+{% endblock %}

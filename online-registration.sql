@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50638
 File Encoding         : 65001
 
-Date: 2018-02-28 15:08:10
+Date: 2018-03-01 14:35:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -381,8 +381,10 @@ CREATE TABLE `userlog` (
   KEY `user_id` (`user_id`),
   KEY `ix_userlog_addtime` (`addtime`),
   CONSTRAINT `userlog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of userlog
 -- ----------------------------
+INSERT INTO `userlog` VALUES ('1', '1', '127.0.0.1', '2018-03-01 14:21:37');
+INSERT INTO `userlog` VALUES ('2', '1', '127.0.0.1', '2018-03-01 14:33:11');

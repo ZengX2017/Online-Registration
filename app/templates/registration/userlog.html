@@ -1,0 +1,80 @@
+{% extends 'registration/registration.html' %}
+{% block title %}
+    登录日志
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
+{% endblock %}
+{% block content %}
+    <div class="container">
+
+        <!--左侧栏-->
+        {% include 'registration/grid.html' %}
+
+        <!--右侧栏-->
+        <div class="col-md-10 info-right">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;登录日志</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped text-center" id="datatable-editable">
+                    <thead>
+                    <tr>
+                        <th class="text-center">编号</th>
+                        <th class="text-center">登录姓名</th>
+                        <th class="text-center">登录邮箱</th>
+                        <th class="text-center">登录ip</th>
+                        <th class="text-center">登录时间</th>
+                    </tr>
+                    </thead>
+                    <tbody class="text-center">
+                    {% for value in page_data %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ value.user.name }}</td>
+                            <td>{{ value.user.email }}</td>
+                            <td>{{ value.ip }}</td>
+                            <td>{{ value.addtime }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
+    <script>
+        <!-- 表格 -->
+        $('#datatable-editable').DataTable({
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "从第 _START_ 条到第 _END_ 条/共 _TOTAL_ 条数据",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "筛选：  ",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+            },
+            "iDisplayLength": 10,
+            "lengthMenu": [5, 10, 15, 20],
+            "searching": false,     //隐藏本地搜索
+            "pagingType": "full_numbers"
+        });
+
+        $(document).ready(function () {
+            $("#m-5").addClass("active")
+        });
+    </script>
+{% endblock %}

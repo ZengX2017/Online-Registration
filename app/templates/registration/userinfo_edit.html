@@ -1,0 +1,114 @@
+{% extends 'registration/registration.html' %}
+{% block title %}
+    个人中心
+{% endblock %}
+{% block css %}
+    <!-- fileinput -->
+    <link href="{{ url_for('static', filename='assets/bootstrap-fileinput/fileinput.css') }}" rel="stylesheet"/>
+{% endblock %}
+{% block content %}
+    <div class="container">
+
+        <!--左侧栏-->
+        {% include 'registration/grid.html' %}
+
+        <!--右侧栏-->
+        <div class="col-md-10 info-right">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;个人中心</h3>
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal" role="form" method="post"
+                          action="{{ url_for('registration.userinfo') }}">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="name">账号名</label>
+                            <div class="col-md-10">
+                                <input class="form-control" id="name" name="name" type="text" value="{{ user.name }}"
+                                       disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="gender">性别</label>
+                            <div class="col-md-10">
+                                <select class="form-control" id="gender" name="gender" disabled>
+                                    {% if user.gender == 0 %}
+                                        <option value="0" selected>女</option>
+                                    {% else %}
+                                        <option selected value="1">男</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="email">邮箱</label>
+                            <div class="col-md-10">
+                                <input class="form-control" id="email" name="email" type="text"
+                                       value="{% if "@" in user.email %}{{ "2018-03-01".split('-')[0] + '---->' + user.email.split('@')[0] + '--->' + user.email.split('@')[1] }}
+                                    {% endif %}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="id_card">身份证</label>
+                            <div class="col-md-10">
+                                <input class="form-control" id="id_card" name="id_card" placeholder="请输入身份证" type="text"
+                                       value="{% if user.id_card %} {{ user.id_card }} {% else %}  {% endif %}"
+                                       disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="phone">手机号码</label>
+                            <div class="col-md-10">
+                                <input class="form-control" id="phone" name="phone" placeholder="请输入手机号码" type="text"
+                                       value="{% if user.phone %} {{ user.phone }} {% else %}  {% endif %}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="face">头像</label>
+                            <div class="col-md-10">
+                                <img src="{{ url_for('static', filename='images/a1.jpg') }}" alt="头像pic"
+                                     style="width: 100%">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="area">地址</label>
+                            <div class="col-md-10">
+                                <input class="form-control" id="area" name="area" placeholder="请输入地址" type="text"
+                                       value="{% if user.phone %} {{ user.phone }} {% else %}  {% endif %}" disabled>
+                            </div>
+                        </div>
+
+                        <input class="btn btn-default pull-right" id="submit" name="submit" type="submit" value="编辑">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <!-- fileinput -->
+    <script src="{{ url_for('static', filename='assets/bootstrap-fileinput/fileinput.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap-fileinput/zh.js') }}"></script>
+    <script>
+        $('#file-input').fileinput({
+            language: 'zh', //设置语言
+            allowedFileExtensions: ['jpg', 'gif', 'png'],//接收的文件后缀
+            uploadAsync: true, //默认异步上传
+            showUpload: false, //是否显示上传按钮
+            showRemove: true, //显示移除按钮
+            showPreview: true, //是否显示预览
+            uploadAsync: false,    //采用同步上传
+            removeFromPreviewOnError: true,   //当文件不符合规则，就不显示预览
+            {#showCaption:false,//是否显示标题#}
+            {#browseClass:"btn btn-primary btn-file", //按钮样式#}
+            dropZoneEnabled: false,//是否显示拖拽区域
+            maxFileCount: 3, //表示允许同时上传的最大文件个数
+            enctype: 'multipart/form-data',
+            validateInitialCount: true,
+            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+        });
+        $(document).ready(function () {
+            $("#m-1").addClass("active")
+        });
+    </script>
+{% endblock %}
