@@ -2,12 +2,11 @@
 {% block content %}
     <!-- Page content -->
     <div class="wraper container-fluid">
-
         <div class="page-title">
             <ol class="breadcrumb" id="breadcrumb">
                 <li><a href="{{ url_for('admin.index') }}">首页</a></li>
                 <li><a href="{{ url_for('admin.newstag_list') }}">新闻标签管理</a></li>
-                <li class="active">添加新闻标签</li>
+                <li class="active">修改新闻标签</li>
             </ol>
         </div>
 
@@ -53,7 +52,7 @@
                             {% endfor %}
                             <!-- 验证提示 -->
                             <div class="form-group">
-                                {{ form.name.label(class='form-margin') }}
+                                <label class="form-margin" for="name">修改新闻标签</label>
                                 {{ form.name }}
                             </div>
                             <div class="form-group">
@@ -76,6 +75,6 @@
         $(document).ready(function () {
             $("#g-3").addClass("active");
             $("#g-3-1").addClass("active");
-        })
+        });
     </script>
 {% endblock %}

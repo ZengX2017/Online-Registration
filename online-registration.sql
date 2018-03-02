@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50638
 File Encoding         : 65001
 
-Date: 2018-03-01 14:35:49
+Date: 2018-03-02 17:04:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,13 +49,14 @@ CREATE TABLE `adminlog` (
   KEY `admin_id` (`admin_id`),
   KEY `ix_adminlog_addtime` (`addtime`),
   CONSTRAINT `adminlog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of adminlog
 -- ----------------------------
 INSERT INTO `adminlog` VALUES ('1', '1', '127.0.0.1', '2018-02-12 21:22:37');
 INSERT INTO `adminlog` VALUES ('2', '1', '127.0.0.1', '2018-02-27 10:45:34');
+INSERT INTO `adminlog` VALUES ('3', '1', '127.0.0.1', '2018-03-02 13:47:49');
 
 -- ----------------------------
 -- Table structure for admission
@@ -107,7 +108,7 @@ CREATE TABLE `newscategory` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `ix_newscategory_addtime` (`addtime`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of newscategory
@@ -116,6 +117,7 @@ INSERT INTO `newscategory` VALUES ('1', '首页', '2018-02-08 13:22:01');
 INSERT INTO `newscategory` VALUES ('2', '资格考试', '2018-02-08 13:59:59');
 INSERT INTO `newscategory` VALUES ('3', '考试动态', '2018-02-08 14:01:07');
 INSERT INTO `newscategory` VALUES ('4', '工作动态', '2018-02-08 21:34:52');
+INSERT INTO `newscategory` VALUES ('5', '政策法规', '2018-03-02 13:49:30');
 
 -- ----------------------------
 -- Table structure for newsinfo
@@ -162,7 +164,7 @@ CREATE TABLE `newstag` (
   KEY `newscategory_id` (`newscategory_id`),
   KEY `ix_newstag_addtime` (`addtime`),
   CONSTRAINT `newstag_ibfk_1` FOREIGN KEY (`newscategory_id`) REFERENCES `newscategory` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of newstag
@@ -183,11 +185,25 @@ CREATE TABLE `oplog` (
   KEY `admin_id` (`admin_id`),
   KEY `ix_oplog_addtime` (`addtime`),
   CONSTRAINT `oplog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oplog
 -- ----------------------------
+INSERT INTO `oplog` VALUES ('2', '1', '127.0.0.1', '修改了新闻类别，原类别名为：政策法规，新类别名为：政策法规', '2018-03-02 14:08:56');
+INSERT INTO `oplog` VALUES ('3', '1', '127.0.0.1', '添加了新闻类别，名为：Test', '2018-03-02 14:18:40');
+INSERT INTO `oplog` VALUES ('4', '1', '127.0.0.1', '删除了新闻类别，名为：Test', '2018-03-02 14:18:53');
+INSERT INTO `oplog` VALUES ('5', '1', '127.0.0.1', '添加了新闻标签，名为：TEST', '2018-03-02 14:48:13');
+INSERT INTO `oplog` VALUES ('6', '1', '127.0.0.1', '修改了新闻类别，原类别名为：政策法规，新类别名为：政策法规', '2018-03-02 15:13:22');
+INSERT INTO `oplog` VALUES ('7', '1', '127.0.0.1', '修改了新闻标签，原标签名为：TEST，新标签名为：TEST_TEST。原所属类别为：资格考试，新所属类别为：考试动态。', '2018-03-02 15:55:27');
+INSERT INTO `oplog` VALUES ('8', '1', '127.0.0.1', '添加了新闻类别，名为：TEST', '2018-03-02 15:59:23');
+INSERT INTO `oplog` VALUES ('9', '1', '127.0.0.1', '修改了新闻标签，原标签名为：TEST_TEST，新标签名为：TEST_TEST。原所属类别为：考试动态，新所属类别为：TEST。', '2018-03-02 16:25:23');
+INSERT INTO `oplog` VALUES ('10', '1', '127.0.0.1', '删除了新闻标签，名为：TEST_TEST', '2018-03-02 16:27:36');
+INSERT INTO `oplog` VALUES ('11', '1', '127.0.0.1', '添加了新闻标签，名为：TEST', '2018-03-02 16:36:24');
+INSERT INTO `oplog` VALUES ('12', '1', '127.0.0.1', '删除了新闻标签，名为：TEST', '2018-03-02 16:36:29');
+INSERT INTO `oplog` VALUES ('13', '1', '127.0.0.1', '添加了新闻标签，名为：TESGDSGS', '2018-03-02 16:36:57');
+INSERT INTO `oplog` VALUES ('14', '1', '127.0.0.1', '修改了新闻标签，原标签名为：TESGDSGS，新标签名为：TESGDSGST。原所属类别为：TEST，新所属类别为：TEST。', '2018-03-02 16:37:05');
+INSERT INTO `oplog` VALUES ('15', '1', '127.0.0.1', '删除了新闻类别，名为：TEST', '2018-03-02 16:37:41');
 
 -- ----------------------------
 -- Table structure for refbook
@@ -381,10 +397,13 @@ CREATE TABLE `userlog` (
   KEY `user_id` (`user_id`),
   KEY `ix_userlog_addtime` (`addtime`),
   CONSTRAINT `userlog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of userlog
 -- ----------------------------
 INSERT INTO `userlog` VALUES ('1', '1', '127.0.0.1', '2018-03-01 14:21:37');
-INSERT INTO `userlog` VALUES ('2', '1', '127.0.0.1', '2018-03-01 14:33:11');
+INSERT INTO `userlog` VALUES ('3', '1', '127.0.0.1', '2018-03-01 14:59:12');
+INSERT INTO `userlog` VALUES ('4', '1', '127.0.0.1', '2018-03-01 15:54:02');
+INSERT INTO `userlog` VALUES ('5', '1', '127.0.0.1', '2018-03-01 17:45:49');
+INSERT INTO `userlog` VALUES ('6', '1', '127.0.0.1', '2018-03-02 12:11:49');

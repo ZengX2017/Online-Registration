@@ -11,7 +11,8 @@ from werkzeug.utils import secure_filename  # 安全修改文件名
 from functools import wraps
 from app.admin.forms import NewsCategoryForm, NewsTagForm, NewsInfoForm, TlevelForm, TsubjectForm, RefbookForm, \
     TinfoForm, LoginForm, ChangePwdForm
-from app.models import NewsCategory, NewsTag, NewsInfo, Admin, Tlevel, Tsubject, Refbook, Tinfo, Adminlog
+from app.models import NewsCategory, NewsTag, NewsInfo, Admin, Tlevel, Tsubject, Refbook, Tinfo, Adminlog, \
+    Userlog, Oplog
 from app import app, db
 from . import admin
 
@@ -20,12 +21,15 @@ from . import admin
 def login_req(f):
     """访问控制
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "admin" not in session:
             return redirect(url_for("admin.login", next=request.url))
         return f(*args, **kwargs)
+
     return decorated_function
+
 
 # 修改文件名称
 def change_filename(filename):
@@ -102,13 +106,13 @@ def newscategory_add():
         db.session.add(nc)
         db.session.commit()
         flash("添加类别成功", "OK")
-        # oplog = Oplog(
-        #     admin_id=session["admin_id"],
-        #     ip=request.remote_addr,
-        #     reason="添加标签：%s" % data["name"]
-        # )
-        # db.session.add(oplog)
-        # db.session.commit()
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了新闻类别，名为：%s" % (data["name"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.newscategory_add"))
     return render_template("admin/newscategory_add.html", form=form)
 
@@ -117,9 +121,17 @@ def newscategory_add():
 @admin.route("/newscategory/del/<int:id>/", methods=["GET"])
 def newscategory_del(id=None):
     newscategory = NewsCategory.query.filter_by(id=id).first_or_404()
+    name = newscategory.name
     db.session.delete(newscategory)
     db.session.commit()
     flash("删除类别成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了新闻类别，名为：%s" % name
+    )
+    db.session.add(oplog)
+    db.session.commit()
     return redirect(url_for("admin.newscategory_list"))
 
 
@@ -131,6 +143,7 @@ def newscategory_edit(id=None):
     if form.validate_on_submit():
         data = form.data
         nc = NewsCategory.query.filter_by(name=data["name"]).count()
+        old_name = data["name"]
         if newscategory.name != data["name"] and nc == 1:
             flash("名称已经存在！", "err")
             return redirect(url_for("admin.newscategory_edit", id=id))
@@ -138,6 +151,13 @@ def newscategory_edit(id=None):
         db.session.add(newscategory)
         db.session.commit()
         flash("修改类别成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="修改了新闻类别，原类别名为：%s，新类别名为：%s" % (old_name, data["name"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.newscategory_edit", id=id))
     return render_template("admin/newscategory_edit.html", form=form, newscategory=newscategory)
 
@@ -145,9 +165,7 @@ def newscategory_edit(id=None):
 # 新闻类别列表
 @admin.route("/newscategory/list/", methods=["GET"])
 def newscategory_list():
-    page_data = NewsCategory.query.order_by(
-        NewsCategory.addtime.asc()
-    )
+    page_data = NewsCategory.query.all()
     return render_template("admin/newscategory_list.html", page_data=page_data)
 
 
@@ -168,6 +186,13 @@ def newstag_add():
         db.session.add(newstag)
         db.session.commit()
         flash("添加标签成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了新闻标签，名为：%s" % (data["name"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.newstag_add"))
     return render_template("admin/newstag_add.html", form=form)
 
@@ -181,6 +206,59 @@ def newstag_list():
         NewsTag.addtime.asc()
     )
     return render_template("admin/newstag_list.html", page_data=page_data)
+
+
+# 新闻标签编辑
+@admin.route("/newstag/edit/<int:id>/", methods=["GET", "POST"])
+def newstag_edit(id=None):
+    form = NewsTagForm()
+    newstag = NewsTag.query.get_or_404(id)
+    old_category = newstag.newscategory.name
+    old_name = newstag.name
+    if request.method == "GET":
+        form.name.data = newstag.name
+        form.category.data = newstag.newscategory_id
+    if form.validate_on_submit():
+        data = form.data
+        nt = NewsTag.query.filter_by(name=data["name"]).count()
+        if newstag.name != data["name"] and nt == 1:
+            flash("此标签名已经存在！", "err")
+            return redirect(url_for("admin.newstag_edit", id=id))
+        newstag.name = data["name"]
+        newstag.newscategory_id = data["category"]
+        new_name = data["name"]
+        new_category = NewsCategory.query.filter_by(id=data["category"]).first().name  # 根据id找到新的类别名称
+        db.session.add(newstag)
+        db.session.commit()
+        flash("修改标签成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="修改了新闻标签，原标签名为：%s，新标签名为：%s。原所属类别为：%s，新所属类别为：%s。" % (
+            old_name, new_name, old_category, new_category)
+        )
+        db.session.add(oplog)
+        db.session.commit()
+        return redirect(url_for("admin.newstag_edit", id=id))
+    return render_template("admin/newstag_edit.html", form=form, newstag=newstag)
+
+
+# 新闻标签删除
+@admin.route("/newstag/del/<int:id>/", methods=["GET"])
+def newstag_del(id=None):
+    newstag = NewsTag.query.filter_by(id=id).first_or_404()
+    name = newstag.name
+    db.session.delete(newstag)
+    db.session.commit()
+    flash("删除标签成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了新闻标签，名为：%s" % name
+    )
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for("admin.newstag_list"))
 
 
 # 新闻资讯添加
@@ -198,7 +276,8 @@ def newsinfo_add():
             info_img = secure_filename(imgs.filename)
             if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
                 os.makedirs(app.config["UP_NEWS_INFO_DIR"])
-                os.chmod(app.config["UP_NEWS_INFO_DIR"], stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
+                os.chmod(app.config["UP_NEWS_INFO_DIR"],
+                         stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
             img = change_filename(info_img)  # 处理文件结束
             img_list = img_list + img + ";"
             form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
@@ -400,7 +479,7 @@ def admin_log():
     ).filter(
         Admin.id == Adminlog.admin_id
     ).order_by(
-        Adminlog.addtime.desc()
+        Adminlog.addtime.asc()
     )
     return render_template("admin/admin_log.html", page_data=page_data)
 
@@ -408,13 +487,19 @@ def admin_log():
 # 操作日志列表
 @admin.route("/oplog_list/", methods=["GET"])
 def oplog_list():
-    return render_template("admin/oplog.html")
+    page_data = Oplog.query.order_by(
+        Oplog.addtime.asc()
+    )
+    return render_template("admin/oplog.html", page_data=page_data)
 
 
 # 用户登录日志列表
 @admin.route("/user_log_list/", methods=["GET"])
 def user_log():
-    return render_template("admin/user_log.html")
+    page_data = Userlog.query.order_by(
+        Userlog.addtime.asc()
+    )
+    return render_template("admin/user_log.html", page_data=page_data)
 
 
 # 管理员信息添加

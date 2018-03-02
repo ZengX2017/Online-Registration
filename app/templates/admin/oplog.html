@@ -1,6 +1,5 @@
 {% extends 'admin/admin.html' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
 {% endblock %}
 {% block content %}
@@ -20,46 +19,31 @@
                     <thead>
                     <tr>
                         <th class="text-center">编号</th>
-                        <th class="text-center">昵称</th>
+                        <th class="text-center">操作人</th>
                         <th class="text-center">操作原因</th>
+                        <th class="text-center">操作ip</th>
                         <th class="text-center">操作时间</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
+                    {% for value in page_data %}
                     <tr>
-                        <td>1</td>
-                        <td>Adward</td>
-                        <td>Adward</td>
-                        <td>2018-01-01</td>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ value.admin.name }}</td>
+                        <td>{{ value.opdetail }}</td>
+                        <td>{{ value.ip }}</td>
+                        <td>{{ value.addtime }}</td>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Adward</td>
-                        <td>Adward</td>
-                        <td>2018-01-01</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Adward</td>
-                        <td>Adward</td>
-                        <td>2018-01-01</td>
-                    </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
-
-
             </div>
             <!-- end: page -->
-
         </div> <!-- end Panel -->
-
-
     </div>
-
     <!-- Page content end -->
 {% endblock %}
 {% block js %}
-    <script src="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
     <script>
@@ -82,7 +66,12 @@
             },
             "iDisplayLength": 10,
             "lengthMenu": [5, 10, 20, 50],
+            "searching": false,
             "pagingType": "full_numbers"
+        });
+        $(document).ready(function () {
+            $("#g-10").addClass("active");
+            $("#g-10-2").addClass("active");
         });
     </script>
 {% endblock %}

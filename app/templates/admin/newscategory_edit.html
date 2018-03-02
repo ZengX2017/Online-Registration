@@ -30,7 +30,7 @@
                             </div>
                         {% endfor %}
                         <!-- 消息闪现提示 -->
-                        <form role="form" method="post" action="{{ url_for('admin.newscategory_edit', id=newscategory.id) }}">
+                        <form role="form" method="post">
                             <!-- 验证提示 -->
                             {% for err in form.name.errors %}
                                 <div class="alert alert-danger alert-dismissable">
@@ -61,6 +61,6 @@
         $(document).ready(function () {
             $("#g-2").addClass("active");
             $("#g-2-1").addClass("active");
-        })
+        });
     </script>
 {% endblock %}

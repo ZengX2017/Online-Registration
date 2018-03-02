@@ -25,10 +25,10 @@
         <!-- 新闻标签管理 -->
 
         <!-- 新闻资讯管理 -->
-        <li class="has-submenu"><a href="#"><i class="ion-compose"></i> <span class="nav-label">新闻资讯管理</span></a>
+        <li class="has-submenu" id="g-4"><a href="#"><i class="ion-compose"></i> <span class="nav-label">新闻资讯管理</span></a>
             <ul class="list-unstyled">
-                <li><a href="{{ url_for('admin.newsinfo_add') }}">添加新闻资讯</a></li>
-                <li><a href="{{ url_for('admin.newsinfo_list') }}">新闻资讯列表</a></li>
+                <li id="g-4-1"><a href="{{ url_for('admin.newsinfo_add') }}">添加新闻资讯</a></li>
+                <li id="g-4-2"><a href="{{ url_for('admin.newsinfo_list') }}">新闻资讯列表</a></li>
             </ul>
         </li>
         <!-- 新闻资讯管理 -->
@@ -79,11 +79,11 @@
         <!-- 用户管理 -->
 
         <!-- 日志管理 -->
-        <li class="has-submenu"><a href="#"><i class="ion-document"></i> <span class="nav-label">日志管理</span></a>
+        <li class="has-submenu" id="g-10"><a href="#"><i class="ion-document"></i> <span class="nav-label">日志管理</span></a>
             <ul class="list-unstyled">
-                <li><a href="{{ url_for('admin.admin_log') }}">管理员登录日志列表</a></li>
-                <li><a href="{{ url_for('admin.oplog_list') }}">操作日志列表</a></li>
-                <li><a href="{{ url_for('admin.user_log') }}">用户登录日志列表</a></li>
+                <li id="g-10-1"><a href="{{ url_for('admin.admin_log') }}">管理员登录日志列表</a></li>
+                <li id="g-10-2"><a href="{{ url_for('admin.oplog_list') }}">操作日志列表</a></li>
+                <li id="g-10-3"><a href="{{ url_for('admin.user_log') }}">用户登录日志列表</a></li>
             </ul>
         </li>
         <!-- 日志管理 -->

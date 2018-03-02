@@ -8,12 +8,6 @@ from wtforms.validators import DataRequired, EqualTo, ValidationError, length
 from app.models import NewsCategory, NewsTag, Tlevel, Tsubject, Refbook, Admin
 import re
 
-newsCategorys = NewsCategory.query.all()
-newsTags = NewsTag.query.all()
-tlevles = Tlevel.query.all()
-tsubjects = Tsubject.query.all()
-refbooks = Refbook.query.all()
-
 
 class NewsCategoryForm(FlaskForm):
     name = StringField(
@@ -53,7 +47,7 @@ class NewsTagForm(FlaskForm):
             DataRequired("请选择所属类别")
         ],
         coerce=int,
-        choices=[(v.id, v.name) for v in newsCategorys],
+        choices=[(v.id, v.name) for v in NewsCategory.query.all()],
         description="所属新闻类别",
         render_kw={
             "class": "form-control",
@@ -96,7 +90,7 @@ class NewsInfoForm(FlaskForm):
             DataRequired("请选择所属标签")
         ],
         coerce=int,
-        choices=[(nt.id, nt.name) for nt in newsTags],
+        choices=[(nt.id, nt.name) for nt in NewsTag.query.all()],
         description="所属新闻标签",
         render_kw={
             "class": "form-control",
@@ -281,7 +275,7 @@ class TinfoForm(FlaskForm):
             DataRequired(message=u"请选择考试级别")
         ],
         coerce=int,
-        choices=[(tl.id, tl.level) for tl in tlevles],
+        choices=[(tl.id, tl.level) for tl in Tlevel.query.all()],
         description="考试级别",
         render_kw={
             "class": "form-control",
@@ -293,7 +287,7 @@ class TinfoForm(FlaskForm):
             DataRequired(message=u"请选择考试科目")
         ],
         coerce=int,
-        choices=[(ts.id, ts.subject) for ts in tsubjects],
+        choices=[(ts.id, ts.subject) for ts in Tsubject.query.all()],
         description="考试科目",
         render_kw={
             "class": "form-control",
@@ -373,7 +367,7 @@ class TinfoForm(FlaskForm):
             DataRequired(message=u"请选择所需参考书")
         ],
         coerce=int,
-        choices=[(rb.id, rb.title) for rb in refbooks],
+        choices=[(rb.id, rb.title) for rb in Refbook.query.all()],
         description="考试科目",
         render_kw={
             "class": "form-control",

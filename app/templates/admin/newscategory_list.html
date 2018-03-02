@@ -1,6 +1,5 @@
 {% extends 'admin/admin.html' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
 {% endblock %}
 {% block content %}
@@ -37,7 +36,7 @@
                     <tbody class="text-center">
                     {% for value in page_data %}
                         <tr>
-                            <td>{{ value.id }}</td>
+                            <td>{{ loop.index }}</td>
                             <td>{{ value.name }}</td>
                             <td>{{ value.addtime }}</td>
                             <td class="actions">
@@ -60,7 +59,6 @@
     <!-- Page content end -->
 {% endblock %}
 {% block js %}
-    <script src="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
     <script>
@@ -90,6 +88,6 @@
         $(document).ready(function () {
             $("#g-2").addClass("active");
             $("#g-2-2").addClass("active");
-        })
+        });
     </script>
 {% endblock %}
