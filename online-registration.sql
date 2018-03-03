@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50638
 File Encoding         : 65001
 
-Date: 2018-03-02 17:04:41
+Date: 2018-03-03 16:04:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,8 +48,8 @@ CREATE TABLE `adminlog` (
   PRIMARY KEY (`id`),
   KEY `admin_id` (`admin_id`),
   KEY `ix_adminlog_addtime` (`addtime`),
-  CONSTRAINT `adminlog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  CONSTRAINT `adminlog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of adminlog
@@ -57,6 +57,7 @@ CREATE TABLE `adminlog` (
 INSERT INTO `adminlog` VALUES ('1', '1', '127.0.0.1', '2018-02-12 21:22:37');
 INSERT INTO `adminlog` VALUES ('2', '1', '127.0.0.1', '2018-02-27 10:45:34');
 INSERT INTO `adminlog` VALUES ('3', '1', '127.0.0.1', '2018-03-02 13:47:49');
+INSERT INTO `adminlog` VALUES ('4', '1', '127.0.0.1', '2018-03-03 14:45:58');
 
 -- ----------------------------
 -- Table structure for admission
@@ -75,27 +76,13 @@ CREATE TABLE `admission` (
   KEY `user_id` (`user_id`),
   KEY `tinfo_id` (`tinfo_id`),
   KEY `ix_admission_addtime` (`addtime`),
-  CONSTRAINT `admission_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `admission_ibfk_2` FOREIGN KEY (`tinfo_id`) REFERENCES `tinfo` (`id`)
+  CONSTRAINT `admission_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `admission_ibfk_2` FOREIGN KEY (`tinfo_id`) REFERENCES `tinfo` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of admission
 -- ----------------------------
-
--- ----------------------------
--- Table structure for alembic_version
--- ----------------------------
-DROP TABLE IF EXISTS `alembic_version`;
-CREATE TABLE `alembic_version` (
-  `version_num` varchar(32) NOT NULL,
-  PRIMARY KEY (`version_num`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of alembic_version
--- ----------------------------
-INSERT INTO `alembic_version` VALUES ('dace8b10b26b');
 
 -- ----------------------------
 -- Table structure for newscategory
@@ -107,8 +94,9 @@ CREATE TABLE `newscategory` (
   `addtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `name_2` (`name`),
   KEY `ix_newscategory_addtime` (`addtime`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of newscategory
@@ -139,8 +127,8 @@ CREATE TABLE `newsinfo` (
   KEY `admin_id` (`admin_id`),
   KEY `newstag_id` (`newstag_id`),
   KEY `ix_newsinfo_addtime` (`addtime`),
-  CONSTRAINT `newsinfo_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`),
-  CONSTRAINT `newsinfo_ibfk_2` FOREIGN KEY (`newstag_id`) REFERENCES `newstag` (`id`)
+  CONSTRAINT `newsinfo_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `newsinfo_ibfk_2` FOREIGN KEY (`newstag_id`) REFERENCES `newstag` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -163,13 +151,14 @@ CREATE TABLE `newstag` (
   UNIQUE KEY `name_2` (`name`),
   KEY `newscategory_id` (`newscategory_id`),
   KEY `ix_newstag_addtime` (`addtime`),
-  CONSTRAINT `newstag_ibfk_1` FOREIGN KEY (`newscategory_id`) REFERENCES `newscategory` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  CONSTRAINT `newstag_ibfk_1` FOREIGN KEY (`newscategory_id`) REFERENCES `newscategory` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of newstag
 -- ----------------------------
 INSERT INTO `newstag` VALUES ('1', '考试简介', '2', '2018-02-08 22:51:42');
+INSERT INTO `newstag` VALUES ('5', 'TEST', '4', '2018-03-03 13:45:12');
 
 -- ----------------------------
 -- Table structure for oplog
@@ -184,8 +173,8 @@ CREATE TABLE `oplog` (
   PRIMARY KEY (`id`),
   KEY `admin_id` (`admin_id`),
   KEY `ix_oplog_addtime` (`addtime`),
-  CONSTRAINT `oplog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+  CONSTRAINT `oplog_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of oplog
@@ -204,6 +193,9 @@ INSERT INTO `oplog` VALUES ('12', '1', '127.0.0.1', '删除了新闻标签，名
 INSERT INTO `oplog` VALUES ('13', '1', '127.0.0.1', '添加了新闻标签，名为：TESGDSGS', '2018-03-02 16:36:57');
 INSERT INTO `oplog` VALUES ('14', '1', '127.0.0.1', '修改了新闻标签，原标签名为：TESGDSGS，新标签名为：TESGDSGST。原所属类别为：TEST，新所属类别为：TEST。', '2018-03-02 16:37:05');
 INSERT INTO `oplog` VALUES ('15', '1', '127.0.0.1', '删除了新闻类别，名为：TEST', '2018-03-02 16:37:41');
+INSERT INTO `oplog` VALUES ('16', '1', '127.0.0.1', '添加了新闻类别，名为：TESTTEST', '2018-03-03 13:45:03');
+INSERT INTO `oplog` VALUES ('17', '1', '127.0.0.1', '添加了新闻标签，名为：TEST', '2018-03-03 13:45:12');
+INSERT INTO `oplog` VALUES ('18', '1', '127.0.0.1', '删除了新闻类别，名为：TESTTEST', '2018-03-03 13:48:31');
 
 -- ----------------------------
 -- Table structure for refbook
@@ -254,9 +246,9 @@ CREATE TABLE `tinfo` (
   KEY `subject_id` (`subject_id`),
   KEY `refbook_id` (`refbook_id`),
   KEY `ix_tinfo_addtime` (`addtime`),
-  CONSTRAINT `tinfo_ibfk_1` FOREIGN KEY (`level_id`) REFERENCES `tlevel` (`id`),
-  CONSTRAINT `tinfo_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `tsubject` (`id`),
-  CONSTRAINT `tinfo_ibfk_3` FOREIGN KEY (`refbook_id`) REFERENCES `refbook` (`id`)
+  CONSTRAINT `tinfo_ibfk_1` FOREIGN KEY (`level_id`) REFERENCES `tlevel` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tinfo_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `tsubject` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `tinfo_ibfk_3` FOREIGN KEY (`refbook_id`) REFERENCES `refbook` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -299,8 +291,8 @@ CREATE TABLE `trinfo` (
   KEY `level_id` (`level_id`),
   KEY `subject_id` (`subject_id`),
   KEY `ix_trinfo_addtime` (`addtime`),
-  CONSTRAINT `trinfo_ibfk_1` FOREIGN KEY (`level_id`) REFERENCES `tlevel` (`id`),
-  CONSTRAINT `trinfo_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `tsubject` (`id`)
+  CONSTRAINT `trinfo_ibfk_1` FOREIGN KEY (`level_id`) REFERENCES `tlevel` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `trinfo_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `tsubject` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -342,9 +334,9 @@ CREATE TABLE `urinfo` (
   KEY `level_id` (`level_id`),
   KEY `subject_id` (`subject_id`),
   KEY `ix_urinfo_addtime` (`addtime`),
-  CONSTRAINT `urinfo_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `urinfo_ibfk_2` FOREIGN KEY (`level_id`) REFERENCES `tlevel` (`id`),
-  CONSTRAINT `urinfo_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `tsubject` (`id`)
+  CONSTRAINT `urinfo_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `urinfo_ibfk_2` FOREIGN KEY (`level_id`) REFERENCES `tlevel` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `urinfo_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `tsubject` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -365,8 +357,8 @@ CREATE TABLE `user` (
   `phone` varchar(11) DEFAULT NULL,
   `face` varchar(255) DEFAULT NULL,
   `area` varchar(200) DEFAULT NULL,
-  `addtime` datetime DEFAULT NULL,
   `id_status` smallint(6) DEFAULT NULL,
+  `addtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `id_card` (`id_card`),
@@ -382,7 +374,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'UserTest', 'pbkdf2:sha256:50000$caF9Z7a5$eef64d9593bef1fe763ac6d2d2281ede710336866ff65e0260bda090d1b11b94', '0', '4@1.co', null, null, null, null, '2018-02-28 14:18:43', '0');
+INSERT INTO `user` VALUES ('1', 'UserTest', 'pbkdf2:sha256:50000$caF9Z7a5$eef64d9593bef1fe763ac6d2d2281ede710336866ff65e0260bda090d1b11b94', '0', '4@1.co', null, null, null, null, '0', '2018-02-28 14:18:43');
 
 -- ----------------------------
 -- Table structure for userlog
@@ -396,7 +388,7 @@ CREATE TABLE `userlog` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `ix_userlog_addtime` (`addtime`),
-  CONSTRAINT `userlog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `userlog_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------

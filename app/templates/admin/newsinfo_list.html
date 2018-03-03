@@ -30,13 +30,13 @@
                     <tbody class="text-center">
                     {% for value in page_data %}
                         <tr>
-                            <td>{{ value.id }}</td>
+                            <td>{{ loop.index }}</td>
                             <td>{{ value.title }}</td>
                             <td>{{ value.admin.name }}</td>
                             <td>{{ value.newstag.name }}</td>
                             <td>{{ value.addtime }}</td>
                             <td class="actions">
-                                <a href="#"><i class="fa fa-pencil"></i></a>
+                                <a href="{{ url_for('admin.newsinfo_edit', id=value.id) }}"><i class="fa fa-pencil"></i></a>
                                 <a class="sa-warning"><i class="fa fa-trash-o"></i></a>
                             </td>
                         </tr>
@@ -110,6 +110,7 @@
             },
             "iDisplayLength": 10,
             "lengthMenu": [5, 10, 20, 50],
+            "searching": false,
             "pagingType": "full_numbers"
         });
     </script>

@@ -173,6 +173,8 @@ def newscategory_list():
 @admin.route("/newstag/add/", methods=["GET", "POST"])
 def newstag_add():
     form = NewsTagForm()
+    # 每次刷新列表
+    form.category.choices = [(v.id, v.name) for v in NewsCategory.query.all()]
     if form.validate_on_submit():
         data = form.data
         nt = NewsTag.query.filter_by(name=data["name"]).count()
@@ -212,6 +214,8 @@ def newstag_list():
 @admin.route("/newstag/edit/<int:id>/", methods=["GET", "POST"])
 def newstag_edit(id=None):
     form = NewsTagForm()
+    # 每次刷新列表
+    form.category.choices = [(v.id, v.name) for v in NewsCategory.query.all()]
     newstag = NewsTag.query.get_or_404(id)
     old_category = newstag.newscategory.name
     old_name = newstag.name
@@ -235,7 +239,7 @@ def newstag_edit(id=None):
             admin_id=session["admin_id"],
             ip=request.remote_addr,
             opdetail="修改了新闻标签，原标签名为：%s，新标签名为：%s。原所属类别为：%s，新所属类别为：%s。" % (
-            old_name, new_name, old_category, new_category)
+                old_name, new_name, old_category, new_category)
         )
         db.session.add(oplog)
         db.session.commit()
@@ -265,6 +269,7 @@ def newstag_del(id=None):
 @admin.route("/newsinfo/add/", methods=["GET", "POST"])
 def newsinfo_add():
     form = NewsInfoForm()
+    form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
     if form.validate_on_submit():
         data = form.data
         ni = NewsInfo.query.filter_by(title=data["title"]).count()
@@ -298,6 +303,13 @@ def newsinfo_add():
         db.session.add(newsinfo)
         db.session.commit()
         flash("添加资讯成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了新闻资讯，名为：%s" % (data["title"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.newsinfo_add"))
     return render_template("admin/newsinfo_add.html", form=form)
 
@@ -312,6 +324,61 @@ def newsinfo_list():
         NewsInfo.addtime.asc()
     )
     return render_template("admin/newsinfo_list.html", page_data=page_data)
+
+
+# 新闻资讯修改
+# 待修改
+@admin.route("/newsinfo/edit/<int:id>", methods=["GET", "POST"])
+def newsinfo_edit(id=None):
+    form = NewsInfoForm()
+    form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
+    newsinfo = NewsInfo.query.get_or_404(id)
+    # old_category = NewsInfo.newscategory.name
+    # old_name = NewsInfo.name
+    if request.method == "GET":
+        form.tag.data = newsinfo.newstag_id
+    if form.validate_on_submit():
+        data = form.data
+        ni = NewsInfo.query.filter_by(title=data["title"]).count()
+        if ni == 1:
+            flash("此标题已经存在！不能重复添加", "err")
+            return redirect(url_for("admin.newsinfo_add"))
+        img_list = ""
+        for imgs in request.files.getlist('img'):
+            info_img = secure_filename(imgs.filename)
+            if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
+                os.makedirs(app.config["UP_NEWS_INFO_DIR"])
+                os.chmod(app.config["UP_NEWS_INFO_DIR"],
+                         stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
+            img = change_filename(info_img)  # 处理文件结束
+            img_list = img_list + img + ";"
+            form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
+            # photos.save(form.photo.data, name='demo_dir/demo.')
+
+        # img_items = img_list.split(";")
+        # print(img_items)  # 读数据用
+
+        newsinfo = NewsInfo(
+            title=data["title"],
+            content=data["info"],
+            view_num=0,
+            admin_id=1,
+            newstag_id=data["tag"],
+            img=img_list,
+            remark=data["remark"]
+        )
+        db.session.add(newsinfo)
+        db.session.commit()
+        flash("添加资讯成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了新闻资讯，名为：%s" % (data["title"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
+        return redirect(url_for("admin.newsinfo_edit"))
+    return render_template("admin/newsinfo_edit.html", form=form, newsinfo=newsinfo)
 
 
 # 考试级别添加

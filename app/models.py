@@ -15,9 +15,12 @@ class Admin(db.Model):
     is_super = db.Column(db.SmallInteger)  # 是否为超级管理员,0为超级管理员
     # role_id = db.Column(db.Integer, db.ForeignKey('role.id'))  # 所属角色
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    adminlogs = db.relationship("Adminlog", backref='admin')  # 登录日志
-    oplogs = db.relationship("Oplog", backref='admin')  # 操作日志
-    newsinfos = db.relationship('NewsInfo', backref='admin')
+    adminlogs = db.relationship("Adminlog", backref='admin', cascade='all, delete-orphan', lazy='dynamic',
+                                passive_deletes=True)  # 登录日志
+    oplogs = db.relationship("Oplog", backref='admin', cascade='all, delete-orphan', lazy='dynamic',
+                             passive_deletes=True)  # 操作日志
+    newsinfos = db.relationship('NewsInfo', backref='admin', cascade='all, delete-orphan', lazy='dynamic',
+                                passive_deletes=True)
 
     def __repr__(self):
         return "<Admin %r>" % self.name
@@ -32,7 +35,7 @@ class Adminlog(db.Model):
     __tablename__ = "adminlog"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id', ondelete='CASCADE'))
     ip = db.Column(db.String(100))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
 
@@ -45,7 +48,7 @@ class Oplog(db.Model):
     __tablename__ = "oplog"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id', ondelete='CASCADE'))
     ip = db.Column(db.String(100))
     opdetail = db.Column(db.String(600))  # 操作详情
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
@@ -70,9 +73,12 @@ class User(db.Model):
     area = db.Column(db.String(200))
     id_status = db.Column(db.SmallInteger)  # 0为身份证不合理，1为身份证合理，默认为0
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    userlogs = db.relationship('Userlog', backref='user')  # 会员日志外键
-    urinfos = db.relationship('Urinfo', backref='user')
-    admissions = db.relationship('Admission', backref='user')
+    userlogs = db.relationship('Userlog', backref='user', cascade='all, delete-orphan', lazy='dynamic',
+                               passive_deletes=True)  # 会员日志外键
+    urinfos = db.relationship('Urinfo', backref='user', cascade='all, delete-orphan', lazy='dynamic',
+                              passive_deletes=True)
+    admissions = db.relationship('Admission', backref='user', cascade='all, delete-orphan', lazy='dynamic',
+                                 passive_deletes=True)
 
     def __repr__(self):
         return "<User %r>" % self.name
@@ -87,7 +93,7 @@ class Userlog(db.Model):
     __tablename__ = "userlog"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     ip = db.Column(db.String(100))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
 
@@ -109,7 +115,8 @@ class Refbook(db.Model):
     price = db.Column(db.Float)
     pubdate = db.Column(db.Date)
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    tinfos = db.relationship("Tinfo", backref='refbook')
+    tinfos = db.relationship("Tinfo", backref='refbook', cascade='all, delete-orphan', lazy='dynamic',
+                             passive_deletes=True)
 
     def __repr__(self):
         return "<Refbook %r>" % self.title
@@ -122,9 +129,12 @@ class Tlevel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     level = db.Column(db.String(10), unique=True)
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    tinfos = db.relationship("Tinfo", backref='tlevel')
-    trinfos = db.relationship("Trinfo", backref='tlevel')
-    urinfos = db.relationship("Urinfo", backref='tlevel')
+    tinfos = db.relationship("Tinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
+                             passive_deletes=True)
+    trinfos = db.relationship("Trinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
+                              passive_deletes=True)
+    urinfos = db.relationship("Urinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
+                              passive_deletes=True)
 
     def __repr__(self):
         return "<Tlevel %r>" % self.level
@@ -137,9 +147,12 @@ class Tsubject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.String(100), unique=True)
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    tinfos = db.relationship("Tinfo", backref='tsubject')
-    trinfos = db.relationship("Trinfo", backref='tsubject')
-    urinfos = db.relationship("Urinfo", backref='tsubject')
+    tinfos = db.relationship("Tinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
+                             passive_deletes=True)
+    trinfos = db.relationship("Trinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
+                              passive_deletes=True)
+    urinfos = db.relationship("Urinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
+                              passive_deletes=True)
 
     def __repr__(self):
         return "<Tsubject %r>" % self.subject
@@ -150,16 +163,17 @@ class Tinfo(db.Model):
     __tablename__ = "tinfo"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id'))
-    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id'))
+    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id', ondelete='CASCADE'))
+    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id', ondelete='CASCADE'))
     t_time = db.Column(db.DateTime)
     area = db.Column(db.String(255))
     examroom = db.Column(db.String(100))
     personnum = db.Column(db.Integer)
     price = db.Column(db.Float)
-    refbook_id = db.Column(db.Integer, db.ForeignKey('refbook.id'))
+    refbook_id = db.Column(db.Integer, db.ForeignKey('refbook.id', ondelete='CASCADE'))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    admissions = db.relationship("Admission", backref='tinfo')
+    admissions = db.relationship("Admission", backref='tinfo', cascade='all, delete-orphan', lazy='dynamic',
+                                 passive_deletes=True)
 
     def __repr__(self):
         return "<Tinfo %r %r>" % self.level_id.name, self.subject_id.name
@@ -170,8 +184,8 @@ class Trinfo(db.Model):
     __tablename__ = "trinfo"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id'))
-    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id'))
+    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id', ondelete='CASCADE'))
+    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id', ondelete='CASCADE'))
     num = db.Column(db.Integer)
     price = db.Column(db.Float)
     status = db.Column(db.SmallInteger)  # 1表示可以报名，0表示不可以报名
@@ -186,9 +200,9 @@ class Urinfo(db.Model):
     __tablename__ = "urinfo"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id'))
-    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id', ondelete='CASCADE'))
+    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id', ondelete='CASCADE'))
     price = db.Column(db.Float)
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
 
@@ -202,8 +216,8 @@ class Admission(db.Model):
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
     admission_id = db.Column(db.String(18), unique=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    tinfo_id = db.Column(db.Integer, db.ForeignKey('tinfo.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+    tinfo_id = db.Column(db.Integer, db.ForeignKey('tinfo.id', ondelete='CASCADE'))
     status = db.Column(db.SmallInteger)  # 1表示可以打印，0表示不可以打印
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
 
@@ -218,7 +232,8 @@ class NewsCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # 编号
     name = db.Column(db.String(100), unique=True)
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    newstags = db.relationship("NewsTag", backref='newscategory')
+    newstags = db.relationship("NewsTag", backref='newscategory', cascade='all, delete-orphan', lazy='dynamic',
+                               passive_deletes=True)
 
     def __repr__(self):
         return "<NewsCategory %r>" % self.name
@@ -229,10 +244,11 @@ class NewsTag(db.Model):
     __tablename__ = "newstag"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)  # 编号
-    name = db.Column(db.String(100), unique=True)  # 标题
-    newscategory_id = db.Column(db.Integer, db.ForeignKey('newscategory.id'))
+    name = db.Column(db.String(100), unique=True)  # 标题p
+    newscategory_id = db.Column(db.Integer, db.ForeignKey('newscategory.id', ondelete='CASCADE'))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    newsinfos = db.relationship('NewsInfo', backref='newstag')
+    newsinfos = db.relationship('NewsInfo', backref='newstag', cascade='all, delete-orphan', lazy='dynamic',
+                                passive_deletes=True)
 
     def __repr__(self):
         return "<NewsTag %r>" % self.name
@@ -246,8 +262,8 @@ class NewsInfo(db.Model):
     title = db.Column(db.String(100), unique=True)
     content = db.Column(db.String(20000))
     view_num = db.Column(db.Integer)
-    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
-    newstag_id = db.Column(db.Integer, db.ForeignKey('newstag.id'))
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id', ondelete='CASCADE'))
+    newstag_id = db.Column(db.Integer, db.ForeignKey('newstag.id', ondelete='CASCADE'))
     img = db.Column(db.String(300))
     remark = db.Column(db.String(600))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
@@ -257,7 +273,7 @@ class NewsInfo(db.Model):
 
 
 # if __name__ == "__main__":
-#     # db.create_all()
+#     db.create_all()
 #     from werkzeug.security import generate_password_hash
 #     admin = Admin(
 #         name="AdwardAdmin",
