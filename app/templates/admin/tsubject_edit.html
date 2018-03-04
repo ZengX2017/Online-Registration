@@ -7,7 +7,7 @@
             <ol class="breadcrumb" id="breadcrumb">
                 <li><a href="{{ url_for('admin.index') }}">首页</a></li>
                 <li><a href="{{ url_for('admin.newscategory_list') }}">考试科目管理</a></li>
-                <li class="active">添加考试科目</li>
+                <li class="active">修改考试科目</li>
             </ol>
         </div>
 
@@ -43,8 +43,8 @@
                             {% endfor %}
                             <!-- 验证提示 -->
                             <div class="form-group">
-                                {{ form.subject.label(class="form-margin") }}
-                                {{ form.subject }}
+                                <label class="form-margin" for="level">修改考试科目</label>
+                                {{ form.subject(value=tsubject.subject) }}
                             </div>
                             {{ form.csrf_token }}
                             {{ form.submit }}

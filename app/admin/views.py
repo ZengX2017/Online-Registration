@@ -12,8 +12,8 @@ from functools import wraps
 from app.admin.forms import NewsCategoryForm, NewsTagForm, NewsInfoForm, TlevelForm, TsubjectForm, RefbookForm, \
     TinfoForm, LoginForm, ChangePwdForm
 from app.models import NewsCategory, NewsTag, NewsInfo, Admin, Tlevel, Tsubject, Refbook, Tinfo, Adminlog, \
-    Userlog, Oplog
-from app import app, db
+    Userlog, Oplog, User
+from app import app, db, photos
 from . import admin
 
 
@@ -199,15 +199,22 @@ def newstag_add():
     return render_template("admin/newstag_add.html", form=form)
 
 
-# 新闻标签列表
-@admin.route("/newstag/list/", methods=["GET"])
-def newstag_list():
-    page_data = NewsTag.query.join(NewsCategory).filter(
-        NewsCategory.id == NewsTag.newscategory_id
-    ).order_by(
-        NewsTag.addtime.asc()
+# 新闻标签删除
+@admin.route("/newstag/del/<int:id>/", methods=["GET"])
+def newstag_del(id=None):
+    newstag = NewsTag.query.filter_by(id=id).first_or_404()
+    name = newstag.name
+    db.session.delete(newstag)
+    db.session.commit()
+    flash("删除标签成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了新闻标签，名为：%s" % name
     )
-    return render_template("admin/newstag_list.html", page_data=page_data)
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for("admin.newstag_list"))
 
 
 # 新闻标签编辑
@@ -247,22 +254,15 @@ def newstag_edit(id=None):
     return render_template("admin/newstag_edit.html", form=form, newstag=newstag)
 
 
-# 新闻标签删除
-@admin.route("/newstag/del/<int:id>/", methods=["GET"])
-def newstag_del(id=None):
-    newstag = NewsTag.query.filter_by(id=id).first_or_404()
-    name = newstag.name
-    db.session.delete(newstag)
-    db.session.commit()
-    flash("删除标签成功", "OK")
-    oplog = Oplog(
-        admin_id=session["admin_id"],
-        ip=request.remote_addr,
-        opdetail="删除了新闻标签，名为：%s" % name
+# 新闻标签列表
+@admin.route("/newstag/list/", methods=["GET"])
+def newstag_list():
+    page_data = NewsTag.query.join(NewsCategory).filter(
+        NewsCategory.id == NewsTag.newscategory_id
+    ).order_by(
+        NewsTag.addtime.asc()
     )
-    db.session.add(oplog)
-    db.session.commit()
-    return redirect(url_for("admin.newstag_list"))
+    return render_template("admin/newstag_list.html", page_data=page_data)
 
 
 # 新闻资讯添加
@@ -314,6 +314,74 @@ def newsinfo_add():
     return render_template("admin/newsinfo_add.html", form=form)
 
 
+# 新闻资讯删除
+@admin.route("/newsinfo/del/<int:id>/", methods=["GET"])
+def newsinfo_del(id=None):
+    newsinfo = NewsInfo.query.filter_by(id=id).first_or_404()
+    title = newsinfo.title
+    db.session.delete(newsinfo)
+    db.session.commit()
+    flash("删除资讯成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了新闻资讯，标题为：%s" % title
+    )
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for("admin.newsinfo_list"))
+
+
+# 新闻资讯编辑
+# 由于内容，图片之类的难以说明，故资讯只对标题进行操作记录
+@admin.route("/newsinfo/edit/<int:id>", methods=["GET", "POST"])
+def newsinfo_edit(id=None):
+    form = NewsInfoForm()
+    form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
+    newsinfo = NewsInfo.query.get_or_404(id)
+    old_title = newsinfo.title
+    img_list = newsinfo.img
+    img_items = img_list.split(";")  # 因为分割出来有一个为空，所以长度会多1
+    if request.method == "GET":
+        form.tag.data = newsinfo.newstag_id
+        form.remark.data = newsinfo.remark
+    if form.validate_on_submit():
+        data = form.data
+        ni = NewsInfo.query.filter_by(title=data["title"]).count()
+        img_list = ""
+        if newsinfo.title != data["title"] and ni == 1:
+            flash("此标题已经存在！不能重复添加", "err")
+            return redirect(url_for("admin.newsinfo_edit", id=id))
+        for imgs in request.files.getlist('img'):
+            info_img = secure_filename(imgs.filename)
+            if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
+                os.makedirs(app.config["UP_NEWS_INFO_DIR"])
+                os.chmod(app.config["UP_NEWS_INFO_DIR"],
+                         stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
+            img = change_filename(info_img)  # 处理文件结束
+            img_list = img_list + img + ";"
+            # photos.save(form.img.data)
+            form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
+
+        newsinfo.title = data["title"]
+        newsinfo.content = data["info"]
+        newsinfo.newstag_id = data["tag"]
+        newsinfo.img = img_list
+        newsinfo.remark = data["remark"]
+        db.session.add(newsinfo)
+        db.session.commit()
+        flash("修改资讯成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="修改了新闻资讯，原标题名为：%s，新标题名为：%s" % (old_title, data["title"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
+        return redirect(url_for("admin.newsinfo_edit", id=id))
+    return render_template("admin/newsinfo_edit.html", form=form, newsinfo=newsinfo, img_items=img_items)
+
+
 # 新闻资讯列表
 @admin.route("/newsinfo/list/", methods=["GET"])
 def newsinfo_list():
@@ -324,61 +392,6 @@ def newsinfo_list():
         NewsInfo.addtime.asc()
     )
     return render_template("admin/newsinfo_list.html", page_data=page_data)
-
-
-# 新闻资讯修改
-# 待修改
-@admin.route("/newsinfo/edit/<int:id>", methods=["GET", "POST"])
-def newsinfo_edit(id=None):
-    form = NewsInfoForm()
-    form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
-    newsinfo = NewsInfo.query.get_or_404(id)
-    # old_category = NewsInfo.newscategory.name
-    # old_name = NewsInfo.name
-    if request.method == "GET":
-        form.tag.data = newsinfo.newstag_id
-    if form.validate_on_submit():
-        data = form.data
-        ni = NewsInfo.query.filter_by(title=data["title"]).count()
-        if ni == 1:
-            flash("此标题已经存在！不能重复添加", "err")
-            return redirect(url_for("admin.newsinfo_add"))
-        img_list = ""
-        for imgs in request.files.getlist('img'):
-            info_img = secure_filename(imgs.filename)
-            if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
-                os.makedirs(app.config["UP_NEWS_INFO_DIR"])
-                os.chmod(app.config["UP_NEWS_INFO_DIR"],
-                         stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
-            img = change_filename(info_img)  # 处理文件结束
-            img_list = img_list + img + ";"
-            form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
-            # photos.save(form.photo.data, name='demo_dir/demo.')
-
-        # img_items = img_list.split(";")
-        # print(img_items)  # 读数据用
-
-        newsinfo = NewsInfo(
-            title=data["title"],
-            content=data["info"],
-            view_num=0,
-            admin_id=1,
-            newstag_id=data["tag"],
-            img=img_list,
-            remark=data["remark"]
-        )
-        db.session.add(newsinfo)
-        db.session.commit()
-        flash("添加资讯成功", "OK")
-        oplog = Oplog(
-            admin_id=session["admin_id"],
-            ip=request.remote_addr,
-            opdetail="添加了新闻资讯，名为：%s" % (data["title"])
-        )
-        db.session.add(oplog)
-        db.session.commit()
-        return redirect(url_for("admin.newsinfo_edit"))
-    return render_template("admin/newsinfo_edit.html", form=form, newsinfo=newsinfo)
 
 
 # 考试级别添加
@@ -397,8 +410,60 @@ def tlevel_add():
         db.session.add(tlevel)
         db.session.commit()
         flash("添加级别成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了考试级别，级别名为：%s" % (data["level"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.tlevel_add"))
     return render_template("admin/tlevel_add.html", form=form)
+
+
+# 考试级别删除
+@admin.route("/tlevel/del/<int:id>/", methods=["GET"])
+def tlevel_del(id=None):
+    tlevel = Tlevel.query.filter_by(id=id).first_or_404()
+    level = tlevel.level
+    db.session.delete(tlevel)
+    db.session.commit()
+    flash("删除级别成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了考试级别，级别名为：%s" % level
+    )
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for("admin.tlevel_list"))
+
+
+# 考试级别编辑
+@admin.route("/tlevel/edit/<int:id>/", methods=["GET", "POST"])
+def tlevel_edit(id=None):
+    form = TlevelForm()
+    tlevel = Tlevel.query.get_or_404(id)
+    old_level = tlevel.level
+    if form.validate_on_submit():
+        data = form.data
+        tl = Tlevel.query.filter_by(level=data["level"]).count()
+        if tlevel.level != data["level"] and tl == 1:
+            flash("此级别已经存在！不能重复添加", "err")
+            return redirect(url_for("admin.tlevel_edit", id=id))
+        tlevel.level = data["level"]
+        db.session.add(tlevel)
+        db.session.commit()
+        flash("修改级别成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="修改了考试级别，原级别名为：%s，新级别名为：%s" % (old_level, data["level"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
+        return redirect(url_for("admin.tlevel_edit", id=id))
+    return render_template("admin/tlevel_edit.html", form=form, tlevel=tlevel)
 
 
 # 考试级别列表
@@ -426,8 +491,60 @@ def tsubject_add():
         db.session.add(tsubject)
         db.session.commit()
         flash("添加科目成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了考试科目，科目名为：%s" % (data["subject"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.tsubject_add"))
     return render_template("admin/tsubject_add.html", form=form)
+
+
+# 考试科目删除
+@admin.route("/tsubject/del/<int:id>/", methods=["GET"])
+def tsubject_del(id=None):
+    tsubject = Tsubject.query.filter_by(id=id).first_or_404()
+    subject = tsubject.subject
+    db.session.delete(tsubject)
+    db.session.commit()
+    flash("删除科目成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了考试科目，科目名为：%s" % subject
+    )
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for("admin.tsubject_list"))
+
+
+# 考试科目编辑
+@admin.route("/tsubject/edit/<int:id>/", methods=["GET", "POST"])
+def tsubject_edit(id=None):
+    form = TsubjectForm()
+    tsubject = Tsubject.query.get_or_404(id)
+    old_subject = tsubject.subject
+    if form.validate_on_submit():
+        data = form.data
+        ts = Tsubject.query.filter_by(subject=data["subject"]).count()
+        if tsubject.subject != data["subject"] and ts == 1:
+            flash("此科目已经存在！不能重复添加", "err")
+            return redirect(url_for("admin.tsubject_edit", id=id))
+        tsubject.subject = data["subject"]
+        db.session.add(tsubject)
+        db.session.commit()
+        flash("修改科目成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="修改了考试科目，原科目名为：%s，新科目名为：%s" % (old_subject, data["subject"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
+        return redirect(url_for("admin.tsubject_edit", id=id))
+    return render_template("admin/tsubject_edit.html", form=form, tsubject=tsubject)
 
 
 # 考试科目列表
@@ -443,6 +560,9 @@ def tsubject_list():
 @admin.route("/tinfo/add/", methods=["GET", "POST"])
 def tinfo_add():
     form = TinfoForm()
+    form.tlevel.choices = [(tl.id, tl.level) for tl in Tlevel.query.all()]
+    form.tsubject.choices = [(ts.id, ts.subject) for ts in Tsubject.query.all()]
+    form.ref_book.choices = [(rb.id, rb.title) for rb in Refbook.query.all()]
     if form.validate_on_submit():
         data = form.data
         area = data["province"] + "-" + data["city"] + "-" + data["school"]
@@ -492,12 +612,6 @@ def refbook_add():
         if isbn == 1:
             flash("此ISBN已经存在！不能重复添加", "err")
             return redirect(url_for("admin.refbook_add"))
-        pubdate = data["pubdate"]
-        year_index = pubdate.find("年")
-        month_index = pubdate.find("月")
-        day_index = pubdate.find("日")
-        pubdate = pubdate[:year_index] + "-" + pubdate[year_index + 1:month_index] + "-" + pubdate[
-                                                                                           month_index + 1:day_index]
 
         logo_img = secure_filename(form.logo.data.filename)
         if not os.path.exists(app.config["UP_BOOK_DIR"]):  # 处理文件
@@ -514,13 +628,82 @@ def refbook_add():
             pages=data["pages"],
             logo=logo,
             price=data["price"],
-            pubdate=pubdate
+            pubdate=data["pubdate"]
         )
         db.session.add(refbook)
         db.session.commit()
         flash("添加参考书成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了参考书，书名为：%s，ISBN为：%s" % (data["title"], data["ISBN"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.refbook_add"))
     return render_template("admin/refbook_add.html", form=form)
+
+
+# 参考书删除
+@admin.route("/refbook/del/<int:id>/", methods=["GET"])
+def refbook_del(id=None):
+    refbook = Refbook.query.filter_by(id=id).first_or_404()
+    old_title = refbook.title
+    old_isbn = refbook.ISBN
+    db.session.delete(refbook)
+    db.session.commit()
+    flash("删除参考书成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了参考书，书名为：%s，ISBN为：%s" % (old_title, old_isbn)
+    )
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for("admin.refbook_list"))
+
+
+# 参考书编辑
+@admin.route("/refbook/edit/<int:id>/", methods=["GET", "POST"])
+def refbook_edit(id=None):
+    form = RefbookForm()
+    refbook = Refbook.query.get_or_404(id)
+    form.logo.validators = []  # 取消掉参考书中封面的验证
+    old_title = refbook.title
+    old_ISBN = refbook.ISBN
+    if request.method == "GET":
+        form.pubdate.data = refbook.pubdate
+
+    if form.validate_on_submit():
+        data = form.data
+        isbn = Refbook.query.filter_by(ISBN=data["ISBN"]).count()
+        if refbook.ISBN != data["ISBN"] and isbn == 1:
+            flash("此ISBN已经存在！不能重复添加", "err")
+            return redirect(url_for("admin.refbook_edit", id=id))
+
+        if form.logo.data != "":
+            book_logo = secure_filename(form.logo.data.filename)
+            refbook.logo = change_filename(book_logo)
+            form.logo.data.save(app.config["UP_BOOK_DIR"] + refbook.logo)
+
+        refbook.title = data["title"]
+        refbook.author = data["author"]
+        refbook.public = data["public"]
+        refbook.pages = data["pages"]
+        refbook.price = data["price"]
+        refbook.pubdate = data["pubdate"]
+        db.session.add(refbook)
+        db.session.commit()
+        flash("修改参考书成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="修改了参考书，原书名为：%s，原ISBN为：%s。现书名为：%s，现ISBN为：%s" % (old_title, old_ISBN, data["title"], data["ISBN"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
+        return redirect(url_for("admin.refbook_edit", id=id))
+    return render_template("admin/refbook_edit.html", form=form, refbook=refbook)
 
 
 # 参考书列表
@@ -532,10 +715,39 @@ def refbook_list():
     return render_template("admin/refbook_list.html", page_data=page_data)
 
 
+# 用户信息查看
+@admin.route("/user/info/<int:id>/", methods=["GET"])
+def user_info(id=None):
+    user = User.query.get_or_404(id)
+    return render_template("admin/user_info.html", user=user)
+
+
+# 用户信息删除
+@admin.route("/user/del/<int:id>/", methods=["GET"])
+def user_del(id=None):
+    user = User.query.filter_by(id=id).first_or_404()
+    name = user.name
+    email = user.email
+    db.session.delete(user)
+    db.session.commit()
+    flash("删除用户成功", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了用户，姓名为：%s，账号为：%s" % (name, email)
+    )
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for("admin.user_list"))
+
+
 # 用户信息列表
 @admin.route("/user/list/", methods=["GET"])
 def user_list():
-    return render_template("admin/user_list.html")
+    page_data = User.query.order_by(
+        User.addtime.asc()
+    )
+    return render_template("admin/user_list.html", page_data=page_data)
 
 
 # 管理员登录日志列表

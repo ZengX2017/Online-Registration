@@ -6,8 +6,8 @@
         <div class="page-title">
             <ol class="breadcrumb" id="breadcrumb">
                 <li><a href="{{ url_for('admin.index') }}">首页</a></li>
-                <li><a href="{{ url_for('admin.newscategory_list') }}">考试科目管理</a></li>
-                <li class="active">添加考试科目</li>
+                <li><a href="{{ url_for('admin.tlevel_list') }}">考试级别管理</a></li>
+                <li class="active">修改考试级别</li>
             </ol>
         </div>
 
@@ -33,7 +33,7 @@
                         <!-- 消息闪现提示 -->
                         <form role="form" method="post">
                             <!-- 验证提示 -->
-                            {% for err in form.subject.errors %}
+                            {% for err in form.level.errors %}
                                 <div class="alert alert-danger alert-dismissable">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
                                     </button>
@@ -43,8 +43,8 @@
                             {% endfor %}
                             <!-- 验证提示 -->
                             <div class="form-group">
-                                {{ form.subject.label(class="form-margin") }}
-                                {{ form.subject }}
+                                <label class="form-margin" for="level">修改考试级别</label>
+                                {{ form.level(value=tlevel.level) }}
                             </div>
                             {{ form.csrf_token }}
                             {{ form.submit }}
@@ -60,8 +60,8 @@
 {% block js %}
     <script>
         $(document).ready(function () {
-            $("#g-6").addClass("active");
-            $("#g-6-1").addClass("active");
+            $("#g-5").addClass("active");
+            $("#g-5-1").addClass("active");
         });
     </script>
 {% endblock %}

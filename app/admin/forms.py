@@ -250,7 +250,7 @@ class RefbookForm(FlaskForm):
         render_kw={
             "class": "form-control",
             "id": "datepicker",
-            "placeholder": "yyyy年mm月dd日",
+            "placeholder": "yyyy-mm-dd",
         }
     )
     submit = SubmitField(

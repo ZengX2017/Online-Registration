@@ -1,0 +1,116 @@
+{% extends 'admin/admin.html' %}
+{% block content %}
+    <!-- Page content -->
+    <div class="wraper container-fluid">
+
+        <div class="page-title">
+            <ol class="breadcrumb" id="breadcrumb">
+                <li><a href="{{ url_for('admin.index') }}">首页</a></li>
+                <li><a href="{{ url_for('admin.user_list') }}">用户管理</a></li>
+                <li class="active">用户个人信息</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">用户个人信息</h3></div>
+                    <div class="panel-body">
+                        <!-- 消息闪现提示 -->
+                        {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i>&nbsp;操作成功</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        <!-- 消息闪现提示 -->
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="name">姓名</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="name" name="name" type="text"
+                                           value="{{ user.name }}"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="gender">性别</label>
+                                <div class="col-md-10">
+                                    <select class="form-control" id="gender" name="gender" disabled>
+                                        {% if user.gender == 0 %}
+                                            <option value="0" selected>女</option>
+                                        {% else %}
+                                            <option value="1" selected>男</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="email">邮箱</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="email" name="email" type="text"
+                                           value="{% if user.email %} {{ user.email }} {% else %}  {% endif %}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="id_card">身份证</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="id_card" name="id_card" placeholder="请输入身份证"
+                                           type="text"
+                                           value="{% if user.id_card %} {{ user.id_card }} {% else %}  {% endif %}"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="phone">手机号码</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="phone" name="phone" placeholder="请输入手机号码"
+                                           type="text"
+                                           value="{% if user.phone %} {{ user.phone }} {% else %}  {% endif %}"
+                                           disabled>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="face">头像</label>
+                                <div class="col-md-10">
+                                    {% if user.face %}
+                                    <img src="{{ url_for('static', filename='images/' + user.face) }}" alt="头像pic"
+                                         style="width: 300px;height: 250px;">
+                                    {% else %}
+                                    <img src="{{ url_for('static', filename='images/a1.jpg') }}" alt="头像pic"
+                                         style="width: 300px;height: 250px;">
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="area">地址</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="area" name="area" placeholder="请输入地址" type="text"
+                                           value="{% if user.phone %} {{ user.phone }} {% else %}  {% endif %}"
+                                           disabled>
+                                </div>
+                            </div>
+                        </form>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel -->
+            </div> <!-- col -->
+        </div>
+    </div>
+    <!-- Page content end -->
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $("#g-9").addClass("active");
+            $("#g-9-1").addClass("active");
+        });
+    </script>
+{% endblock %}
