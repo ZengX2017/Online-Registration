@@ -9,14 +9,14 @@ from app.models import User
 
 class RegisterForm(FlaskForm):
     name = StringField(
-        label="账号",
-        validators=[
-            DataRequired("请输入您的账号！")
-        ],
-        description="账号",
+        label="姓名（可选）",
+        # validators=[
+        #     DataRequired("请输入您的姓名！")
+        # ],
+        description="姓名",
         render_kw={
             "class": "form-control",
-            "placeholder": "请输入您的账号",
+            "placeholder": "请输入您的姓名",
         }
     )
     email = StringField(
@@ -72,17 +72,11 @@ class RegisterForm(FlaskForm):
         }
     )
 
-    def validate_name(self, field):
-        name = field.data
-        user = User.query.filter_by(name=name).count()
-        if user == 1:
-            raise ValidationError("账号已经存在！")
-
     def validate_email(self, field):
         email = field.data
         user = User.query.filter_by(email=email).count()
         if user == 1:
-            raise ValidationError("邮箱已经存在！")
+            raise ValidationError("账号已经存在！")
 
 
 class LoginForm(FlaskForm):
@@ -138,18 +132,18 @@ class UserInfoForm(FlaskForm):
             "class": "form-control",
         }
     )
-    email = StringField(
-        label="邮箱",
-        validators=[
-            DataRequired("请输入邮箱！"),
-            Email(message=u"邮箱格式不对！请重新输入！")
-        ],
-        description="邮箱",
-        render_kw={
-            "class": "form-control",
-            "placeholder": "请输入邮箱",
-        }
-    )
+    # email = StringField(
+    #     label="邮箱",
+    #     validators=[
+    #         DataRequired("请输入邮箱！"),
+    #         Email(message=u"邮箱格式不对！请重新输入！")
+    #     ],
+    #     description="邮箱",
+    #     render_kw={
+    #         "class": "form-control",
+    #         "placeholder": "请输入邮箱",
+    #     }
+    # )
     id_card = StringField(
         label="身份证",
         validators=[

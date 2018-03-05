@@ -2,12 +2,16 @@
   <dictionary name="Adward_Z">
     <words>
       <w>dest</w>
+      <w>dismissable</w>
+      <w>examroom</w>
       <w>imgs</w>
       <w>newsinfo</w>
       <w>newsinfos</w>
       <w>newstag</w>
       <w>oplog</w>
       <w>refbook</w>
+      <w>tinfo</w>
+      <w>userinfo</w>
     </words>
   </dictionary>
 </component>

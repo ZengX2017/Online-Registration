@@ -28,7 +28,8 @@
                     <thead>
                     <tr>
                         <th class="text-center">编号</th>
-                        <th class="text-center">昵称</th>
+                        <th class="text-center">姓名</th>
+                        <th class="text-center">账号</th>
                         <th class="text-center">注册时间</th>
                         <th class="text-center">操作事项</th>
                     </tr>
@@ -37,7 +38,8 @@
                     {% for value in page_data %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ value.name }}</td>
+                        <td>{% if value.name %}{{ value.name }}{% else %} {% endif %}</td>
+                        <td>{{ value.email }}</td>
                         <td>{{ value.addtime }}</td>
                         <td class="actions">
                             <a href="{{ url_for('admin.user_info', id=value.id) }}"><i class="fa fa-pencil"></i></a>

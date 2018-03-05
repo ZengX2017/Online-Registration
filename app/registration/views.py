@@ -66,6 +66,7 @@ def register():
 
 
 # 个人中心
+# 头像没实现
 @registration.route("/userinfo/", methods=["GET", "POST"])
 def userinfo():
     form = UserInfoForm()
@@ -76,7 +77,24 @@ def userinfo():
         form.phone.data = user.phone
         form.area.data = user.area
     if form.validate_on_submit():
-        pass
+        data = form.data
+        ui = User.query.filter_by(id_card=data["id_card"]).count()
+        up = User.query.filter_by(phone=data["phone"]).count()
+        if user.id_card != data["id_card"] and ui == 1:
+            flash("此身份证已经存在！请输入正确的身份证号码！", "err")
+            return redirect(url_for("registration.userinfo"))
+        if user.phone != data["phone"] and up == 1:
+            flash("此手机号码已经存在！请输入正确的手机号码！", "err")
+            return redirect(url_for("registration.userinfo"))
+        user.name = data["name"],
+        user.gender = data["gender"]
+        user.id_card = data["id_card"],
+        user.phone = data["phone"],
+        user.area = data["area"]
+        db.session.add(user)
+        db.session.commit()
+        flash("个人信息修改成功！", "OK")
+        return redirect(url_for("registration.userinfo"))
     return render_template("registration/userinfo.html", form=form, user=user)
 
 
@@ -101,7 +119,7 @@ def change_pwd():
 @registration.route("/userlog/", methods=["GET", "POST"])
 def userlog():
     page_data = Userlog.query.join(User).filter(
-        Userlog.user_id == User.id
+        Userlog.user_id == session["user_id"]
     ).order_by(
         Userlog.addtime.asc()
     )

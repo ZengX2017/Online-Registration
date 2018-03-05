@@ -76,13 +76,145 @@
 
 
 <!-- refbook系列的日期修改 -->
-    # 插件传过来的数据为yyyy-MM-dd，故不用下面的方法了
-    # pubdate = data["pubdate"]  输出测试
-    # year_index = pubdate.find("年")
-    # month_index = pubdate.find("月")
-    # day_index = pubdate.find("日")
-    # pubdate = pubdate[:year_index] + "-" + pubdate[year_index + 1:month_index] + "-" + pubdate[
-    #                                                                                    month_index + 1:day_index]
+# 插件传过来的数据为yyyy-MM-dd，故不用下面的方法了
+# pubdate = data["pubdate"]  输出测试
+# year_index = pubdate.find("年")
+# month_index = pubdate.find("月")
+# day_index = pubdate.find("日")
+# pubdate = pubdate[:year_index] + "-" + pubdate[year_index + 1:month_index] + "-" + pubdate[
+#                                                                                    month_index + 1:day_index]
 <!-- refbook系列的日期修改 -->
 
+<!-- admin_script.html修改 -->
+<script src="{{ url_for('static', filename='js/jquery.scrollTo.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/chat/moment-2.2.1.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/modernizr.min.js') }}"></script>
+
+<!-- sparkline -->
+<script src="{{ url_for('static', filename='assets/sparkline-chart/jquery.sparkline.min.js') }}"
+        type="text/javascript"></script>
+<script src="{{ url_for('static', filename='assets/sparkline-chart/chart-sparkline.js') }}"
+        type="text/javascript"></script>
+
+<!-- sweet alerts -->
+<script src="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.init.js') }}"></script>
+
+<!-- admin_script.html修改 -->
+
+<!-- index.html 中间部分修改 -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="portlet"><!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark text-uppercase">
+                    Yearly Sales Report
+                </h3>
+                <div class="portlet-widgets">
+                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                            class="ion-minus-round"></i></a>
+                    <span class="divider"></span>
+                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="portlet2" class="panel-collapse collapse in">
+                <div class="portlet-body">
+                    <div id="morris-area-example" style="height: 320px;"></div>
+                    <div class="row text-center m-t-30 m-b-30">
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 126</h4>
+                            <small class="text-muted"> Today's Sales</small>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 967</h4>
+                            <small class="text-muted">This Week's Sales</small>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 4500</h4>
+                            <small class="text-muted">This Month's Sales</small>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 87,000</h4>
+                            <small class="text-muted">This Year's Sales</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /Portlet -->
+
+    </div>
+
+    <div class="col-lg-6">
+        <div class="portlet"><!-- /primary heading -->
+            <div class="portlet-heading">
+                <h3 class="portlet-title text-dark text-uppercase">
+                    Weekly Sales Report
+                </h3>
+                <div class="portlet-widgets">
+                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                    <span class="divider"></span>
+                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet1"><i
+                            class="ion-minus-round"></i></a>
+                    <span class="divider"></span>
+                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div id="portlet1" class="panel-collapse collapse in">
+                <div class="portlet-body">
+                    <div id="morris-bar-example" style="height: 320px;"></div>
+
+                    <div class="row text-center m-t-30 m-b-30">
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 126</h4>
+                            <small class="text-muted"> Today's Sales</small>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 967</h4>
+                            <small class="text-muted">This Week's Sales</small>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 4500</h4>
+                            <small class="text-muted">This Month's Sales</small>
+                        </div>
+                        <div class="col-sm-3 col-xs-6">
+                            <h4>$ 87,000</h4>
+                            <small class="text-muted">This Year's Sales</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /Portlet -->
+
+    </div> <!-- end col -->
+</div> <!-- End row -->
+<!-- index.html 中间部分修改 -->
+
+
+<!-- index.html script部分修改 -->
+
+<!-- Chat -->
+<script src="{{ url_for('static', filename='js/jquery.chat.js') }}"></script>
+
+<!--Morris Chart-->
+<script src="{{ url_for('static', filename='assets/morris/morris.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/morris/raphael.min.js') }}"></script>
+<!-- sparkline -->
+<script src="{{ url_for('static', filename='assets/sparkline-chart/jquery.sparkline.min.js') }}"
+        type="text/javascript"></script>
+<script src="{{ url_for('static', filename='assets/sparkline-chart/chart-sparkline.js') }}"
+        type="text/javascript"></script>
+<!-- EASY PIE CHART JS -->
+<script src="{{ url_for('static', filename='assets/easypie-chart/easypiechart.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/easypie-chart/jquery.easypiechart.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/easypie-chart/example.js') }}"></script>
+<!--C3 Chart-->
+<script src="{{ url_for('static', filename='assets/c3-chart/d3.v3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/c3-chart/c3.js') }}"></script>
+
+<!-- index.html script部分修改 -->
 

@@ -40,8 +40,20 @@ def change_filename(filename):
 
 # 首页
 @admin.route("/")
+@login_req
 def index():
-    return render_template("admin/index.html")
+    oplog_list = Oplog.query.order_by(
+        Oplog.addtime.asc()
+    )
+    user_count = User.query.count()
+    oplog_book_list = oplog_list.filter(Oplog.opdetail.like('%参考书%'))
+    oplog_book_list = oplog_book_list[oplog_book_list.count() - 3:]
+    oplog_news_list = oplog_list.filter(Oplog.opdetail.like('%新闻%'))
+    oplog_news_list = oplog_news_list[oplog_news_list.count() - 3:]
+    oplog_test_list = oplog_list.filter(Oplog.opdetail.like('%考试%'))
+    oplog_test_list = oplog_test_list[oplog_test_list.count() - 3:]
+    return render_template("admin/index.html", oplog_book_list=oplog_book_list, oplog_news_list=oplog_news_list,
+                           oplog_test_list=oplog_test_list, user_count=user_count)
 
 
 # 登录
@@ -68,6 +80,7 @@ def login():
 
 # 注销
 @admin.route("/logout/")
+@login_req
 def logout():
     session.pop("admin", None)
     session.pop("admin_id", None)
@@ -76,6 +89,7 @@ def logout():
 
 # 修改密码
 @admin.route("/change_pwd/", methods=["GET", "POST"])
+@login_req
 def change_pwd():
     form = ChangePwdForm()
     if form.validate_on_submit():
@@ -92,6 +106,7 @@ def change_pwd():
 
 # 新闻类别添加
 @admin.route("/newscategory/add/", methods=["GET", "POST"])
+@login_req
 def newscategory_add():
     form = NewsCategoryForm()
     if form.validate_on_submit():
@@ -119,6 +134,7 @@ def newscategory_add():
 
 # 新闻类别删除
 @admin.route("/newscategory/del/<int:id>/", methods=["GET"])
+@login_req
 def newscategory_del(id=None):
     newscategory = NewsCategory.query.filter_by(id=id).first_or_404()
     name = newscategory.name
@@ -137,6 +153,7 @@ def newscategory_del(id=None):
 
 # 新闻类别编辑
 @admin.route("/newscategory/edit/<int:id>/", methods=["GET", "POST"])
+@login_req
 def newscategory_edit(id=None):
     form = NewsCategoryForm()
     newscategory = NewsCategory.query.get_or_404(id)
@@ -164,6 +181,7 @@ def newscategory_edit(id=None):
 
 # 新闻类别列表
 @admin.route("/newscategory/list/", methods=["GET"])
+@login_req
 def newscategory_list():
     page_data = NewsCategory.query.all()
     return render_template("admin/newscategory_list.html", page_data=page_data)
@@ -171,6 +189,7 @@ def newscategory_list():
 
 # 新闻标签添加
 @admin.route("/newstag/add/", methods=["GET", "POST"])
+@login_req
 def newstag_add():
     form = NewsTagForm()
     # 每次刷新列表
@@ -201,6 +220,7 @@ def newstag_add():
 
 # 新闻标签删除
 @admin.route("/newstag/del/<int:id>/", methods=["GET"])
+@login_req
 def newstag_del(id=None):
     newstag = NewsTag.query.filter_by(id=id).first_or_404()
     name = newstag.name
@@ -219,6 +239,7 @@ def newstag_del(id=None):
 
 # 新闻标签编辑
 @admin.route("/newstag/edit/<int:id>/", methods=["GET", "POST"])
+@login_req
 def newstag_edit(id=None):
     form = NewsTagForm()
     # 每次刷新列表
@@ -256,6 +277,7 @@ def newstag_edit(id=None):
 
 # 新闻标签列表
 @admin.route("/newstag/list/", methods=["GET"])
+@login_req
 def newstag_list():
     page_data = NewsTag.query.join(NewsCategory).filter(
         NewsCategory.id == NewsTag.newscategory_id
@@ -267,6 +289,7 @@ def newstag_list():
 
 # 新闻资讯添加
 @admin.route("/newsinfo/add/", methods=["GET", "POST"])
+@login_req
 def newsinfo_add():
     form = NewsInfoForm()
     form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
@@ -316,6 +339,7 @@ def newsinfo_add():
 
 # 新闻资讯删除
 @admin.route("/newsinfo/del/<int:id>/", methods=["GET"])
+@login_req
 def newsinfo_del(id=None):
     newsinfo = NewsInfo.query.filter_by(id=id).first_or_404()
     title = newsinfo.title
@@ -335,6 +359,7 @@ def newsinfo_del(id=None):
 # 新闻资讯编辑
 # 由于内容，图片之类的难以说明，故资讯只对标题进行操作记录
 @admin.route("/newsinfo/edit/<int:id>", methods=["GET", "POST"])
+@login_req
 def newsinfo_edit(id=None):
     form = NewsInfoForm()
     form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
@@ -363,6 +388,12 @@ def newsinfo_edit(id=None):
             # photos.save(form.img.data)
             form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
 
+        # 参考书的图片用法
+        # if form.logo.data != "":
+        #     book_logo = secure_filename(form.logo.data.filename)
+        #     refbook.logo = change_filename(book_logo)
+        #     form.logo.data.save(app.config["UP_BOOK_DIR"] + refbook.logo)
+
         newsinfo.title = data["title"]
         newsinfo.content = data["info"]
         newsinfo.newstag_id = data["tag"]
@@ -384,6 +415,7 @@ def newsinfo_edit(id=None):
 
 # 新闻资讯列表
 @admin.route("/newsinfo/list/", methods=["GET"])
+@login_req
 def newsinfo_list():
     page_data = NewsInfo.query.join(Admin).join(NewsTag).filter(
         Admin.id == NewsInfo.admin_id,
@@ -396,6 +428,7 @@ def newsinfo_list():
 
 # 考试级别添加
 @admin.route("/tlevel/add/", methods=["GET", "POST"])
+@login_req
 def tlevel_add():
     form = TlevelForm()
     if form.validate_on_submit():
@@ -423,6 +456,7 @@ def tlevel_add():
 
 # 考试级别删除
 @admin.route("/tlevel/del/<int:id>/", methods=["GET"])
+@login_req
 def tlevel_del(id=None):
     tlevel = Tlevel.query.filter_by(id=id).first_or_404()
     level = tlevel.level
@@ -441,6 +475,7 @@ def tlevel_del(id=None):
 
 # 考试级别编辑
 @admin.route("/tlevel/edit/<int:id>/", methods=["GET", "POST"])
+@login_req
 def tlevel_edit(id=None):
     form = TlevelForm()
     tlevel = Tlevel.query.get_or_404(id)
@@ -468,6 +503,7 @@ def tlevel_edit(id=None):
 
 # 考试级别列表
 @admin.route("/tlevel/list/", methods=["GET"])
+@login_req
 def tlevel_list():
     page_data = Tlevel.query.order_by(
         Tlevel.addtime.asc()
@@ -477,6 +513,7 @@ def tlevel_list():
 
 # 考试科目添加
 @admin.route("/tsubject/add/", methods=["GET", "POST"])
+@login_req
 def tsubject_add():
     form = TsubjectForm()
     if form.validate_on_submit():
@@ -504,6 +541,7 @@ def tsubject_add():
 
 # 考试科目删除
 @admin.route("/tsubject/del/<int:id>/", methods=["GET"])
+@login_req
 def tsubject_del(id=None):
     tsubject = Tsubject.query.filter_by(id=id).first_or_404()
     subject = tsubject.subject
@@ -522,6 +560,7 @@ def tsubject_del(id=None):
 
 # 考试科目编辑
 @admin.route("/tsubject/edit/<int:id>/", methods=["GET", "POST"])
+@login_req
 def tsubject_edit(id=None):
     form = TsubjectForm()
     tsubject = Tsubject.query.get_or_404(id)
@@ -549,6 +588,7 @@ def tsubject_edit(id=None):
 
 # 考试科目列表
 @admin.route("/tsubject/list/", methods=["GET"])
+@login_req
 def tsubject_list():
     page_data = Tsubject.query.order_by(
         Tsubject.addtime.asc()
@@ -558,6 +598,7 @@ def tsubject_list():
 
 # 考试信息添加
 @admin.route("/tinfo/add/", methods=["GET", "POST"])
+@login_req
 def tinfo_add():
     form = TinfoForm()
     form.tlevel.choices = [(tl.id, tl.level) for tl in Tlevel.query.all()]
@@ -589,12 +630,96 @@ def tinfo_add():
         db.session.add(tinfo)
         db.session.commit()
         flash("添加考试信息成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="添加了考试信息，级别为：%s，考试科目为：%s，考试时间为：%s，考试地点为：%s" % (
+                data["tlevel"], data["tsubject"], str(data["ttime"]), area + "-" + data["examroom"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
         return redirect(url_for("admin.tinfo_add"))
     return render_template("admin/tinfo_add.html", form=form)
 
 
+# 考试信息删除
+@admin.route("/tinfo/del/<int:id>/", methods=["GET"])
+@login_req
+def tinfo_del(id=None):
+    tinfo = Tinfo.query.filter_by(id=id).first_or_404()
+    tlevel = tinfo.tlevel.level
+    tsubject = tinfo.tsubject.subject
+    ttime = tinfo.t_time
+    area = tinfo.area
+    examroom = tinfo.examroom
+    db.session.delete(tinfo)
+    db.session.commit()
+    flash("删除考试信息成功！", "OK")
+    oplog = Oplog(
+        admin_id=session["admin_id"],
+        ip=request.remote_addr,
+        opdetail="删除了考试信息，级别为：%s，考试科目为：%s，考试时间为：%s，考试地点为：%s" % (tlevel, tsubject, str(ttime), area + "-" + examroom)
+    )
+    db.session.add(oplog)
+    db.session.commit()
+    return redirect(url_for('admin.tinfo_list'))
+
+
+# 考试信息添加
+@admin.route("/tinfo/edit/<int:id>/", methods=["GET", "POST"])
+@login_req
+def tinfo_edit(id=None):
+    form = TinfoForm()
+    form.tlevel.choices = [(tl.id, tl.level) for tl in Tlevel.query.all()]
+    form.tsubject.choices = [(ts.id, ts.subject) for ts in Tsubject.query.all()]
+    form.ref_book.choices = [(rb.id, rb.title) for rb in Refbook.query.all()]
+    tinfo = Tinfo.query.get_or_404(id)
+
+    if request.method == "GET":
+        form.tlevel.data = tinfo.level_id
+        form.tsubject.data = tinfo.subject_id
+        form.ttime.data = tinfo.t_time
+        form.ref_book.data = tinfo.refbook_id
+
+    if form.validate_on_submit():
+        data = form.data
+        area = data["province"] + "-" + data["city"] + "-" + data["school"]
+        ti = Tinfo.query.filter_by(
+            level_id=data["tlevel"],
+            subject_id=data["tsubject"],
+            t_time=data["ttime"],
+            area=area,
+            examroom=data["examroom"]
+        ).count()  # 在同一个时间段，不能存在同一级别的考试科目在同一考点的考场上
+        if ti == 1:
+            flash("此考试信息已经存在！不能重复添加", "err")
+            return redirect(url_for("admin.tinfo_edit", id=id))
+        tinfo.level_id = data["tlevel"]
+        tinfo.subject_id = data["tsubject"]
+        tinfo.t_time = data["ttime"]
+        tinfo.area = area
+        tinfo.examroom = data["examroom"]
+        tinfo.personnum = data["personnum"]
+        tinfo.price = data["price"]
+        tinfo.refbook_id = data["ref_book"]
+        db.session.add(tinfo)
+        db.session.commit()
+        flash("修改考试信息成功", "OK")
+        oplog = Oplog(
+            admin_id=session["admin_id"],
+            ip=request.remote_addr,
+            opdetail="修改了考试信息，级别为：%s，考试科目为：%s，考试时间为：%s，考试地点为：%s" % (
+                data["tlevel"], data["tsubject"], str(data["ttime"]), area + "-" + data["examroom"])
+        )
+        db.session.add(oplog)
+        db.session.commit()
+        return redirect(url_for("admin.tinfo_edit", id=id))
+    return render_template("admin/tinfo_edit.html", form=form, tinfo=tinfo)
+
+
 # 考试信息列表
 @admin.route("/tinfo/list/", methods=["GET"])
+@login_req
 def tinfo_list():
     page_data = Tinfo.query.order_by(
         Tinfo.addtime.asc()
@@ -604,6 +729,7 @@ def tinfo_list():
 
 # 参考书添加
 @admin.route("/refbook/add/", methods=["GET", "POST"])
+@login_req
 def refbook_add():
     form = RefbookForm()
     if form.validate_on_submit():
@@ -646,6 +772,7 @@ def refbook_add():
 
 # 参考书删除
 @admin.route("/refbook/del/<int:id>/", methods=["GET"])
+@login_req
 def refbook_del(id=None):
     refbook = Refbook.query.filter_by(id=id).first_or_404()
     old_title = refbook.title
@@ -665,6 +792,7 @@ def refbook_del(id=None):
 
 # 参考书编辑
 @admin.route("/refbook/edit/<int:id>/", methods=["GET", "POST"])
+@login_req
 def refbook_edit(id=None):
     form = RefbookForm()
     refbook = Refbook.query.get_or_404(id)
@@ -708,6 +836,7 @@ def refbook_edit(id=None):
 
 # 参考书列表
 @admin.route("/refbook/list/", methods=["GET"])
+@login_req
 def refbook_list():
     page_data = Refbook.query.order_by(
         Refbook.addtime.asc()
@@ -717,6 +846,7 @@ def refbook_list():
 
 # 用户信息查看
 @admin.route("/user/info/<int:id>/", methods=["GET"])
+@login_req
 def user_info(id=None):
     user = User.query.get_or_404(id)
     return render_template("admin/user_info.html", user=user)
@@ -724,6 +854,7 @@ def user_info(id=None):
 
 # 用户信息删除
 @admin.route("/user/del/<int:id>/", methods=["GET"])
+@login_req
 def user_del(id=None):
     user = User.query.filter_by(id=id).first_or_404()
     name = user.name
@@ -743,6 +874,7 @@ def user_del(id=None):
 
 # 用户信息列表
 @admin.route("/user/list/", methods=["GET"])
+@login_req
 def user_list():
     page_data = User.query.order_by(
         User.addtime.asc()
@@ -752,11 +884,12 @@ def user_list():
 
 # 管理员登录日志列表
 @admin.route("/admin_log_list/", methods=["GET"])
+@login_req
 def admin_log():
     page_data = Adminlog.query.join(
         Admin
     ).filter(
-        Admin.id == Adminlog.admin_id
+        Admin.id == session["admin_id"]
     ).order_by(
         Adminlog.addtime.asc()
     )
@@ -765,6 +898,7 @@ def admin_log():
 
 # 操作日志列表
 @admin.route("/oplog_list/", methods=["GET"])
+@login_req
 def oplog_list():
     page_data = Oplog.query.order_by(
         Oplog.addtime.asc()
@@ -774,6 +908,7 @@ def oplog_list():
 
 # 用户登录日志列表
 @admin.route("/user_log_list/", methods=["GET"])
+@login_req
 def user_log():
     page_data = Userlog.query.order_by(
         Userlog.addtime.asc()
@@ -783,11 +918,17 @@ def user_log():
 
 # 管理员信息添加
 @admin.route("/admin_add/", methods=["GET", "POST"])
+@login_req
 def admin_add():
     return render_template("admin/admin_add.html")
 
 
 # 管理员信息列表
 @admin.route("/admin_list/", methods=["GET"])
+@login_req
 def admin_list():
-    return render_template("admin/admin_list.html")
+    page_data = Admin.query.order_by(
+        Admin.addtime.asc()
+    )
+    return render_template("admin/admin_list.html", page_data=page_data)
+
