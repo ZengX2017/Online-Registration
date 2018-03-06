@@ -26,63 +26,15 @@
     <div class="container">
         <div class="detail-div">
             <ol class="breadcrumb">
-                <li><a href="#">{{ newscategory }}</a></li>
-                <li class="active">{{ newstag_name }}</li>
+                <li><a href="#">搜索</a></li>
+                <li class="active">{% if info == "" %}
+                所有{% else %}关于<span style="color: #ff0000">{{ info }}</span>{% endif %}的信息有<span style="color: #ff0000">{{ count }}</span>条</li>
             </ol>
         </div>
 
         <div class="row">
-            {% if zwgkNc != newscategory %}
-                <div class="col-md-2">
-                <div class="panel panel-info">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading text-center"><i class="fa fa-book fa-fw"
-                                                              aria-hidden="true"></i>&nbsp;{{ newscategory }}
-                    </div>
-                    <!-- List group -->
-                    <ul class="list-group text-center">
-                        {% for tag in newstags %}
-                            {% if newstag_name == tag.name %}
-                                <a href="{{ url_for('registration.newscategory', name=tag.name) }}" class="list-group-item active">
-                                    {{ tag.name }}
-                                </a>
-                            {% else %}
-                                <a href="{{ url_for('registration.newscategory', name=tag.name) }}" class="list-group-item">
-                                    {{ tag.name }}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-
-                </div>
-            </div>
-                <div class="panel panel-default col-md-8">
-                <div class="panel-heading">{{ newstag_name }}</div>
-                <div class="panel-body">
-                    <table class="table table-bordered table-striped" id="datatable-editable">
-                        <thead>
-                        <tr>
-                            <th class="text-center" style="display: none">g</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for newsinfo in newsinfos %}
-                            <tr class="text-left">
-                                <td>
-                                    <a href="{{ url_for('registration.detail', id=newsinfo.id) }}">
-                                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;{{ newsinfo.title | safe }}
-                                    <span class="pull-right"> [{{ newsinfo.addtime.strftime("%Y-%m-%d") }}]</span>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {% else %}  <!-- 若当前为政务公开时，会去掉左侧栏 -->
-                <div class="panel panel-default col-md-10">
-                <div class="panel-heading">{{ newstag_name }}</div>
+            <div class="panel panel-default col-md-10">
+                <div class="panel-heading">搜索结果</div>
                 <div class="panel-body">
                     <table class="table table-bordered table-striped" id="datatable-editable">
                         <thead>
@@ -105,7 +57,7 @@
                     </table>
                 </div>
             </div>
-            {% endif %}
+
             {% include 'registration/affairs_public.html' %}
         </div>
 

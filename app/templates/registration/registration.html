@@ -75,6 +75,16 @@
 {#<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>#}
 <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $('#search').on('click', function () {
+            var infos = $("#info").val();
+            location.href = "{{ url_for('registration.search') }}?info=" + infos;
+            <!--$("#myform").attr("action", "{{ url_for('registration.search') }}?info=" + infos);-->
+        })
+
+    });
+</script>
 {% block js %}
 {% endblock %}
 </body>

@@ -11,29 +11,74 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/Online_Registration$models.coverage" NAME="models Coverage Results" MODIFIED="1520064113992" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
-    <SUITE FILE_PATH="coverage/Online_Registration$manage.coverage" NAME="manage Coverage Results" MODIFIED="1520322108542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Online_Registration$manage.coverage" NAME="manage Coverage Results" MODIFIED="1520339757956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/registration/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="39" column="4" lean-forward="false" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="11" />
+            <state relative-caret-position="151">
+              <caret line="51" column="13" lean-forward="false" selection-start-line="51" selection-start-column="13" selection-end-line="51" selection-end-column="13" />
               <folding>
                 <element signature="e#49#133#0" expanded="true" />
-                <element signature="e#440#1096#0" expanded="false" />
-                <element signature="e#1458#2248#0" expanded="false" />
-                <element signature="e#2341#2688#0" expanded="false" />
-                <element signature="e#2771#3408#0" expanded="false" />
-                <element signature="e#2832#3343#0" expanded="false" />
-                <element signature="e#3468#3577#0" expanded="false" />
-                <element signature="e#3666#4149#0" expanded="false" />
-                <element signature="e#3730#4081#0" expanded="false" />
-                <element signature="e#4246#5449#0" expanded="false" />
-                <element signature="e#5782#6002#0" expanded="false" />
-                <element signature="e#6089#6308#0" expanded="false" />
-                <element signature="e#6399#6609#0" expanded="false" />
+                <element signature="e#401#605#1" expanded="false" />
+                <element signature="e#639#848#0" expanded="false" />
+                <element signature="e#898#1649#0" expanded="false" />
+                <element signature="e#1707#2140#0" expanded="false" />
+                <element signature="e#2143#2398#1" expanded="false" />
+                <element signature="e#2502#3413#0" expanded="false" />
+                <element signature="e#3506#3880#0" expanded="false" />
+                <element signature="e#4024#4535#0" expanded="false" />
+                <element signature="e#4660#4769#0" expanded="false" />
+                <element signature="e#4858#5341#0" expanded="false" />
+                <element signature="e#4922#5273#0" expanded="false" />
+                <element signature="e#5438#6641#0" expanded="false" />
+                <element signature="e#6974#7194#0" expanded="false" />
+                <element signature="e#7281#7500#0" expanded="false" />
+                <element signature="e#7591#7801#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="search.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/templates/registration/search.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="36" column="45" lean-forward="false" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+              <folding>
+                <element signature="e#188#684#0#HTML" expanded="false" />
+                <element signature="e#952#974#0#HTML" expanded="true" />
+                <element signature="e#1013#1035#0#HTML" expanded="true" />
+                <element signature="e#2749#3631#0#HTML" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="registration.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/templates/registration/registration.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="262">
+              <caret line="37" column="24" lean-forward="false" selection-start-line="37" selection-start-column="24" selection-end-line="37" selection-end-column="24" />
+              <folding>
+                <element signature="n#style#0;n#head#0;n#html#0;n#!!top" expanded="false" />
+                <element signature="n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nav.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/templates/registration/nav.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="839">
+              <caret line="90" column="6" lean-forward="false" selection-start-line="90" selection-start-column="6" selection-end-line="90" selection-end-column="6" />
+              <folding>
+                <element signature="n#ul#0;n#div#1;n#div#0;n#nav#0;n#!!top" expanded="false" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#form#0;n#div#1;n#div#0;n#nav#0;n#!!top" expanded="true" />
+                <element signature="n#ul#1;n#div#1;n#div#0;n#nav#0;n#!!top" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -42,11 +87,10 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/registration/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
+            <state relative-caret-position="300">
               <caret line="34" column="65" lean-forward="false" selection-start-line="34" selection-start-column="65" selection-end-line="34" selection-end-column="65" />
               <folding>
-                <element signature="e#67#431#0#HTML" expanded="false" />
-                <element signature="e#1606#1610#0#HTML" expanded="true" />
+                <element signature="e#2183#2798#0#HTML" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -55,61 +99,24 @@
       <file leaf-file-name="newscategory.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/registration/newscategory.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2734">
-              <caret line="113" column="41" lean-forward="true" selection-start-line="113" selection-start-column="31" selection-end-line="113" selection-end-column="41" />
+            <state relative-caret-position="472">
+              <caret line="141" column="11" lean-forward="false" selection-start-line="141" selection-start-column="11" selection-end-line="141" selection-end-column="11" />
               <folding>
-                <element signature="e#2463#2643#0#HTML" expanded="false" />
-                <element signature="e#3019#3025#0#HTML" expanded="true" />
-                <element signature="e#3847#4386#0#HTML" expanded="false" />
+                <element signature="e#188#684#0#HTML" expanded="false" />
+                <element signature="e#1056#2227#0#HTML" expanded="false" />
+                <element signature="e#2515#2695#0#HTML" expanded="false" />
+                <element signature="e#3540#4749#0#HTML" expanded="false" />
+                <element signature="e#5193#6075#0#HTML" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rg_style.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/static/css/rg_style.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="170" column="16" lean-forward="true" selection-start-line="170" selection-start-column="16" selection-end-line="170" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="detail.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="detail.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/templates/registration/detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
+            <state relative-caret-position="30">
               <caret line="29" column="67" lean-forward="false" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
-              <folding>
-                <element signature="e#1305#1334#0#HTML" expanded="true" />
-                <element signature="e#1409#1415#0#HTML" expanded="true" />
-                <element signature="e#1415#1421#0#HTML" expanded="true" />
-                <element signature="e#1421#1427#0#HTML" expanded="true" />
-                <element signature="e#1456#1462#0#HTML" expanded="true" />
-                <element signature="e#1462#1468#0#HTML" expanded="true" />
-                <element signature="e#1468#1474#0#HTML" expanded="true" />
-                <element signature="e#1718#1739#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="affairs_public.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/templates/registration/affairs_public.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nav.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/templates/registration/nav.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="45" column="87" lean-forward="false" selection-start-line="45" selection-start-column="87" selection-end-line="45" selection-end-column="87" />
               <folding />
             </state>
           </provider>
@@ -164,7 +171,6 @@
         <option value="$PROJECT_DIR$/app/templates/registration/userinfo_edit.html" />
         <option value="$PROJECT_DIR$/app/templates/admin/user_list.html" />
         <option value="$PROJECT_DIR$/app/templates/registration/userinfo.html" />
-        <option value="$PROJECT_DIR$/app/registration/forms.py" />
         <option value="$PROJECT_DIR$/app/templates/admin/admin_add.html" />
         <option value="$PROJECT_DIR$/app/templates/admin/admin_list.html" />
         <option value="$PROJECT_DIR$/app/templates/admin/tinfo_add.html" />
@@ -181,8 +187,12 @@
         <option value="$PROJECT_DIR$/app/static/css/rg_style.css" />
         <option value="$PROJECT_DIR$/app/templates/registration/detail.html" />
         <option value="$PROJECT_DIR$/app/templates/registration/index.html" />
+        <option value="$PROJECT_DIR$/app/templates/registration/affairs_public.html" />
         <option value="$PROJECT_DIR$/app/templates/registration/newscategory.html" />
+        <option value="$PROJECT_DIR$/app/registration/forms.py" />
         <option value="$PROJECT_DIR$/app/templates/registration/nav.html" />
+        <option value="$PROJECT_DIR$/app/templates/registration/registration.html" />
+        <option value="$PROJECT_DIR$/app/templates/registration/search.html" />
         <option value="$PROJECT_DIR$/app/registration/views.py" />
       </list>
     </option>
@@ -193,7 +203,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="159" />
     <option name="y" value="13" />
     <option name="width" value="1611" />
@@ -233,7 +243,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -263,35 +272,6 @@
               <item name="Online-Registration" type="b2602c69:ProjectViewProjectNode" />
               <item name="Online-Registration" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Online-Registration" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Online-Registration" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="uploads" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Online-Registration" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Online-Registration" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="uploads" type="462c0819:PsiDirectoryNode" />
-              <item name="books" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Online-Registration" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Online-Registration" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="uploads" type="462c0819:PsiDirectoryNode" />
-              <item name="newsinfos" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Online-Registration" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Online-Registration" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -310,6 +290,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -434,16 +415,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2725322" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27628756" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -480,27 +461,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/templates/registration/userinfo_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2336">
-          <caret line="24" column="78" lean-forward="false" selection-start-line="24" selection-start-column="78" selection-end-line="24" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/admin/user_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="40" column="82" lean-forward="false" selection-start-line="40" selection-start-column="82" selection-end-line="40" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/static/css/bootstrap.min.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1440">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/orm/session.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-804">
@@ -700,38 +660,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="59" column="9" lean-forward="true" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="9" />
-          <folding>
-            <element signature="e#133#1249#0" expanded="false" />
-            <element signature="e#1292#1666#0" expanded="false" />
-            <element signature="e#1703#2120#0" expanded="false" />
-            <element signature="e#2159#3514#0" expanded="false" />
-            <element signature="e#3555#3925#0" expanded="false" />
-            <element signature="e#3963#4693#0" expanded="false" />
-            <element signature="e#4731#5500#0" expanded="false" />
-            <element signature="e#5540#6324#0" expanded="false" />
-            <element signature="e#9152#9638#0" expanded="false" />
-            <element signature="e#9677#10256#0" expanded="false" />
-            <element signature="e#10296#10937#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/registration/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1418">
-          <caret line="9" column="30" lean-forward="false" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
-          <folding>
-            <element signature="e#315#2014#0" expanded="false" />
-            <element signature="e#2049#2708#0" expanded="false" />
-            <element signature="e#2746#4623#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/admin/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
@@ -822,9 +750,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="472">
           <caret line="266" column="25" lean-forward="false" selection-start-line="266" selection-start-column="25" selection-end-line="266" selection-end-column="25" />
-          <folding>
-            <element signature="n#div#7;n#!!top" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -833,7 +758,7 @@
         <state relative-caret-position="300">
           <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
-            <element signature="e#49#89#0" expanded="true" />
+            <element signature="e#49#89#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -862,80 +787,143 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/registration/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" column="65" lean-forward="false" selection-start-line="34" selection-start-column="65" selection-end-line="34" selection-end-column="65" />
-          <folding>
-            <element signature="e#67#431#0#HTML" expanded="false" />
-            <element signature="e#1606#1610#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/registration/nav.html">
+    <entry file="file://$PROJECT_DIR$/app/templates/registration/affairs_public.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="45" column="87" lean-forward="false" selection-start-line="45" selection-start-column="87" selection-end-line="45" selection-end-column="87" />
+          <caret line="10" column="30" lean-forward="true" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/registration/views.py">
+    <entry file="file://$PROJECT_DIR$/app/templates/registration/grid.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="39" column="4" lean-forward="false" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="11" />
+        <state relative-caret-position="-270">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/registration/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="622">
+          <caret line="244" column="43" lean-forward="false" selection-start-line="244" selection-start-column="43" selection-end-line="244" selection-end-column="43" />
           <folding>
-            <element signature="e#49#133#0" expanded="true" />
-            <element signature="e#440#1096#0" expanded="false" />
-            <element signature="e#1458#2248#0" expanded="false" />
-            <element signature="e#2341#2688#0" expanded="false" />
-            <element signature="e#2771#3408#0" expanded="false" />
-            <element signature="e#2832#3343#0" expanded="false" />
-            <element signature="e#3468#3577#0" expanded="false" />
-            <element signature="e#3666#4149#0" expanded="false" />
-            <element signature="e#3730#4081#0" expanded="false" />
-            <element signature="e#4246#5449#0" expanded="false" />
-            <element signature="e#5782#6002#0" expanded="false" />
-            <element signature="e#6089#6308#0" expanded="false" />
-            <element signature="e#6399#6609#0" expanded="false" />
+            <element signature="e#315#2014#0" expanded="false" />
+            <element signature="e#2049#2708#0" expanded="false" />
+            <element signature="e#2746#4623#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/registration/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="34" column="65" lean-forward="false" selection-start-line="34" selection-start-column="65" selection-end-line="34" selection-end-column="65" />
+          <folding>
+            <element signature="e#2183#2798#0#HTML" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="59" column="9" lean-forward="true" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="9" />
+          <folding>
+            <element signature="e#133#1249#0" expanded="false" />
+            <element signature="e#1292#1666#0" expanded="false" />
+            <element signature="e#1703#2120#0" expanded="false" />
+            <element signature="e#2159#3514#0" expanded="false" />
+            <element signature="e#3555#3925#0" expanded="false" />
+            <element signature="e#3963#4693#0" expanded="false" />
+            <element signature="e#4731#5500#0" expanded="false" />
+            <element signature="e#5540#6324#0" expanded="false" />
+            <element signature="e#9152#9638#0" expanded="false" />
+            <element signature="e#9677#10256#0" expanded="false" />
+            <element signature="e#10296#10937#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/registration/newscategory.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2734">
-          <caret line="113" column="41" lean-forward="true" selection-start-line="113" selection-start-column="31" selection-end-line="113" selection-end-column="41" />
+        <state relative-caret-position="472">
+          <caret line="141" column="11" lean-forward="false" selection-start-line="141" selection-start-column="11" selection-end-line="141" selection-end-column="11" />
           <folding>
-            <element signature="e#2463#2643#0#HTML" expanded="false" />
-            <element signature="e#3019#3025#0#HTML" expanded="true" />
-            <element signature="e#3847#4386#0#HTML" expanded="false" />
+            <element signature="e#188#684#0#HTML" expanded="false" />
+            <element signature="e#1056#2227#0#HTML" expanded="false" />
+            <element signature="e#2515#2695#0#HTML" expanded="false" />
+            <element signature="e#3540#4749#0#HTML" expanded="false" />
+            <element signature="e#5193#6075#0#HTML" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/registration/nav.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="839">
+          <caret line="90" column="6" lean-forward="false" selection-start-line="90" selection-start-column="6" selection-end-line="90" selection-end-column="6" />
+          <folding>
+            <element signature="n#ul#0;n#div#1;n#div#0;n#nav#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#form#0;n#div#1;n#div#0;n#nav#0;n#!!top" expanded="true" />
+            <element signature="n#ul#1;n#div#1;n#div#0;n#nav#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/registration/registration.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="37" column="24" lean-forward="false" selection-start-line="37" selection-start-column="24" selection-end-line="37" selection-end-column="24" />
+          <folding>
+            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" expanded="false" />
+            <element signature="n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/registration/search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="36" column="45" lean-forward="false" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+          <folding>
+            <element signature="e#188#684#0#HTML" expanded="false" />
+            <element signature="e#952#974#0#HTML" expanded="true" />
+            <element signature="e#1013#1035#0#HTML" expanded="true" />
+            <element signature="e#2749#3631#0#HTML" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/registration/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="51" column="13" lean-forward="false" selection-start-line="51" selection-start-column="13" selection-end-line="51" selection-end-column="13" />
+          <folding>
+            <element signature="e#49#133#0" expanded="true" />
+            <element signature="e#401#605#1" expanded="false" />
+            <element signature="e#639#848#0" expanded="false" />
+            <element signature="e#898#1649#0" expanded="false" />
+            <element signature="e#1707#2140#0" expanded="false" />
+            <element signature="e#2143#2398#1" expanded="false" />
+            <element signature="e#2502#3413#0" expanded="false" />
+            <element signature="e#3506#3880#0" expanded="false" />
+            <element signature="e#4024#4535#0" expanded="false" />
+            <element signature="e#4660#4769#0" expanded="false" />
+            <element signature="e#4858#5341#0" expanded="false" />
+            <element signature="e#4922#5273#0" expanded="false" />
+            <element signature="e#5438#6641#0" expanded="false" />
+            <element signature="e#6974#7194#0" expanded="false" />
+            <element signature="e#7281#7500#0" expanded="false" />
+            <element signature="e#7591#7801#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/registration/detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
+        <state relative-caret-position="30">
           <caret line="29" column="67" lean-forward="false" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
-          <folding>
-            <element signature="e#1305#1334#0#HTML" expanded="true" />
-            <element signature="e#1409#1415#0#HTML" expanded="true" />
-            <element signature="e#1415#1421#0#HTML" expanded="true" />
-            <element signature="e#1421#1427#0#HTML" expanded="true" />
-            <element signature="e#1456#1462#0#HTML" expanded="true" />
-            <element signature="e#1462#1468#0#HTML" expanded="true" />
-            <element signature="e#1468#1474#0#HTML" expanded="true" />
-            <element signature="e#1718#1739#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/registration/affairs_public.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

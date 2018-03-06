@@ -6,6 +6,8 @@
       <w>dismissable</w>
       <w>examroom</w>
       <w>imgs</w>
+      <w>jinja</w>
+      <w>myform</w>
       <w>newsinfo</w>
       <w>newsinfos</w>
       <w>newstag</w>
@@ -13,6 +15,8 @@
       <w>refbook</w>
       <w>tinfo</w>
       <w>userinfo</w>
+      <w>zwgk</w>
+      <w>zwgktag</w>
     </words>
   </dictionary>
 </component>

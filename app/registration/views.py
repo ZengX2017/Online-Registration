@@ -9,6 +9,23 @@ from werkzeug.security import generate_password_hash
 from . import registration
 
 
+# 政务公开栏
+'''
+理解本方法（affairs_public_tags）：
+    因为政务公开栏挂在右侧，在网页中是用Jinja2的语法：include进行加载的，为了让数据从数据库读出来以及减少重复性，故写出了本方法。
+在数据库的NewsCategory下有政务公开数据时返回为政务公开和及其下面的标签，若没有此值，则返回空。不过不用当心前台右侧会不出现任何东
+西，前台会根据空时显示设置号的静态类别和标签。
+'''
+
+
+def affairs_public_tags():
+    zwgkNc = NewsCategory.query.filter_by(name="政务公开").first_or_404()
+    if not zwgkNc:
+        return None, None
+    zwgkTags = NewsTag.query.filter_by(newscategory_id=zwgkNc.id)
+    return zwgkNc.name, zwgkTags
+
+
 # 首页
 @registration.route("/")
 def index():
@@ -25,7 +42,22 @@ def index():
     else:
         newstags = newstags[newstags.count() - 5:]  # 超过6条数据后选最后5条数据出现
     newstags.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
-    return render_template("registration/index.html", newstags=newstags)
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/index.html", newstags=newstags, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+
+
+# 搜索
+@registration.route("/search/")
+def search():
+    info = request.args.get("info", "")
+    newsinfos = NewsInfo.query.filter(NewsInfo.title.ilike('%' + info + '%'))
+    count = newsinfos.count()
+    newsinfos = newsinfos[:]  # 不超过6条数据则全部显示
+    newsinfos.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/search.html", newsinfos=newsinfos, info=info, count=count, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 '''
@@ -41,7 +73,7 @@ def index():
 @registration.route("/newscategory/<name>", methods=["GET"])
 def newscategory(name):
     newstag = NewsTag.query.filter_by(name=name).first_or_404()  # 通过nav请求找到tag
-    newstag_name = name  # 存一下当前请求的name
+    newstag_name = name  # 存下当前请求的name
     newscategory = newstag.newscategory.name  # 根据当前tag找到所属类别，为了面包屑导航栏的一级显示
     newscategorys = NewsCategory.query.filter_by(name=newscategory).first_or_404()  # 找出当前所属类别的id
     newstags = NewsTag.query.filter_by(newscategory_id=newscategorys.id)  # 根据所属类别的id找出此类别下所有的标签
@@ -50,8 +82,11 @@ def newscategory(name):
     )  # 根据当前标签找出此标签下的所有内容
     newsinfos = newsinfos[:]  # 将数据集转为列表，目的是为了翻转
     newsinfos.reverse()
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/newscategory.html", newstag=newstag, newstag_name=newstag_name,
-                           newscategory=newscategory, newstags=newstags, newsinfos=newsinfos)
+                           newscategory=newscategory, newstags=newstags, newsinfos=newsinfos,
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 资讯详情
@@ -63,7 +98,8 @@ def detail(id=None):
     newsinfo.view_num = newsinfo.view_num + 1
     db.session.add(newsinfo)
     db.session.commit()
-    return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag, newscategory=newscategory)
+    return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag,
+                           newscategory=newscategory)
 
 
 # 用户登录

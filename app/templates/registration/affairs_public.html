@@ -1,16 +1,22 @@
 <div class="col-md-2 col-sm-12">
     <div class="panel panel-success">
         <!-- Default panel contents -->
-        <div class="panel-heading text-center"><i class="fa fa-gear" aria-hidden="true"></i>&nbsp;&nbsp;政务公开
+        <div class="panel-heading text-center"><i class="fa fa-gear" aria-hidden="true"></i>&nbsp;&nbsp;{% if zwgkNc %}
+            {{ zwgkNc }}{% else %} 政务公开{% endif %}
         </div>
 
         <!-- List group -->
         <ul class="list-group text-center">
-            <a href="#" class="list-group-item">通知公告</a>
-            <a href="#" class="list-group-item">办事指南</a>
-            <a href="#" class="list-group-item">政策法规</a>
-            <a href="#" class="list-group-item">合格标准</a>
+            {% if zwgkNc %}
+                {% for zwgktag in zwgkTags %}
+                    <a href="{{ url_for('registration.newscategory', name=zwgktag.name) }}" class="list-group-item">{{ zwgktag.name }}</a>
+                {% endfor %}
+            {% else %}
+                <a href="#" class="list-group-item">通知公告</a>
+                <a href="#" class="list-group-item">办事指南</a>
+                <a href="#" class="list-group-item">政策法规</a>
+                <a href="#" class="list-group-item">合格标准</a>
+            {% endif %}
         </ul>
-
     </div>
 </div>
