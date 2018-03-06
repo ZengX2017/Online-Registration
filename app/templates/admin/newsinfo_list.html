@@ -56,19 +56,18 @@
 
         </div> <!-- end Panel -->
 
-                <div class="panel panel-default m-t-20">
-                    <div class="panel-body">
-                        {% for v in page_data %}
-                            <div id="summer">
-
-                            </div>
-                            <input type="hidden" value="{{ v.content }}" id="article_content">
-                        {% endfor %}
-                    </div> <!-- panel-body -->
-                </div>
+        {#                <div class="panel panel-default m-t-20">#}
+        {#                    <div class="panel-body">#}
+        {#                        {% for v in page_data %}#}
+        {#                            <div id="summer">#}
+        {##}
+        {#                            </div>#}
+        {#                            <input type="hidden" value="{{ v.content }}" id="article_content">#}
+        {#                        {% endfor %}#}
+        {#                    </div> <!-- panel-body -->#}
+        {#                </div>#}
 
     </div>
-
     <!-- Page content end -->
 {% endblock %}
 {% block js %}
@@ -77,8 +76,8 @@
     <script>
 
         jQuery(document).ready(function () {
-            var innerhtml = $("#article_content").val();
-            $("#summer").html(innerhtml);
+            {#var innerhtml = $("#article_content").val();#}
+            {#$("#summer").html(innerhtml);#}
             $("#g-4").addClass("active");
             $("#g-4-2").addClass("active");
         });

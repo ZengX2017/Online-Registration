@@ -1,157 +1,171 @@
 {% extends 'registration/registration.html' %}
+{% block css %}
+    <style>
+        ul.panel-ul > a.list-group-item {
+            border: none;
+            padding-bottom: 4px;
+            margin: 8px 0;
+        }
+
+        @media (max-width: 767px) {
+            ul.panel-ul > a.list-group-item {
+                border: none;
+                padding-bottom: 4px;
+                margin: 18px 0;
+            }
+        }
+    </style>
+{% endblock %}
 {% block content %}
     <!--内容-->
-<div class="container" style="margin-top: -20px;padding-bottom: 20px;">
-    <img src="{{ url_for('static', filename='images/topimg.png') }}" alt="顶部图片" class="center-img">
-    <div class="row">
-        {% include 'registration/banner.html' %}
+    <div class="container" style="margin-top: -20px;padding-bottom: 20px;">
+        <img src="{{ url_for('static', filename='images/topimg.png') }}" alt="顶部图片" class="center-img">
+        <div class="row">
+            {% include 'registration/banner.html' %}
 
-        <div class="col-md-5 col-sm-12 panel-5">
-            <div class="panel panel-primary">
-                <!-- Default panel contents -->
-                <div class="panel-heading">工作动态</div>
-                <!-- List group -->
-                <ul class="list-group panel-ul">
-                    <a href="#" class="list-group-item">
-                        工作动态0
-                    </a>
-                    <a href="#" class="list-group-item">工作动态1</a>
-                    <a href="#" class="list-group-item">工作动态2</a>
-                    <a href="#" class="list-group-item">工作动态3</a>
-                    <a href="#" class="list-group-item">工作动态4</a>
-                    <a href="#" class="list-group-item">工作动态5</a>
-                    <a href="#" class="list-group-item">工作动态5</a>
-                </ul>
-                <a href="#" class="pull-right">More&gt;</a>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row">
-        {% include 'registration/tablist.html' %}
-
-        <div class="col-md-3 col-xs-12">
-            <div class="panel panel-default panel-margin">
-                <div class="panel-body panel-body-margin">
-                    <h2 class="text-center">
-                        <i class="fa fa-volume-up" aria-hidden="true"></i>
-                        <span>最新通知</span>
-                    </h2>
-                    <hr>
-                    <ul>
-                        <li><a href="#"><i></i><span>浮动效果待添加浮动效果待添加浮动效果待添加</span></a></li>
-                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                        <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+            <div class="col-md-5 col-sm-12 panel-5">
+                <div class="panel panel-primary">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">公告栏</div>
+                    <!-- List group -->
+                    <ul class="list-group panel-ul">
+                        {% for news in newstags %}
+                            <a href="{{ url_for('registration.detail', id=news.id) }}" class="list-group-item">
+                                {{ news.title | safe | truncate(25) }}
+                                <span class="pull-right">[{{ news.addtime.strftime('%Y-%m-%d') }}]</span>
+                            </a>
+                        {% endfor %}
                     </ul>
-                    <a href="#" class="pull-right">More></a>
+                    <a href="{{ url_for('registration.newscategory', name="公告栏") }}" class="pull-right" target="_blank">More&gt;</a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <hr/>
 
-    <div class="row">
-        <div class="col-md-3 col-sm-12">
-            <div class="panel panel-info">
-                <!-- Default panel contents -->
-                <div class="panel-heading">考试概述<a href="#" class="pull-right">More&gt;</a></div>
+        <div class="row">
+            {% include 'registration/tablist.html' %}
 
-                <!-- List group -->
-                <ul class="list-group">
-                    <a href="#" class="list-group-item">
-                        <h5 class="list-group-item-heading">考试介绍</h5>
-                        <h6 class="list-group-item-text">
-                            计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <h5 class="list-group-item-heading">资格介绍</h5>
-                        <h6 class="list-group-item-text">
-                            计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <h5 class="list-group-item-heading">考试教程和大纲</h5>
-                        <h6 class="list-group-item-text">
-                            计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
-                    </a>
-                </ul>
-
+            <div class="col-md-3 col-xs-12">
+                <div class="panel panel-default panel-margin">
+                    <div class="panel-body panel-body-margin">
+                        <h2 class="text-center">
+                            <i class="fa fa-volume-up" aria-hidden="true"></i>
+                            <span>最新通知</span>
+                        </h2>
+                        <hr>
+                        <ul>
+                            <li><a href="#"><i></i><span>浮动效果待添加浮动效果待添加浮动效果待添加</span></a></li>
+                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
+                        </ul>
+                        <a href="#" class="pull-right">More></a>
+                    </div>
+                </div>
             </div>
         </div>
-        <hr class="hr-hidden"/>
-        <div class="col-md-9 col-sm-12">
-            <strong>要闻速递</strong>
-            <a href="#" class="pull-right">More></a>
-            <div id="content2">
-                <ul style="display:block;">
-                    <dl class="dl-horizontal">
-                        <dt>
-                            <img src="{{ url_for('static', filename="images/b1.jpg") }}" alt="pic"/>
-                        </dt>
-                        <dd>
-                            <h3>2016年10月25日广播体操比赛</h3>
-                            <span>为了提高我校的广播操质量，激发同学们做广播操的积极性与热情，同时也为了丰富学生校园文化生活...<a href="#"
-                                                                                     class="more2">More></a></span>
-                        </dd>
-                    </dl>
-                    <li><a href="#">
-                        <h4>教学管理中心开展学期初教学培训活动</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年10月11日羽毛球比赛</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年10月6日国庆篮球赛</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年9月30日班主任座谈会</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年9月7日走进泰山医学院</h4>
-                        <span>2017/01/16</span></a></li>
-                </ul>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-3 col-sm-12">
+                <div class="panel panel-info">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">考试概述<a href="#" class="pull-right">More&gt;</a></div>
+
+                    <!-- List group -->
+                    <ul class="list-group">
+                        <a href="#" class="list-group-item">
+                            <h5 class="list-group-item-heading">考试介绍</h5>
+                            <h6 class="list-group-item-text">
+                                计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h5 class="list-group-item-heading">资格介绍</h5>
+                            <h6 class="list-group-item-text">
+                                计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <h5 class="list-group-item-heading">考试教程和大纲</h5>
+                            <h6 class="list-group-item-text">
+                                计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
+                        </a>
+                    </ul>
+
+                </div>
+            </div>
+            <hr class="hr-hidden"/>
+            <div class="col-md-9 col-sm-12">
+                <strong>要闻速递</strong>
+                <a href="#" class="pull-right">More></a>
+                <div id="content2">
+                    <ul style="display:block;">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                <img src="{{ url_for('static', filename="images/b1.jpg") }}" alt="pic"/>
+                            </dt>
+                            <dd>
+                                <h3>2016年10月25日广播体操比赛</h3>
+                                <span>为了提高我校的广播操质量，激发同学们做广播操的积极性与热情，同时也为了丰富学生校园文化生活...<a href="#"
+                                                                                         class="more2">More></a></span>
+                            </dd>
+                        </dl>
+                        <li><a href="#">
+                            <h4>教学管理中心开展学期初教学培训活动</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年10月11日羽毛球比赛</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年10月6日国庆篮球赛</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年9月30日班主任座谈会</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年9月7日走进泰山医学院</h4>
+                            <span>2017/01/16</span></a></li>
+                    </ul>
+                </div>
+
             </div>
 
         </div>
 
-    </div>
+        <hr/>
 
-    <hr/>
-
-    <div class="row">
-        <hr class="hr-hidden"/>
-        <div class="col-md-10 col-sm-12">
-            <strong>要闻速递</strong>
-            <a href="#" class="pull-right">More></a>
-            <div id="content3">
-                <ul style="display:block;">
-                    <li><a href="#">
-                        <h4>2016年10月25日广播体操比赛</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年10月11日羽毛球比赛</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年10月6日国庆篮球赛</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年9月30日班主任座谈会</h4>
-                        <span>2017/01/16</span></a></li>
-                    <li><a href="#">
-                        <h4>2016年9月7日走进泰山医学院</h4>
-                        <span>2017/01/16</span></a></li>
-                </ul>
+        <div class="row">
+            <hr class="hr-hidden"/>
+            <div class="col-md-10 col-sm-12">
+                <strong>要闻速递</strong>
+                <a href="#" class="pull-right">More></a>
+                <div id="content3">
+                    <ul style="display:block;">
+                        <li><a href="#">
+                            <h4>2016年10月25日广播体操比赛</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年10月11日羽毛球比赛</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年10月6日国庆篮球赛</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年9月30日班主任座谈会</h4>
+                            <span>2017/01/16</span></a></li>
+                        <li><a href="#">
+                            <h4>2016年9月7日走进泰山医学院</h4>
+                            <span>2017/01/16</span></a></li>
+                    </ul>
+                </div>
             </div>
+            <hr class="hr-hidden"/>
+            {% include 'registration/affairs_public.html' %}
         </div>
-        <hr class="hr-hidden"/>
-        {% include 'registration/affairs_public.html' %}
-    </div>
 
-</div>
-<!--内容-->
+    </div>
+    <!--内容-->
 {% endblock %}

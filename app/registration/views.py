@@ -3,7 +3,7 @@ __author__ = 'Adward_Z'
 
 from flask import render_template, redirect, url_for, flash, session, request, abort
 from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm
-from app.models import User, Userlog
+from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory
 from app import db
 from werkzeug.security import generate_password_hash
 from . import registration
@@ -12,7 +12,58 @@ from . import registration
 # 首页
 @registration.route("/")
 def index():
-    return render_template("registration/index.html")
+    newsinfos = NewsInfo.query.order_by(NewsInfo.addtime.asc())
+    newstag = NewsTag.query.filter_by(name="公告栏").first_or_404()  # 找出公告栏所在newstag表中的数据
+    newstags = newsinfos.join(NewsTag).filter(
+        NewsTag.id == newstag.id
+    )  # 找出newsinfo表中隶属公告栏的数据
+    # newscategorys = newstags.join(NewsCategory).filter(
+    #     NewsCategory.id == newstag.newscategory_id
+    # )
+    if newstags.count() <= 5:
+        newstags = newstags[:]  # 不超过6条数据则全部显示
+    else:
+        newstags = newstags[newstags.count() - 5:]  # 超过6条数据后选最后5条数据出现
+    newstags.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
+    return render_template("registration/index.html", newstags=newstags)
+
+
+'''
+理解本方法（newscategory）：
+    在nav.html页中用get方式取得标签，然后在本方法中润色，通过传递过来的标签（具有唯一性）进行数据查找
+    找到name所对应的newstag，然后再根据newstag去取得所属类别，通过Jinja2模板渲染在前台。
+    此处加newstag_name的作用有3，一是面包屑导航栏的显示，二是根据判断newstags的tag是否为当前name，是的话加上active
+    三是左侧小导航的显示和中间面板主体左上角的显示    
+'''
+
+
+# 资讯标签和类别相关
+@registration.route("/newscategory/<name>", methods=["GET"])
+def newscategory(name):
+    newstag = NewsTag.query.filter_by(name=name).first_or_404()  # 通过nav请求找到tag
+    newstag_name = name  # 存一下当前请求的name
+    newscategory = newstag.newscategory.name  # 根据当前tag找到所属类别，为了面包屑导航栏的一级显示
+    newscategorys = NewsCategory.query.filter_by(name=newscategory).first_or_404()  # 找出当前所属类别的id
+    newstags = NewsTag.query.filter_by(newscategory_id=newscategorys.id)  # 根据所属类别的id找出此类别下所有的标签
+    newsinfos = NewsInfo.query.filter_by(newstag_id=newstag.id).order_by(
+        NewsInfo.addtime.asc()
+    )  # 根据当前标签找出此标签下的所有内容
+    newsinfos = newsinfos[:]  # 将数据集转为列表，目的是为了翻转
+    newsinfos.reverse()
+    return render_template("registration/newscategory.html", newstag=newstag, newstag_name=newstag_name,
+                           newscategory=newscategory, newstags=newstags, newsinfos=newsinfos)
+
+
+# 资讯详情
+@registration.route("/detail/<int:id>/", methods=["GET"])
+def detail(id=None):
+    newsinfo = NewsInfo.query.get_or_404(id)
+    newstag = newsinfo.newstag.name
+    newscategory = newsinfo.newstag.newscategory.name
+    newsinfo.view_num = newsinfo.view_num + 1
+    db.session.add(newsinfo)
+    db.session.commit()
+    return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag, newscategory=newscategory)
 
 
 # 用户登录
@@ -135,12 +186,6 @@ def admission():
         Userlog.addtime.asc()
     )
     return render_template("registration/admission.html", page_data=page_data)
-
-
-# 资讯
-@registration.route("/newscategory/", methods=["GET", "POST"])
-def newscategory():
-    return render_template("registration/newscategory.html")
 
 
 # 图书

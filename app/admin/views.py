@@ -48,10 +48,13 @@ def index():
     user_count = User.query.count()
     oplog_book_list = oplog_list.filter(Oplog.opdetail.like('%参考书%'))
     oplog_book_list = oplog_book_list[oplog_book_list.count() - 3:]
+    oplog_book_list.reverse()
     oplog_news_list = oplog_list.filter(Oplog.opdetail.like('%新闻%'))
     oplog_news_list = oplog_news_list[oplog_news_list.count() - 3:]
+    oplog_news_list.reverse()
     oplog_test_list = oplog_list.filter(Oplog.opdetail.like('%考试%'))
     oplog_test_list = oplog_test_list[oplog_test_list.count() - 3:]
+    oplog_test_list.reverse()
     return render_template("admin/index.html", oplog_book_list=oplog_book_list, oplog_news_list=oplog_news_list,
                            oplog_test_list=oplog_test_list, user_count=user_count)
 

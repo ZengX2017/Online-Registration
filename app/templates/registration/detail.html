@@ -1,0 +1,67 @@
+{% extends 'registration/registration.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
+    <style>
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+
+        .table-bordered {
+            border: none;
+        }
+
+        table.table-bordered th:last-child, table.table-bordered td:last-child {
+            border-top-width: 0;
+            border-right-width: 0;
+        }
+
+        div.dataTables_paginate ul.pagination {
+            margin: 2px 0;
+            margin-top: 15px;
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="detail-div">
+            <ol class="breadcrumb">
+                <li><a href="{{ url_for('registration.newscategory', name=newstag) }}">{{ newstag }}</a></li>
+                <li class="active">{{ newsinfo.title | truncate(20) }}</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="panel panel-default col-md-10 m-t-20">
+                <div class="panel-body">
+                    <h3 class="text-center">{{ newsinfo.title }}</h3>
+                    <hr>
+                    <p class="text-center" style="margin: -10px 0 20px;">
+                        【发布日期：{{ newsinfo.addtime.strftime("%Y-%m-%d") }}&nbsp;&nbsp;&nbsp;管理员：{{ newsinfo.admin.name }}&nbsp;&nbsp;&nbsp;浏览量：{{ newsinfo.view_num }}】</p>
+                    <div id="summer">
+
+                    </div>
+                    <input type="hidden" value="{{ newsinfo.content }}" id="article_content">
+                    <hr>
+                    <span style="color:#aca8a8">{{ newsinfo.remark }}</span>
+                </div> <!-- panel-body -->
+            </div>
+            {% include 'registration/affairs_public.html' %}
+        </div>
+
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
+    <script>
+        jQuery(document).ready(function () {
+            var innerhtml = $("#article_content").val();
+            $("#summer").html(innerhtml);
+        });
+
+        $(document).ready(function () {
+            $("#m-4").addClass("active")
+        });
+    </script>
+{% endblock %}

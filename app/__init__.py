@@ -20,7 +20,6 @@ app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(os.path.abspath(os.path.dirnam
                                                   "static/uploads/newsinfos/")  # 2018年3月4日 14点14分
 photos = UploadSet('photos', IMAGES)  # 2018年3月4日 14点14分
 configure_uploads(app, photos)  # 2018年3月4日 14点14分
-# app.config["FC_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users")
 
 app.debug = True
 db = SQLAlchemy(app)

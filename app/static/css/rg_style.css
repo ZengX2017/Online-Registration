@@ -165,7 +165,7 @@ div.panel-5{
 }
 ul.panel-ul>a.list-group-item{
     border: none;
-    padding-bottom: 4px;;
+    padding-bottom: 4px;
 }
 @media (max-width:767px) {
     div.panel-5{
