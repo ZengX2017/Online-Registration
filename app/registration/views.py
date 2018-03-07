@@ -26,6 +26,43 @@ def affairs_public_tags():
     return zwgkNc.name, zwgkTags
 
 
+'''
+理解本方法（index_length）：
+    本方法本来是在index_infos方法里面的，后来因为好几个部分不能调用infos方法但都有此逻辑，故将此部分从index_infos方法
+抽出重建。
+    注：为了避免多次写reverse()，在方法内部封装了此方法，返回翻转后的数据列表
+'''
+
+
+def index_length(result=None, length=None):
+    if result.count() <= int(length):
+        result = result[:]  # 小于等于length(举例：6）条数据全部显示
+    else:
+        result = result[result.count() - int(length):]  # 大于length(举例：6）条数据显示最新的前length(举例：6）条（需要翻转）
+    result.reverse()  # 先加上，后期再看，如果不方便再去掉
+    return result
+
+
+'''
+理解本方法（index_infos）：
+    因为首页大多数内容都有一样的显示方式，即小于等于length(举例：6）条数据全部显示，大于length(举例：6）条数据
+显示最新的前length(举例：6）条（需要翻转），为了避免多余的重复代码，故在此写本方法减少代码的重复率。
+    注：注释部分被抽出成为index_length()方法。
+    原意是为了解决级别tablist而设计的，在此基础上对外扩展，成为了部分内容都可用的方法    
+'''
+
+
+def index_infos(name=None, length=None):
+    infos = NewsTag.query.filter_by(name=name).first_or_404()  # 找出name所在的tag_id
+    infos = NewsInfo.query.filter_by(newstag_id=infos.id)  # 找出name级别的所有数据
+    infos = index_length(infos, length)
+    # if infos.count() <= int(length):
+    #     infos = infos[:]  # 不超过length条数据则全部显示
+    # else:
+    #     infos = infos[infos.count() - int(length):]  # 超过length条数据后选最后length-1条数据出现
+    return infos
+
+
 # 首页
 @registration.route("/")
 def index():
@@ -35,17 +72,27 @@ def index():
         NewsTag.id == newstag.id
     )  # 找出newsinfo表中隶属公告栏的数据
 
-    if newstags.count() <= 5:
-        newstags = newstags[:]  # 不超过6条数据则全部显示
-    else:
-        newstags = newstags[newstags.count() - 5:]  # 超过6条数据后选最后5条数据出现
-    newstags.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
+    newstags = index_length(newstags, 5)
 
     latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
     latest_infos = latest_infos[:10]  # 切片，找出前10条
 
+    # 轮播图，NewsInfo
+    banner = newsinfos.filter(NewsInfo.img.ilike("20%"))
+    banner = index_length(banner, 3)
+
+    # 级别tablist
+    primary = index_infos("初级", 6)  # 详见方法index_infos()上方说明
+    middle = index_infos("中级", 6)
+    advanced = index_infos("高级", 6)
+
+    # 尾部信息
+    reg_infos = index_infos("报名安排", 5)
+
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/index.html", newstags=newstags, zwgkNc=zwgkNc, zwgkTags=zwgkTags, latest_infos=latest_infos)
+    return render_template("registration/index.html", newstags=newstags, zwgkNc=zwgkNc, zwgkTags=zwgkTags,
+                           latest_infos=latest_infos, banner=banner, primary=primary, middle=middle,
+                           advanced=advanced, reg_infos=reg_infos)
 
 
 '''

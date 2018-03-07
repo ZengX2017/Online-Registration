@@ -16,6 +16,17 @@
             float: none;
         }
 
+        div#content3 > ul > li {
+            list-style: none;
+            padding: 2px 0 0 0;
+            margin-left: -30px;
+        }
+
+        div#myCarousel > div.carousel-inner > div.item > div.container > div.carousel-caption a{
+            color: #ffffff;
+            text-decoration: none;
+        }
+
         @media (max-width: 767px) {
             ul.panel-ul > a.list-group-item {
                 border: none;
@@ -41,14 +52,14 @@
                         {% for news in newstags %}
                             <a href="{{ url_for('registration.detail', id=news.id) }}" class="list-group-item">
                                 {{ news.title | safe | truncate(25) }}
-                                <span class="pull-right">[{{ news.addtime.strftime('%Y-%m-%d') }}]</span>
+                                <span class="pull-right">[{{ news.addtime }}]</span>
                                 {% if loop.index <= 2 %}
                                     <span class="badge">new</span>
                                 {% endif %}
                             </a>
                         {% endfor %}
                     </ul>
-                    <a href="{{ url_for('registration.newscategory', name="公告栏") }}" class="pull-right" target="_blank">More&gt;</a>
+                    <a href="{{ url_for('registration.newscategory', name="公告栏") }}" class="pull-right" target="_blank">More&gt;&gt;</a>
                 </div>
             </div>
         </div>
@@ -74,7 +85,6 @@
                                 {% endfor %}
                             </ul>
                         </div>
-{#                        <a href="#" class="pull-right" target="_blank">More></a>#}
                     </div>
                 </div>
             </div>
@@ -86,7 +96,7 @@
             <div class="col-md-3 col-sm-12">
                 <div class="panel panel-info">
                     <!-- Default panel contents -->
-                    <div class="panel-heading">考试概述<a href="{{ url_for('registration.newscategory', name='考试介绍') }}" class="pull-right">More&gt;</a></div>
+                    <div class="panel-heading">考试概述<a href="{{ url_for('registration.newscategory', name='考试介绍') }}" class="pull-right">More&gt;&gt;</a></div>
 
                     <!-- List group -->
                     <ul class="list-group">
@@ -112,7 +122,7 @@
             <hr class="hr-hidden"/>
             <div class="col-md-9 col-sm-12">
                 <strong>要闻速递</strong>
-                <a href="#" class="pull-right">More></a>
+                <a href="#" class="pull-right">More&gt;&gt;</a>
                 <div id="content2">
                     <ul style="display:block;">
                         <dl class="dl-horizontal">
@@ -122,7 +132,7 @@
                             <dd>
                                 <h3>2016年10月25日广播体操比赛</h3>
                                 <span>为了提高我校的广播操质量，激发同学们做广播操的积极性与热情，同时也为了丰富学生校园文化生活...<a href="#"
-                                                                                         class="more2">More></a></span>
+                                                                                         class="more2">More&gt;&gt;</a></span>
                             </dd>
                         </dl>
                         <li><a href="#">
@@ -152,25 +162,15 @@
         <div class="row">
             <hr class="hr-hidden"/>
             <div class="col-md-10 col-sm-12">
-                <strong>要闻速递</strong>
-                <a href="#" class="pull-right">More></a>
+                <strong>报名安排</strong>
+                <a href="{{ url_for('registration.newscategory', name="报名安排") }}" class="pull-right">More&gt;&gt;</a>
                 <div id="content3">
                     <ul style="display:block;">
-                        <li><a href="#">
-                            <h4>2016年10月25日广播体操比赛</h4>
-                            <span>2017/01/16</span></a></li>
-                        <li><a href="#">
-                            <h4>2016年10月11日羽毛球比赛</h4>
-                            <span>2017/01/16</span></a></li>
-                        <li><a href="#">
-                            <h4>2016年10月6日国庆篮球赛</h4>
-                            <span>2017/01/16</span></a></li>
-                        <li><a href="#">
-                            <h4>2016年9月30日班主任座谈会</h4>
-                            <span>2017/01/16</span></a></li>
-                        <li><a href="#">
-                            <h4>2016年9月7日走进泰山医学院</h4>
-                            <span>2017/01/16</span></a></li>
+                        {% for reg_info in reg_infos %}
+                           <li><a href="{{ url_for('registration.detail', id=reg_info.id) }}">
+                            <h4>{{ reg_info.title | safe | truncate(25) }}</h4>
+                            <span>{{ reg_info.addtime }}</span></a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -189,7 +189,7 @@
 		    pause: 2000,
 		    animation: 'fade',
 		    mousePause: false,
-		    showItems: 4
+		    showItems: 5
 	    });
     </script>
 {% endblock %}

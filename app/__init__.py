@@ -15,9 +15,9 @@ app.config["UP_BOOK_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file_
 app.config["UP_USER_INFO_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users/")
 app.config["UP_NEWS_INFO_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/newsinfos/")
 
-
 app.debug = True
 db = SQLAlchemy(app)
+
 
 from app.registration import registration as regst_blueprint
 from app.admin import admin as admin_blueprint

@@ -322,14 +322,15 @@ def newsinfo_add():
         if ni == 1:
             flash("此标题已经存在！不能重复添加", "err")
             return redirect(url_for("admin.newsinfo_add"))
-
-        info_img = secure_filename(imgs.filename)
-        if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
-            os.makedirs(app.config["UP_NEWS_INFO_DIR"])
-            os.chmod(app.config["UP_NEWS_INFO_DIR"], stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
-        img = change_filename(info_img)  # 处理文件结束
-        form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
-        # photos.save(form.photo.data, name='demo_dir/demo.')
+        img = ""
+        if form.img.data != "":
+            info_img = secure_filename(form.img.data.filename)
+            if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
+                os.makedirs(app.config["UP_NEWS_INFO_DIR"])
+                os.chmod(app.config["UP_NEWS_INFO_DIR"], stat.S_IRWXU)
+                # stat.S_IRWXU − Read, write, and execute by owner.
+            img = change_filename(info_img)  # 处理文件结束
+            form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
 
         newsinfo = NewsInfo(
             title=data["title"],
@@ -382,39 +383,29 @@ def newsinfo_edit(id=None):
     form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
     newsinfo = NewsInfo.query.get_or_404(id)
     old_title = newsinfo.title
-    img_list = newsinfo.img
-    img_items = img_list.split(";")  # 因为分割出来有一个为空，所以长度会多1
+    image = newsinfo.img
     if request.method == "GET":
         form.tag.data = newsinfo.newstag_id
         form.remark.data = newsinfo.remark
     if form.validate_on_submit():
         data = form.data
         ni = NewsInfo.query.filter_by(title=data["title"]).count()
-        img_list = ""
         if newsinfo.title != data["title"] and ni == 1:
             flash("此标题已经存在！不能重复添加", "err")
             return redirect(url_for("admin.newsinfo_edit", id=id))
-        for imgs in request.files.getlist('img'):
-            info_img = secure_filename(imgs.filename)
+        if form.img.data != "":
+            info_img = secure_filename(form.img.data.filename)
             if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
                 os.makedirs(app.config["UP_NEWS_INFO_DIR"])
                 os.chmod(app.config["UP_NEWS_INFO_DIR"],
                          stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
             img = change_filename(info_img)  # 处理文件结束
-            img_list = img_list + img + ";"
-            # photos.save(form.img.data)
             form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
-
-        # 参考书的图片用法
-        # if form.logo.data != "":
-        #     book_logo = secure_filename(form.logo.data.filename)
-        #     refbook.logo = change_filename(book_logo)
-        #     form.logo.data.save(app.config["UP_BOOK_DIR"] + refbook.logo)
+            newsinfo.img = img
 
         newsinfo.title = data["title"]
         newsinfo.content = data["info"]
         newsinfo.newstag_id = data["tag"]
-        newsinfo.img = img_list
         newsinfo.remark = data["remark"]
         db.session.add(newsinfo)
         db.session.commit()
@@ -427,7 +418,7 @@ def newsinfo_edit(id=None):
         db.session.add(oplog)
         db.session.commit()
         return redirect(url_for("admin.newsinfo_edit", id=id))
-    return render_template("admin/newsinfo_edit.html", form=form, newsinfo=newsinfo, img_items=img_items)
+    return render_template("admin/newsinfo_edit.html", form=form, newsinfo=newsinfo, image=image)
 
 
 # 新闻资讯列表

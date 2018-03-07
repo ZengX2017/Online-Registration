@@ -82,12 +82,10 @@
                                 {{ form.img.label(class="col-md-2 control-label", for="file-input") }}
                                 <div class="col-md-10">
                                     {{ form.img }}
-                                    {% for img_item in img_items %}
-                                        {% if not loop.last %}
-                                        <img src="{{ url_for('static', filename='uploads/newsinfos/' + img_item) }}"
+                                    {% if image %}
+                                        <img src="{{ url_for('static', filename='uploads/newsinfos/' + image) }}"
                                              alt="新闻图片pic" style="width: 33%">
-                                        {% endif %}
-                                    {% endfor %}
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="form-group">

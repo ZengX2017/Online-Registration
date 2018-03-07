@@ -5,6 +5,7 @@
       <w>dest</w>
       <w>dismissable</w>
       <w>examroom</w>
+      <w>ilike</w>
       <w>imgs</w>
       <w>jinja</w>
       <w>myform</w>
@@ -13,6 +14,8 @@
       <w>newstag</w>
       <w>oplog</w>
       <w>refbook</w>
+      <w>refbooks</w>
+      <w>tablist</w>
       <w>tinfo</w>
       <w>userinfo</w>
       <w>zwgk</w>

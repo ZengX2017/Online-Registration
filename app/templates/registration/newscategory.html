@@ -71,7 +71,7 @@
                                 <td>
                                     <a href="{{ url_for('registration.detail', id=newsinfo.id) }}">
                                         <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;{{ newsinfo.title | safe }}
-                                    <span class="pull-right"> [{{ newsinfo.addtime.strftime("%Y-%m-%d") }}]</span>
+                                    <span class="pull-right"> [{{ newsinfo.addtime }}]</span>
                                     </a>
                                 </td>
                             </tr>
@@ -132,7 +132,7 @@
                     "sLast": "尾页"
                 }
             },
-            "iDisplayLength": 10,
+            "iDisplayLength": 6,
             {#"lengthMenu": [5, 10, 15, 20],#}
             "lengthChange": false,  //隐藏左上角Length页面
             "searching": false,     //隐藏右上角本地搜索
