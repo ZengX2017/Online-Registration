@@ -3,7 +3,7 @@ __author__ = 'Adward_Z'
 
 from flask import render_template, redirect, url_for, flash, session, request, abort
 from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm
-from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory
+from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook
 from app import db
 from werkzeug.security import generate_password_hash
 from . import registration
@@ -34,30 +34,48 @@ def index():
     newstags = newsinfos.join(NewsTag).filter(
         NewsTag.id == newstag.id
     )  # 找出newsinfo表中隶属公告栏的数据
-    # newscategorys = newstags.join(NewsCategory).filter(
-    #     NewsCategory.id == newstag.newscategory_id
-    # )
+
     if newstags.count() <= 5:
         newstags = newstags[:]  # 不超过6条数据则全部显示
     else:
         newstags = newstags[newstags.count() - 5:]  # 超过6条数据后选最后5条数据出现
     newstags.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
 
+    latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
+    latest_infos = latest_infos[:10]  # 切片，找出前10条
+
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/index.html", newstags=newstags, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+    return render_template("registration/index.html", newstags=newstags, zwgkNc=zwgkNc, zwgkTags=zwgkTags, latest_infos=latest_infos)
+
+
+'''
+理解本方法（search）：
+    本方法为搜索功能，从前台导航栏的搜索框获取输入的key去数据库查找，只需要改一条语句即可实现不同的功能。鉴于毕业设计任务书要求实现的是
+参考书的搜索功能，故将功能设置为参考书的搜索功能。写此功能时初始实现的是搜索新闻资讯，代码如下：
+    newsinfos = NewsInfo.query.filter(NewsInfo.title.ilike('%' + info + '%'))
+    方法内的newsinfos为了避免在search.html和本方法内进行修改，就不设置为refbooks了
+'''
 
 
 # 搜索
 @registration.route("/search/")
 def search():
     info = request.args.get("info", "")
-    newsinfos = NewsInfo.query.filter(NewsInfo.title.ilike('%' + info + '%'))
+    newsinfos = Refbook.query.filter(Refbook.title.ilike('%' + info + '%'))
     count = newsinfos.count()
-    newsinfos = newsinfos[:]  # 不超过6条数据则全部显示
+    newsinfos = newsinfos[:]  # 将所得的数据集合转为列表
     newsinfos.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/search.html", newsinfos=newsinfos, info=info, count=count, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+
+
+# 参考书详情
+@registration.route("/refbook_detail/<int:id>", methods=["GET"])
+def refbook_detail(id=None):
+    refbook = Refbook.query.get_or_404(id)
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/refbook_detail.html", refbook=refbook, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 '''
@@ -98,8 +116,9 @@ def detail(id=None):
     newsinfo.view_num = newsinfo.view_num + 1
     db.session.add(newsinfo)
     db.session.commit()
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag,
-                           newscategory=newscategory)
+                           newscategory=newscategory, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 用户登录
@@ -222,9 +241,3 @@ def admission():
         Userlog.addtime.asc()
     )
     return render_template("registration/admission.html", page_data=page_data)
-
-
-# 图书
-@registration.route("/book/", methods=["GET", "POST"])
-def book():
-    return render_template("registration/book.html")

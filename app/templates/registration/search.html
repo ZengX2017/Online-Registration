@@ -26,15 +26,15 @@
     <div class="container">
         <div class="detail-div">
             <ol class="breadcrumb">
-                <li><a href="#">搜索</a></li>
-                <li class="active">{% if info == "" %}
-                所有{% else %}关于<span style="color: #ff0000">{{ info }}</span>{% endif %}的信息有<span style="color: #ff0000">{{ count }}</span>条</li>
+                <li class="active">搜索结果</li>
             </ol>
         </div>
 
         <div class="row">
             <div class="panel panel-default col-md-10">
-                <div class="panel-heading">搜索结果</div>
+                <div class="panel-heading">{% if info == "" %}
+                    所有{% else %}关于&nbsp;<strong style="color: #ff0000">{{ info }}</strong>&nbsp;{% endif %}的信息有&nbsp;<strong style="color: #ff0000">{{ count }}</strong>&nbsp;条
+                </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-striped" id="datatable-editable">
                         <thead>
@@ -44,12 +44,19 @@
                         </thead>
                         <tbody>
                         {% for newsinfo in newsinfos %}
-                            <tr class="text-left">
+                            <tr class="col-sm-6 col-md-4">
                                 <td>
-                                    <a href="{{ url_for('registration.detail', id=newsinfo.id) }}">
-                                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;{{ newsinfo.title | safe }}
-                                    <span class="pull-right"> [{{ newsinfo.addtime }}]</span>
-                                    </a>
+                                    <div class="thumbnail">
+                                        <img src="{{ url_for('static', filename='uploads/books/' + newsinfo.logo) }}"
+                                             alt="图书封面pic" class="img-block" style="width:250px;height: 250px;">
+                                        <div class="caption text-center">
+                                            <h3>{{ newsinfo.title | safe | truncate(8) }}</h3>
+                                            <p>{{ newsinfo.info | truncate(20) }}</p>
+                                            <p class="text-right"><a href="{{ url_for('registration.refbook_detail', id=newsinfo.id) }}">查看更多&nbsp;<i
+                                                    class="fa fa-angle-double-right"
+                                                    aria-hidden="true"></i>&nbsp;</a></p>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -84,7 +91,7 @@
                     "sLast": "尾页"
                 }
             },
-            "iDisplayLength": 10,
+            "iDisplayLength": 9,
             {#"lengthMenu": [5, 10, 15, 20],#}
             "lengthChange": false,  //隐藏左上角Length页面
             "searching": false,     //隐藏右上角本地搜索

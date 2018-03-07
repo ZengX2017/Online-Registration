@@ -3,7 +3,6 @@ __author__ = 'Adward_Z'
 
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
-from flask_uploads import UploadSet, configure_uploads, IMAGES  # 2018年3月4日 14点14分
 import pymysql
 import os
 
@@ -16,10 +15,6 @@ app.config["UP_BOOK_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file_
 app.config["UP_USER_INFO_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users/")
 app.config["UP_NEWS_INFO_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/newsinfos/")
 
-app.config["UPLOADED_PHOTOS_DEST"] = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                                  "static/uploads/newsinfos/")  # 2018年3月4日 14点14分
-photos = UploadSet('photos', IMAGES)  # 2018年3月4日 14点14分
-configure_uploads(app, photos)  # 2018年3月4日 14点14分
 
 app.debug = True
 db = SQLAlchemy(app)

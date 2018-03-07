@@ -13,7 +13,7 @@ from app.admin.forms import NewsCategoryForm, NewsTagForm, NewsInfoForm, TlevelF
     TinfoForm, LoginForm, ChangePwdForm
 from app.models import NewsCategory, NewsTag, NewsInfo, Admin, Tlevel, Tsubject, Refbook, Tinfo, Adminlog, \
     Userlog, Oplog, User
-from app import app, db, photos
+from app import app, db
 from . import admin
 
 
@@ -107,6 +107,11 @@ def change_pwd():
     return render_template("admin/change_pwd.html", form=form)
 
 
+'''
+以下是新闻类别（newscategory）的add，del，edit，list四个方法
+'''
+
+
 # 新闻类别添加
 @admin.route("/newscategory/add/", methods=["GET", "POST"])
 @login_req
@@ -188,6 +193,11 @@ def newscategory_edit(id=None):
 def newscategory_list():
     page_data = NewsCategory.query.all()
     return render_template("admin/newscategory_list.html", page_data=page_data)
+
+
+'''
+以下是新闻标签（newstag）的add，del，edit，list四个方法
+'''
 
 
 # 新闻标签添加
@@ -290,32 +300,36 @@ def newstag_list():
     return render_template("admin/newstag_list.html", page_data=page_data)
 
 
+'''
+以下是新闻资讯（newsinfo）的add，del，edit，list四个方法
+'''
+
+
 # 新闻资讯添加
 @admin.route("/newsinfo/add/", methods=["GET", "POST"])
 @login_req
 def newsinfo_add():
     form = NewsInfoForm()
     form.tag.choices = [(nt.id, nt.name) for nt in NewsTag.query.all()]
+    form.remark.data = "声明：本网所刊载的所有信息，包括文字、图片、软件、声音、相片、录相、图表，广告、商业信息及电子邮件" \
+                       "的全部内容，除特别标明之外，版权归中国计算机技术职业资格网所有。未经本网的明确书面许可，任何单位或" \
+                       "个人不得以任何方式作全部或局部复制、转载、引用，再造或创造与该内容有关的任何派生产品，否则本网将追究其法律责任。 本网凡特别注明稿件来源的文/图等稿件为转载稿，" \
+                       "本网转载出于传递更多信息之目的，并不意味着赞同其观点或证实其内容的真实性。" \
+                       "如对稿件内容有疑议，请及时与我们联系。 如本网转载稿涉及版权问题，请作者在两周内速来电或来函与我们联系，我们将及时按作者意愿予以更正。"
     if form.validate_on_submit():
         data = form.data
         ni = NewsInfo.query.filter_by(title=data["title"]).count()
         if ni == 1:
             flash("此标题已经存在！不能重复添加", "err")
             return redirect(url_for("admin.newsinfo_add"))
-        img_list = ""
-        for imgs in request.files.getlist('img'):
-            info_img = secure_filename(imgs.filename)
-            if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
-                os.makedirs(app.config["UP_NEWS_INFO_DIR"])
-                os.chmod(app.config["UP_NEWS_INFO_DIR"],
-                         stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
-            img = change_filename(info_img)  # 处理文件结束
-            img_list = img_list + img + ";"
-            form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
-            # photos.save(form.photo.data, name='demo_dir/demo.')
 
-        # img_items = img_list.split(";")
-        # print(img_items)  # 读数据用
+        info_img = secure_filename(imgs.filename)
+        if not os.path.exists(app.config["UP_NEWS_INFO_DIR"]):  # 处理文件
+            os.makedirs(app.config["UP_NEWS_INFO_DIR"])
+            os.chmod(app.config["UP_NEWS_INFO_DIR"], stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
+        img = change_filename(info_img)  # 处理文件结束
+        form.img.data.save(app.config["UP_NEWS_INFO_DIR"] + img)
+        # photos.save(form.photo.data, name='demo_dir/demo.')
 
         newsinfo = NewsInfo(
             title=data["title"],
@@ -323,7 +337,7 @@ def newsinfo_add():
             view_num=0,
             admin_id=1,
             newstag_id=data["tag"],
-            img=img_list,
+            img=img,
             remark=data["remark"]
         )
         db.session.add(newsinfo)
@@ -429,6 +443,11 @@ def newsinfo_list():
     return render_template("admin/newsinfo_list.html", page_data=page_data)
 
 
+'''
+以下是考试级别（tlevel）的add，del，edit，list四个方法
+'''
+
+
 # 考试级别添加
 @admin.route("/tlevel/add/", methods=["GET", "POST"])
 @login_req
@@ -514,6 +533,11 @@ def tlevel_list():
     return render_template("admin/tlevel_list.html", page_data=page_data)
 
 
+'''
+以下是考试科目（tsubject）的add，del，edit，list四个方法
+'''
+
+
 # 考试科目添加
 @admin.route("/tsubject/add/", methods=["GET", "POST"])
 @login_req
@@ -597,6 +621,11 @@ def tsubject_list():
         Tsubject.addtime.asc()
     )
     return render_template("admin/tsubject_list.html", page_data=page_data)
+
+
+'''
+以下是考试信息（tinfo）的add，del，edit，list四个方法
+'''
 
 
 # 考试信息添加
@@ -730,6 +759,11 @@ def tinfo_list():
     return render_template("admin/tinfo_list.html", page_data=page_data)
 
 
+'''
+以下是参考书（refbook）的add，del，edit，list四个方法
+'''
+
+
 # 参考书添加
 @admin.route("/refbook/add/", methods=["GET", "POST"])
 @login_req
@@ -757,7 +791,8 @@ def refbook_add():
             pages=data["pages"],
             logo=logo,
             price=data["price"],
-            pubdate=data["pubdate"]
+            pubdate=data["pubdate"],
+            info=data["info"]
         )
         db.session.add(refbook)
         db.session.commit()
@@ -804,6 +839,7 @@ def refbook_edit(id=None):
     old_ISBN = refbook.ISBN
     if request.method == "GET":
         form.pubdate.data = refbook.pubdate
+        form.info.data = refbook.info
 
     if form.validate_on_submit():
         data = form.data
@@ -823,6 +859,7 @@ def refbook_edit(id=None):
         refbook.pages = data["pages"]
         refbook.price = data["price"]
         refbook.pubdate = data["pubdate"]
+        refbook.info = data["info"]
         db.session.add(refbook)
         db.session.commit()
         flash("修改参考书成功", "OK")
@@ -845,6 +882,11 @@ def refbook_list():
         Refbook.addtime.asc()
     )
     return render_template("admin/refbook_list.html", page_data=page_data)
+
+
+'''
+以下是用户（user）的info，del，list三个方法
+'''
 
 
 # 用户信息查看
@@ -885,6 +927,11 @@ def user_list():
     return render_template("admin/user_list.html", page_data=page_data)
 
 
+'''
+以下是日志（log）的admin_log，oplog_list，user_log三个方法
+'''
+
+
 # 管理员登录日志列表
 @admin.route("/admin_log_list/", methods=["GET"])
 @login_req
@@ -917,6 +964,11 @@ def user_log():
         Userlog.addtime.asc()
     )
     return render_template("admin/user_log.html", page_data=page_data)
+
+
+'''
+以下是管理员（admin）的add，list两个方法，考虑舍弃
+'''
 
 
 # 管理员信息添加

@@ -34,13 +34,13 @@
         <div class="row">
             {% if zwgkNc != newscategory %}
                 <div class="col-md-2">
-                <div class="panel panel-info">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading text-center"><i class="fa fa-book fa-fw"
+                    <div class="panel panel-info">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading text-center"><i class="fa fa-book fa-fw"
                                                               aria-hidden="true"></i>&nbsp;{{ newscategory }}
-                    </div>
-                    <!-- List group -->
-                    <ul class="list-group text-center">
+                        </div>
+                        <!-- List group -->
+                        <ul class="list-group text-center">
                         {% for tag in newstags %}
                             {% if newstag_name == tag.name %}
                                 <a href="{{ url_for('registration.newscategory', name=tag.name) }}" class="list-group-item active">
@@ -54,12 +54,12 @@
                         {% endfor %}
                     </ul>
 
+                    </div>
                 </div>
-            </div>
                 <div class="panel panel-default col-md-8">
-                <div class="panel-heading">{{ newstag_name }}</div>
-                <div class="panel-body">
-                    <table class="table table-bordered table-striped" id="datatable-editable">
+                    <div class="panel-heading">{{ newstag_name }}</div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable-editable">
                         <thead>
                         <tr>
                             <th class="text-center" style="display: none">g</th>
@@ -78,8 +78,8 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    </div>
                 </div>
-            </div>
             {% else %}  <!-- 若当前为政务公开时，会去掉左侧栏 -->
                 <div class="panel panel-default col-md-10">
                 <div class="panel-heading">{{ newstag_name }}</div>

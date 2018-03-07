@@ -42,6 +42,9 @@
 
                     </div>
                     <input type="hidden" value="{{ newsinfo.content }}" id="article_content">
+                    {% if newsinfo.img %}
+                        <img src="{{ url_for('static', filename='uploads/newsinfos/'+newsinfo.img) }}" alt="新闻资讯pic">
+                    {% endif %}
                     <hr>
                     <span style="color:#aca8a8">{{ newsinfo.remark }}</span>
                 </div> <!-- panel-body -->
@@ -58,10 +61,6 @@
         jQuery(document).ready(function () {
             var innerhtml = $("#article_content").val();
             $("#summer").html(innerhtml);
-        });
-
-        $(document).ready(function () {
-            $("#m-4").addClass("active")
         });
     </script>
 {% endblock %}

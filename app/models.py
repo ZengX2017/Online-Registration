@@ -114,6 +114,7 @@ class Refbook(db.Model):
     logo = db.Column(db.String(255), unique=True)
     price = db.Column(db.Float)
     pubdate = db.Column(db.Date)
+    info = db.Column(db.String(20000))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     tinfos = db.relationship("Tinfo", backref='refbook', cascade='all, delete-orphan', lazy='dynamic',
                              passive_deletes=True)

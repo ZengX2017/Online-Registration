@@ -3,8 +3,12 @@
     登录日志
 {% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
+    <style>
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #eff9fe;
+        }
+    </style>
 {% endblock %}
 {% block content %}
     <div class="container">
@@ -20,27 +24,27 @@
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-striped text-center" id="datatable-editable">
-                    <thead>
-                    <tr>
-                        <th class="text-center">编号</th>
-                        <th class="text-center">登录姓名</th>
-                        <th class="text-center">登录邮箱</th>
-                        <th class="text-center">登录ip</th>
-                        <th class="text-center">登录时间</th>
-                    </tr>
-                    </thead>
-                    <tbody class="text-center">
-                    {% for value in page_data %}
+                        <thead>
                         <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ value.user.name }}</td>
-                            <td>{{ value.user.email }}</td>
-                            <td>{{ value.ip }}</td>
-                            <td>{{ value.addtime }}</td>
+                            <th class="text-center">编号</th>
+                            <th class="text-center">登录姓名</th>
+                            <th class="text-center">登录邮箱</th>
+                            <th class="text-center">登录ip</th>
+                            <th class="text-center">登录时间</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody class="text-center">
+                        {% for value in page_data %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ value.user.name }}</td>
+                                <td>{{ value.user.email }}</td>
+                                <td>{{ value.ip }}</td>
+                                <td>{{ value.addtime }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

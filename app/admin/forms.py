@@ -100,8 +100,7 @@ class NewsInfoForm(FlaskForm):
         label="图片",
         description="图片",
         render_kw={
-            "id": "file-input",
-            "multiple": "multiple"
+            "id": "file-input"
         }
     )
     remark = TextAreaField(
@@ -252,6 +251,17 @@ class RefbookForm(FlaskForm):
             "id": "datepicker",
             "placeholder": "yyyy-mm-dd",
         }
+    )
+    info = TextAreaField(
+        label="图书简介",
+        validators=[
+            DataRequired("请输入图书简介！")
+        ],
+        description="图书简介",
+        render_kw={
+            "class": "form-control",
+            "rows": 10
+        }  # 附加选项
     )
     submit = SubmitField(
         "编辑",

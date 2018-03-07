@@ -119,6 +119,16 @@
                                 </div>
                             {% endfor %}
                             <!-- 验证提示 -->
+                            <!-- 验证提示 -->
+                            {% for err in form.info.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
                             <div class="form-group">
                                 {{ form.title.label(class="col-md-2 control-label") }}
                                 <div class="col-md-10">
@@ -165,6 +175,12 @@
                                 {{ form.pubdate.label(class="col-md-2 control-label") }}
                                 <div class="col-md-10">
                                     {{ form.pubdate }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.info.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.info }}
                                 </div>
                             </div>
                             {{ form.csrf_token }}

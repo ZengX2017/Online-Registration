@@ -7,6 +7,15 @@
             margin: 8px 0;
         }
 
+        .badge-danger{
+            background-color: #dc3545;
+        }
+
+        .list-group-item>.badge {
+            background-color: #dc3545;
+            float: none;
+        }
+
         @media (max-width: 767px) {
             ul.panel-ul > a.list-group-item {
                 border: none;
@@ -33,6 +42,9 @@
                             <a href="{{ url_for('registration.detail', id=news.id) }}" class="list-group-item">
                                 {{ news.title | safe | truncate(25) }}
                                 <span class="pull-right">[{{ news.addtime.strftime('%Y-%m-%d') }}]</span>
+                                {% if loop.index <= 2 %}
+                                    <span class="badge">new</span>
+                                {% endif %}
                             </a>
                         {% endfor %}
                     </ul>
@@ -40,7 +52,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="row">
             {% include 'registration/tablist.html' %}
@@ -53,16 +64,17 @@
                             <span>最新通知</span>
                         </h2>
                         <hr>
-                        <ul>
-                            <li><a href="#"><i></i><span>浮动效果待添加浮动效果待添加浮动效果待添加</span></a></li>
-                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                            <li><a href="#"><i></i><span>浮动效果待添加</span></a></li>
-                        </ul>
-                        <a href="#" class="pull-right">More></a>
+                        <div id="news-container">
+                            <ul>
+                                {% for latest_info in latest_infos %}
+                                 <li><a href="{{ url_for('registration.detail', id=latest_info.id) }}" target="_blank"><i></i>
+                                     <span>{{ latest_info.title }}</span></a>
+                                     <span class="badge badge-danger">new</span>
+                                 </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+{#                        <a href="#" class="pull-right" target="_blank">More></a>#}
                     </div>
                 </div>
             </div>
@@ -74,21 +86,21 @@
             <div class="col-md-3 col-sm-12">
                 <div class="panel panel-info">
                     <!-- Default panel contents -->
-                    <div class="panel-heading">考试概述<a href="#" class="pull-right">More&gt;</a></div>
+                    <div class="panel-heading">考试概述<a href="{{ url_for('registration.newscategory', name='考试介绍') }}" class="pull-right">More&gt;</a></div>
 
                     <!-- List group -->
                     <ul class="list-group">
-                        <a href="#" class="list-group-item">
+                        <a href="{{ url_for('registration.newscategory', name='考试介绍') }}" class="list-group-item">
                             <h5 class="list-group-item-heading">考试介绍</h5>
                             <h6 class="list-group-item-text">
-                                计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
+                               <!-- 72个字符 --> 计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
                         </a>
-                        <a href="#" class="list-group-item">
+                        <a href="{{ url_for('registration.newscategory', name='资格介绍') }}" class="list-group-item">
                             <h5 class="list-group-item-heading">资格介绍</h5>
                             <h6 class="list-group-item-text">
                                 计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
                         </a>
-                        <a href="#" class="list-group-item">
+                        <a href="{{ url_for('registration.newscategory', name='考试教程和大纲') }}" class="list-group-item">
                             <h5 class="list-group-item-heading">考试教程和大纲</h5>
                             <h6 class="list-group-item-text">
                                 计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软件专业技术资格和水平考试（简称软件考试）的完善与发展...</h6>
@@ -168,4 +180,16 @@
 
     </div>
     <!--内容-->
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/jquery.vticker-min.js') }}"></script>
+    <script>
+        $('#news-container').vTicker({
+		    speed: 500,
+		    pause: 2000,
+		    animation: 'fade',
+		    mousePause: false,
+		    showItems: 4
+	    });
+    </script>
 {% endblock %}

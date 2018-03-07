@@ -42,8 +42,6 @@
                         <li><a href="{{ url_for('registration.newscategory', name="资格介绍") }}">资格介绍</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="{{ url_for('registration.newscategory', name="考试教程和大纲") }}">考试教程和大纲</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="合格标准") }}">合格标准</a></li>
                     </ul>
                 </li>
 
@@ -63,7 +61,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="搜索" id="info" style="width: 70%;">
                     <span class="input-group-btn" style="float: left">
-                        <a class="btn btn-default" id="search"><span class="fa fa-search"/></a>
+                        <a type="submit" class="btn btn-default" id="search"><span class="fa fa-search"/></a>
                     </span>
                 </div>
             </form>

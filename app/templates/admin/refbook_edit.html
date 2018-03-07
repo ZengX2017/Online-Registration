@@ -168,6 +168,12 @@
                                     {{ form.pubdate }}
                                 </div>
                             </div>
+                            <div class="form-group">
+                                {{ form.info.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.info }}
+                                </div>
+                            </div>
                             {{ form.csrf_token }}
                             {{ form.submit }}
                         </form>
