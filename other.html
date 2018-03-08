@@ -300,27 +300,27 @@
 <!-- registration  views.py -->
 index():
 newstags = newsinfos.join(NewsTag).filter(
-        NewsTag.id == newstag.id
-    )  # 找出newsinfo表中隶属公告栏的数据
+NewsTag.id == newstag.id
+)  # 找出newsinfo表中隶属公告栏的数据
 下注释部分：
-    # if newstags.count() <= 5:
-    #     newstags = newstags[:]  # 不超过6条数据则全部显示
-    # else:
-    #     newstags = newstags[newstags.count() - 5:]  # 超过6条数据后选最后5条数据出现
-    # newstags.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
+# if newstags.count() <= 5:
+#     newstags = newstags[:]  # 不超过6条数据则全部显示
+# else:
+#     newstags = newstags[newstags.count() - 5:]  # 超过6条数据后选最后5条数据出现
+# newstags.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
 <!-- registration  views.py -->
 
+<!-- banner.html -->
+<div class="item">
+    <img src="{{ url_for('static', filename='images/c1.jpg') }}" style="width:100%" data-src="" alt="Third slide">
+    <div class="container">
+        <div class="carousel-caption">
+            <h1>Slide 3</h1>
+            <p>Donec sit amet mi imperdiet mauris viverra accumsan ut at libero.</p>
+            <p><a class="btn btn-lg btn-primary" href="http://618cj.com" role="button">adward_z</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- banner.html -->
 
-
-
-            <div class="item">
-                <img src="{{ url_for('static', filename='images/c1.jpg') }}" style="width:100%" data-src="" alt="Third slide">
-                <div class="container">
-                    <div class="carousel-caption">
-                        <h1>Slide 3</h1>
-                        <p>Donec sit amet mi imperdiet mauris viverra accumsan ut at libero.</p>
-                        <p><a class="btn btn-lg btn-primary" href="http://618cj.com" role="button">adward_z</a>
-                        </p>
-                    </div>
-                </div>
-            </div>

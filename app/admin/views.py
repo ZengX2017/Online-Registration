@@ -10,9 +10,9 @@ from flask import render_template, redirect, url_for, flash, session, request, a
 from werkzeug.utils import secure_filename  # 安全修改文件名
 from functools import wraps
 from app.admin.forms import NewsCategoryForm, NewsTagForm, NewsInfoForm, TlevelForm, TsubjectForm, RefbookForm, \
-    TinfoForm, LoginForm, ChangePwdForm
+    TinfoForm, LoginForm, ChangePwdForm, TrinfoForm
 from app.models import NewsCategory, NewsTag, NewsInfo, Admin, Tlevel, Tsubject, Refbook, Tinfo, Adminlog, \
-    Userlog, Oplog, User
+    Userlog, Oplog, User, Trinfo
 from app import app, db
 from . import admin
 
@@ -38,6 +38,24 @@ def change_filename(filename):
     return filename
 
 
+'''
+理解本方法（index_length）：
+    本方法本来是在registration中index_infos方法里面的，后来因为很多部分都有此逻辑（找出数据集合再翻转），故将此部分
+从index_infos方法抽出重建。
+    注：为了避免多次写reverse()，在方法内部封装了此方法，返回翻转后的数据列表
+'''
+
+
+def index_length(oplog_list=None, name=None, length=None):  # 将数据集转为列表，目的是为了翻转
+    oplog_list = oplog_list.filter(Oplog.opdetail.like('%' + name + '%'))
+    if oplog_list.count() <= int(length):
+        oplog_list = oplog_list[:]  # 小于等于length(举例：6）条数据全部显示
+    else:
+        oplog_list = oplog_list[oplog_list.count() - int(length):]  # 大于length(举例：6）条数据显示最新的前length(举例：6）条（需要翻转）
+    oplog_list.reverse()  # 先加上，后期再看，如果不方便再去掉
+    return oplog_list
+
+
 # 首页
 @admin.route("/")
 @login_req
@@ -46,15 +64,12 @@ def index():
         Oplog.addtime.asc()
     )
     user_count = User.query.count()
-    oplog_book_list = oplog_list.filter(Oplog.opdetail.like('%参考书%'))
-    oplog_book_list = oplog_book_list[oplog_book_list.count() - 3:]
-    oplog_book_list.reverse()
-    oplog_news_list = oplog_list.filter(Oplog.opdetail.like('%新闻%'))
-    oplog_news_list = oplog_news_list[oplog_news_list.count() - 3:]
-    oplog_news_list.reverse()
-    oplog_test_list = oplog_list.filter(Oplog.opdetail.like('%考试%'))
-    oplog_test_list = oplog_test_list[oplog_test_list.count() - 3:]
-    oplog_test_list.reverse()
+    oplog_book_list = index_length(oplog_list, "参考书", 3)
+
+    oplog_news_list = index_length(oplog_list, "新闻", 3)
+
+    oplog_test_list = index_length(oplog_list, "考试信息", 3)
+
     return render_template("admin/index.html", oplog_book_list=oplog_book_list, oplog_news_list=oplog_news_list,
                            oplog_test_list=oplog_test_list, user_count=user_count)
 
@@ -631,12 +646,10 @@ def tinfo_add():
         data = form.data
         area = data["province"] + "-" + data["city"] + "-" + data["school"]
         ti = Tinfo.query.filter_by(
-            level_id=data["tlevel"],
-            subject_id=data["tsubject"],
             t_time=data["ttime"],
             area=area,
             examroom=data["examroom"]
-        ).count()  # 在同一个时间段，不能存在同一级别的考试科目在同一考点的考场上
+        ).count()  # 在同一个时间段，不能存在一个考点的相同考场
         if ti == 1:
             flash("此考试信息已经存在！不能重复添加", "err")
             return redirect(url_for("admin.tinfo_add"))
@@ -688,7 +701,7 @@ def tinfo_del(id=None):
     return redirect(url_for('admin.tinfo_list'))
 
 
-# 考试信息添加
+# 考试信息修改
 @admin.route("/tinfo/edit/<int:id>/", methods=["GET", "POST"])
 @login_req
 def tinfo_edit(id=None):
@@ -708,13 +721,11 @@ def tinfo_edit(id=None):
         data = form.data
         area = data["province"] + "-" + data["city"] + "-" + data["school"]
         ti = Tinfo.query.filter_by(
-            level_id=data["tlevel"],
-            subject_id=data["tsubject"],
             t_time=data["ttime"],
             area=area,
             examroom=data["examroom"]
-        ).count()  # 在同一个时间段，不能存在同一级别的考试科目在同一考点的考场上
-        if ti == 1:
+        ).count()  # 在同一个时间段，不能存在同一考点有相同考场
+        if tinfo.t_time != data["ttime"] and tinfo.area != area and tinfo.examroom != data["examroom"] and ti == 1:
             flash("此考试信息已经存在！不能重复添加", "err")
             return redirect(url_for("admin.tinfo_edit", id=id))
         tinfo.level_id = data["tlevel"]
@@ -748,6 +759,76 @@ def tinfo_list():
         Tinfo.addtime.asc()
     )
     return render_template("admin/tinfo_list.html", page_data=page_data)
+
+
+'''
+以下是考试报名信息（trinfo）的add，del，edit，list四个方法
+'''
+
+
+# 考试报名信息添加
+@admin.route("/trinfo/add/", methods=["GET", "POST"])
+@login_req
+def trinfo_add():
+    form = TrinfoForm()
+    form.tinfo.choices = [(tl.id, tl.area + "——>" + tl.examroom + "——>" + tl.t_time.strftime('%Y-%m-%d') +
+                           "——>" + tl.tlevel.level + "——>" + tl.tsubject.subject) for tl in Tinfo.query.all()]
+    if form.validate_on_submit():
+        data = form.data
+        trinfo = Trinfo(
+            tinfo_id=data["tinfo"],
+            status=1,
+            num=0
+        )
+        db.session.add(trinfo)
+        db.session.commit()
+        flash("添加考试报名信息成功", "OK")
+        return redirect(url_for("admin.trinfo_add"))
+    return render_template("admin/trinfo_add.html", form=form)
+
+
+# 考试报名信息删除
+@admin.route("/trinfo/del/<int:id>/", methods=["GET"])
+@login_req
+def trinfo_del(id=None):
+    trinfo = Trinfo.query.filter_by(id=id).first_or_404()
+    if trinfo.status != 0:
+        flash("考试报名信息仍有效，不可删除！", "err")
+        return redirect(url_for("admin.trinfo_list"))
+    db.session.delete(trinfo)
+    db.session.commit()
+    flash("删除考试报名信息成功！", "OK")
+    return redirect(url_for('admin.trinfo_list'))
+
+
+# 考试报名信息修改
+@admin.route("/trinfo/edit/<int:id>/", methods=["GET", "POST"])
+@login_req
+def trinfo_edit(id=None):
+    form = TrinfoForm()
+    form.tinfo.choices = [(tl.id, tl.area + "——>" + tl.examroom + "——>" + tl.t_time.strftime('%Y-%m-%d') +
+                           "——>" + tl.tlevel.level + "——>" + tl.tsubject.subject) for tl in Tinfo.query.all()]
+    trinfo = Trinfo.query.get_or_404(id)
+    if request.method == "GET":
+        form.tinfo.data = trinfo.tinfo_id
+    if form.validate_on_submit():
+        data = form.data
+        trinfo.tinfo_id = data["tinfo"]
+        db.session.add(trinfo)
+        db.session.commit()
+        flash("修改考试报名信息成功", "OK")
+        return redirect(url_for("admin.trinfo_edit", id=id))
+    return render_template("admin/trinfo_edit.html", form=form, trinfo=trinfo)
+
+
+# 考试报名信息列表
+@admin.route("/trinfo/list/", methods=["GET"])
+@login_req
+def trinfo_list():
+    page_data = Trinfo.query.order_by(
+        Trinfo.addtime.asc()
+    )
+    return render_template("admin/trinfo_list.html", page_data=page_data)
 
 
 '''
@@ -977,4 +1058,3 @@ def admin_list():
         Admin.addtime.asc()
     )
     return render_template("admin/admin_list.html", page_data=page_data)
-

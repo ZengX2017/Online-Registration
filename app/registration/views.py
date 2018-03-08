@@ -3,10 +3,11 @@ __author__ = 'Adward_Z'
 
 from flask import render_template, redirect, url_for, flash, session, request, abort
 from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm
-from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook
+from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook, Tinfo, Trinfo
 from app import db
 from werkzeug.security import generate_password_hash
 from . import registration
+import datetime
 
 
 # 政务公开栏
@@ -34,7 +35,7 @@ def affairs_public_tags():
 '''
 
 
-def index_length(result=None, length=None):
+def index_length(result=None, length=None):  # 将数据集转为列表，目的是为了翻转
     if result.count() <= int(length):
         result = result[:]  # 小于等于length(举例：6）条数据全部显示
     else:
@@ -77,7 +78,7 @@ def index():
     latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
     latest_infos = latest_infos[:10]  # 切片，找出前10条
 
-    # 轮播图，NewsInfo
+    # 轮播图，NewsInfo，本来打算用Newsinfo.img.isnot(None)来找出img字段不为空的newsinfo，但是用此方法找出来的是所有的info，故舍弃
     banner = newsinfos.filter(NewsInfo.img.ilike("20%"))
     banner = index_length(banner, 3)
 
@@ -86,13 +87,17 @@ def index():
     middle = index_infos("中级", 6)
     advanced = index_infos("高级", 6)
 
+    # 考试信息
+    tinfos = Tinfo.query.filter(Tinfo.refbook_id.isnot(None))
+    tinfos = index_length(tinfos, 5)
+
     # 尾部信息
     reg_infos = index_infos("报名安排", 5)
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/index.html", newstags=newstags, zwgkNc=zwgkNc, zwgkTags=zwgkTags,
                            latest_infos=latest_infos, banner=banner, primary=primary, middle=middle,
-                           advanced=advanced, reg_infos=reg_infos)
+                           advanced=advanced, tinfos=tinfos, reg_infos=reg_infos)
 
 
 '''
@@ -110,8 +115,7 @@ def search():
     info = request.args.get("info", "")
     newsinfos = Refbook.query.filter(Refbook.title.ilike('%' + info + '%'))
     count = newsinfos.count()
-    newsinfos = newsinfos[:]  # 将所得的数据集合转为列表
-    newsinfos.reverse()  # 数据翻转，目的是为了将最新的数据显示在第一条
+    newsinfos = index_length(newsinfos, count)
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/search.html", newsinfos=newsinfos, info=info, count=count, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
@@ -135,7 +139,7 @@ def refbook_detail(id=None):
 
 
 # 资讯标签和类别相关
-@registration.route("/newscategory/<name>", methods=["GET"])
+@registration.route("/newscategory/<name>/", methods=["GET"])
 def newscategory(name):
     newstag = NewsTag.query.filter_by(name=name).first_or_404()  # 通过nav请求找到tag
     newstag_name = name  # 存下当前请求的name
@@ -145,8 +149,8 @@ def newscategory(name):
     newsinfos = NewsInfo.query.filter_by(newstag_id=newstag.id).order_by(
         NewsInfo.addtime.asc()
     )  # 根据当前标签找出此标签下的所有内容
-    newsinfos = newsinfos[:]  # 将数据集转为列表，目的是为了翻转
-    newsinfos.reverse()
+
+    newsinfos = index_length(newsinfos, newsinfos.count())
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/newscategory.html", newstag=newstag, newstag_name=newstag_name,
@@ -168,6 +172,58 @@ def detail(id=None):
                            newscategory=newscategory, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
+# 考试信息相关
+@registration.route("/tinfo/<name>/", methods=["GET"])
+def tinfo(name):
+    newstag = NewsTag.query.filter_by(name=name).first_or_404()  # 通过nav请求找到tag
+    newstag_name = name  # 存下当前请求的name
+    newscategory = newstag.newscategory.name  # 根据当前tag找到所属类别，为了面包屑导航栏的一级显示
+    newscategorys = NewsCategory.query.filter_by(name=newscategory).first_or_404()  # 找出当前所属类别的id
+    newstags = NewsTag.query.filter_by(newscategory_id=newscategorys.id)  # 根据所属类别的id找出此类别下所有的标签
+    tinfos = Tinfo.query.order_by(
+        Tinfo.t_time.asc()
+    )  # 根据当前标签找出此标签下的所有内容
+    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+    time_diff = datetime.timedelta(days=30)
+    tinfos = index_length(tinfos, tinfos.count())
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/tinfo.html", newstag=newstag, newstag_name=newstag_name,
+                           newscategory=newscategory, newstags=newstags, tinfos=tinfos, now=now,
+                           time_diff=time_diff, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+
+
+# 考试信息详情
+@registration.route("/tinfo_detail/<int:id>/", methods=["GET"])
+def tinfo_detail(id=None):
+    tinfo = Tinfo.query.get_or_404(id)
+    time_diff = datetime.timedelta(days=7)
+
+    latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
+    latest_infos = latest_infos[:6]  # 切片，找出前6条
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/tinfo_detail.html", tinfo=tinfo, time_diff=time_diff, latest_infos=latest_infos
+                           , zwgkNc=zwgkNc,zwgkTags=zwgkTags)
+
+
+# 考试信息详情
+@registration.route("/trinfo/<int:id>/", methods=["GET"])
+def trinfo(id=None):
+    trinfo = Trinfo.query.filter_by(tinfo_id=id).first_or_404()
+    time_diff = datetime.timedelta(days=7)
+    if "user" not in session:
+        flash("请您先登录！", "err")
+        return redirect(url_for("registration.login"))
+
+    latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
+    latest_infos = latest_infos[:6]  # 切片，找出前6条
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/trinfo.html", trinfo=trinfo, time_diff=time_diff, latest_infos=latest_infos,
+                           zwgkNc=zwgkNc,zwgkTags=zwgkTags)
+
+
 # 用户登录
 @registration.route("/login/", methods=["GET", "POST"])
 def login():
@@ -178,7 +234,7 @@ def login():
         if not user.check_pwd(data["pwd"]):
             flash("密码错误！", "err")
             return redirect(url_for("registration.login"))
-        session["user"] = user.name
+        session["user"] = user.email
         session["user_id"] = user.id
         userlog = Userlog(
             user_id=user.id,
@@ -186,7 +242,7 @@ def login():
         )
         db.session.add(userlog)
         db.session.commit()
-        return redirect(url_for("registration.userinfo"))
+        return redirect(request.args.get("next") or url_for("registration.userinfo"))  # 登录后返回之前位置实现失败
     return render_template("registration/login.html", form=form)
 
 

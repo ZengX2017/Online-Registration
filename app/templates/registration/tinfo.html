@@ -1,0 +1,144 @@
+{% extends 'registration/registration.html' %}
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
+    <style>
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+
+        .table-bordered {
+            border: none;
+        }
+
+        table.table-bordered th:last-child, table.table-bordered td:last-child {
+            border-top-width: 0;
+            border-right-width: 0;
+        }
+
+        div.dataTables_paginate ul.pagination {
+            margin: 2px 0;
+            margin-top: 15px;
+            white-space: nowrap;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="detail-div">
+            <ol class="breadcrumb">
+                <li><a href="#">{{ newscategory }}</a></li>
+                <li class="active">{{ newstag_name }}</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            {% if zwgkNc != newscategory %}
+                <div class="col-md-2">
+                    <div class="panel panel-info">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading text-center"><i class="fa fa-book fa-fw"
+                                                                  aria-hidden="true"></i>&nbsp;{{ newscategory }}
+                        </div>
+                        <!-- List group -->
+                        <ul class="list-group text-center">
+                            {% for tag in newstags %}
+                                {% if newstag_name == tag.name %}
+                                    <a href="{{ url_for('registration.tinfo', name=tag.name) }}"
+                                       class="list-group-item active">
+                                        {{ tag.name }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('registration.tinfo', name=tag.name) }}"
+                                       class="list-group-item">
+                                        {{ tag.name }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+                <div class="panel panel-default col-md-8">
+                    <div class="panel-heading">{{ newstag_name }}</div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped" id="datatable-editable">
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="display: none">g</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for tinfo in tinfos %}
+                                <!-- 考试时间在距离当前时间的30天内 -->
+                                {% if newstag_name.find("近期") != -1 %}
+                                    {% if tinfo.t_time - now < time_diff %}
+                                        <tr class="text-left">
+                                            <td>
+                                                <a href="{{ url_for('registration.tinfo_detail', id=tinfo.id) }}"
+                                                   target="_blank">
+                                                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
+                                                    {{ tinfo.tlevel.level | safe }}&nbsp;&nbsp;&nbsp;————<i
+                                                        class="fa fa-angle-right"></i>&nbsp;&nbsp;&nbsp;{{ tinfo.tsubject.subject | safe | truncate(20) }}
+                                                    考试时间：{{ tinfo.t_time }}
+                                                    <span class="pull-right"> [{{ tinfo.addtime }}]</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% else %}
+                                    <tr class="text-left">
+                                        <td>
+                                            <a href="{{ url_for('registration.tinfo_detail', id=tinfo.id) }}" target="_blank">
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
+                                                {{ tinfo.tlevel.level | safe }}&nbsp;&nbsp;&nbsp;————<i
+                                                    class="fa fa-angle-right"></i>&nbsp;&nbsp;&nbsp;{{ tinfo.tsubject.subject | safe | truncate(20) }}
+                                                考试时间：{{ tinfo.t_time }}
+                                                <span class="pull-right"> [{{ tinfo.addtime }}]</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}  <!-- 若当前为政务公开时，会去掉左侧栏 -->
+                {% include 'registration/affairs_public_tag.html' %}
+            {% endif %}
+            {% include 'registration/affairs_public.html' %}
+        </div>
+
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
+    <script>
+        <!-- 表格 -->
+        $('#datatable-editable').DataTable({
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "从第 _START_ 条到第 _END_ 条/共 _TOTAL_ 条数据",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "筛选：  ",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+            },
+            "iDisplayLength": 6,
+            {#"lengthMenu": [5, 10, 15, 20],#}
+            "lengthChange": false,  //隐藏左上角Length页面
+            "searching": false,     //隐藏右上角本地搜索
+            "info": false,  //隐藏左下角提示信息
+            "pagingType": "full_numbers",
+            "ordering": false  {#取消全局排序#}
+        });
+    </script>
+{% endblock %}

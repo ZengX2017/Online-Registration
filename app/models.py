@@ -132,8 +132,6 @@ class Tlevel(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     tinfos = db.relationship("Tinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
                              passive_deletes=True)
-    trinfos = db.relationship("Trinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
-                              passive_deletes=True)
     urinfos = db.relationship("Urinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
                               passive_deletes=True)
 
@@ -150,8 +148,6 @@ class Tsubject(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     tinfos = db.relationship("Tinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
                              passive_deletes=True)
-    trinfos = db.relationship("Trinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
-                              passive_deletes=True)
     urinfos = db.relationship("Urinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
                               passive_deletes=True)
 
@@ -175,9 +171,11 @@ class Tinfo(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     admissions = db.relationship("Admission", backref='tinfo', cascade='all, delete-orphan', lazy='dynamic',
                                  passive_deletes=True)
+    trinfos = db.relationship("Trinfo", backref='tinfo', cascade='all, delete-orphan', lazy='dynamic',
+                              passive_deletes=True)
 
     def __repr__(self):
-        return "<Tinfo %r %r>" % self.level_id.name, self.subject_id.name
+        return "<Tinfo %r>" % self.id
 
 
 # 考试报名信息
@@ -185,11 +183,9 @@ class Trinfo(db.Model):
     __tablename__ = "trinfo"
     __table_args__ = {"useexisting": True}
     id = db.Column(db.Integer, primary_key=True)
-    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id', ondelete='CASCADE'))
-    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id', ondelete='CASCADE'))
-    num = db.Column(db.Integer)
-    price = db.Column(db.Float)
+    num = db.Column(db.Integer)  # 当前报名人数
     status = db.Column(db.SmallInteger)  # 1表示可以报名，0表示不可以报名
+    tinfo_id = db.Column(db.Integer, db.ForeignKey('tinfo.id', ondelete='CASCADE'))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
 
     def __repr__(self):
@@ -271,7 +267,6 @@ class NewsInfo(db.Model):
 
     def __repr__(self):
         return "<NewsInfo %r>" % self.title
-
 
 # if __name__ == "__main__":
 #     db.create_all()

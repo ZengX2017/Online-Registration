@@ -3,7 +3,7 @@ __author__ = 'Adward_Z'
 
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Email, Regexp
-from wtforms import StringField, PasswordField, SubmitField, SelectField, FileField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, FileField, DateTimeField, FloatField
 from app.models import User
 
 
@@ -243,3 +243,53 @@ class ChangePwdForm(FlaskForm):
         ).first()
         if not user.check_pwd(pwd):
             raise ValidationError("旧密码错误！")
+
+
+class Trinfo(FlaskForm):
+    level = StringField(
+        label="级别",
+        description="级别",
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    subject = StringField(
+        label="科目",
+        description="科目",
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    area = StringField(
+        label="考试地点",
+        description="考试地点",
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    t_time = DateTimeField(
+        label="考试时间",
+        description="考试时间",
+        render_kw={
+            "class": "form-control",
+        },
+    )
+    price = FloatField(
+        label="报考价格",
+        description="报考价格",
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    ref_book = StringField(
+        label="参考书",
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    submit = SubmitField(
+        "报名",
+        render_kw={
+            "class": "btn btn-primary pull-right",
+        }  # 附加选项
+    )

@@ -81,30 +81,7 @@
                     </div>
                 </div>
             {% else %}  <!-- 若当前为政务公开时，会去掉左侧栏 -->
-                <div class="panel panel-default col-md-10">
-                <div class="panel-heading">{{ newstag_name }}</div>
-                <div class="panel-body">
-                    <table class="table table-bordered table-striped" id="datatable-editable">
-                        <thead>
-                        <tr>
-                            <th class="text-center" style="display: none">g</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for newsinfo in newsinfos %}
-                            <tr class="text-left">
-                                <td>
-                                    <a href="{{ url_for('registration.detail', id=newsinfo.id) }}">
-                                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;{{ newsinfo.title | safe }}
-                                    <span class="pull-right"> [{{ newsinfo.addtime }}]</span>
-                                    </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                {% include 'registration/affairs_public_tag.html' %}
             {% endif %}
             {% include 'registration/affairs_public.html' %}
         </div>

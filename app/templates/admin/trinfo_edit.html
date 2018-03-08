@@ -1,0 +1,71 @@
+{% extends 'admin/admin.html' %}
+{% block content %}
+    <!-- Page content -->
+    <div class="wraper container-fluid">
+
+        <div class="page-title">
+            <ol class="breadcrumb" id="breadcrumb">
+                <li><a href="{{ url_for('admin.index') }}">首页</a></li>
+                <li><a href="{{ url_for('admin.trinfo_list') }}">考试报名信息管理</a></li>
+                <li class="active">修改考试报名信息</li>
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">修改考试报名信息</h3></div>
+                    <div class="panel-body">
+                        <!-- 消息闪现提示 -->
+                        {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i>&nbsp;操作成功</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                {{ msg }}
+                            </div>
+                        {% endfor %}
+                        <!-- 消息闪现提示 -->
+                        <form class="form-horizontal" role="form" method="post">
+                            <!-- 验证提示 -->
+                            {% for err in form.tinfo.errors %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                                    {{ err }}
+                                </div>
+                            {% endfor %}
+                            <!-- 验证提示 -->
+                            <div class="form-group">
+                                {{ form.tinfo.label(class="col-md-2 control-label") }}
+                                <div class="col-md-10">
+                                    {{ form.tinfo }}
+                                </div>
+                            </div>
+                            {{ form.csrf_token }}
+                            {{ form.submit }}
+                        </form>
+                    </div> <!-- panel-body -->
+                </div> <!-- panel -->
+            </div> <!-- col -->
+        </div>
+
+    </div>
+    <!-- Page content end -->
+
+{% endblock %}
+{% block js %}
+    <script>
+        jQuery(document).ready(function () {
+            $("#g-12").addClass("active");
+            $("#g-12-1").addClass("active");
+        });
+    </script>
+{% endblock %}

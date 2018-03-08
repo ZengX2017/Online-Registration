@@ -3,9 +3,9 @@ __author__ = 'Adward_Z'
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, FileField, IntegerField, FloatField, \
-    DateField, DateTimeField, PasswordField
+     DateTimeField, PasswordField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, length
-from app.models import NewsCategory, NewsTag, Tlevel, Tsubject, Refbook, Admin
+from app.models import Admin
 import re
 
 
@@ -378,7 +378,7 @@ class TinfoForm(FlaskForm):
         ],
         coerce=int,
         # choices=[(rb.id, rb.title) for rb in Refbook.query.all()],
-        description="考试科目",
+        description="所需参考书",
         render_kw={
             "class": "form-control",
         }
@@ -408,6 +408,26 @@ class TinfoForm(FlaskForm):
     def validate_school(self, field):
         if (field.data is None) or (field.data == ""):
             raise ValidationError("请选择学校！")
+
+
+class TrinfoForm(FlaskForm):
+    tinfo = SelectField(
+        label="考试信息",
+        validators=[
+            DataRequired(message=u"请选择考试信息")
+        ],
+        coerce=int,
+        description="考试信息",
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    submit = SubmitField(
+        "编辑",
+        render_kw={
+            "class": "btn btn-primary pull-right",
+        }
+    )
 
 
 class LoginForm(FlaskForm):
