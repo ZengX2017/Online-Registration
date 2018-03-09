@@ -1,6 +1,6 @@
 {% extends 'registration/registration.html' %}
 {% block title %}
-    登录日志
+    报名查询
 {% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
@@ -20,27 +20,30 @@
         <div class="col-md-10 info-right">
             <div class="panel panel-warning">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;登录日志</h3>
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;报名查询</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table table-bordered table-striped text-center" id="datatable-editable">
                         <thead>
                         <tr>
                             <th class="text-center">编号</th>
-                            <th class="text-center">登录姓名</th>
-                            <th class="text-center">登录邮箱</th>
-                            <th class="text-center">登录ip</th>
-                            <th class="text-center">登录时间</th>
+                            <th class="text-center">考试名称</th>
+{#                            <th class="text-center">考试地点</th>#}
+                            <th class="text-center">准考证号</th>
+                            <th class="text-center">操作事项</th>
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                        {% for value in page_data %}
+                        {% for admission in admissions %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ value.user.name }}</td>
-                                <td>{{ value.user.email }}</td>
-                                <td>{{ value.ip }}</td>
-                                <td>{{ value.addtime }}</td>
+                                <td>{{ admission.trinfo.tinfo.tlevel.level + admission.trinfo.tinfo.tsubject.subject }}</td>
+{#                                <td>{{ admission.trinfo.tinfo.area + "-" + admission.trinfo.tinfo.examroom }}</td>#}
+                                <td>{{ admission.admission_id }}</td>
+                                <td class="actions">
+                                    <a href="{{ url_for('registration.registration_detail', id=admission.id ) }}"><i class="fa fa-pencil"></i>&nbsp;查询</a>&nbsp;&nbsp;
+                                    <a href="#" class="print no-print"><i class="fa fa-print"></i>&nbsp;打印</a>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -51,6 +54,7 @@
     </div>
 {% endblock %}
 {% block js %}
+    <script src="{{ url_for('static', filename='js/jQuery.print.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
     <script>
@@ -76,9 +80,30 @@
             "searching": false,     //隐藏本地搜索
             "pagingType": "full_numbers"
         });
-
+        {#$(".print").on("click", function () {#}
+        {#    $('.print').printThis({#}
+        {#        header: "<h1>准考证</h1>",#}
+        {#        footer: null,#}
+        {#        pageTitle: "准考证"#}
+        {#    });#}
+        {#);#}
+        $(".print").on("click", function () {
+            $('.print').print({
+                globalStyles: false,  //Use Global styles
+                mediaPrint: false,  //Add link with attrbute media=print
+                stylesheet: null,  //Custom stylesheet  eg."http://fonts.googleapis.com/css?family=Inconsolata",
+                noPrintSelector: ".no-print",  //Don't print this
+                iframe: true,  //Print in a hidden iframe
+                append: "<br/>Buh Bye!<br/>",  //Add this on bottom
+                prepend: "Hello World!!!<br/>",  //Add this at top
+                manuallyCopyFormValues: true,
+                deferred: $.Deferred().done(function () {
+                    console.log('Printing done', arguments);
+                })
+            });
+        });
         $(document).ready(function () {
-            $("#m-4").addClass("active")
+            $("#m-3").addClass("active")
         });
     </script>
 {% endblock %}

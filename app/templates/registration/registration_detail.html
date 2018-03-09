@@ -1,0 +1,134 @@
+{% extends 'registration/registration.html' %}
+{% block css %}
+    <link href="{{ url_for('static', filename='css/BreakingNews.css') }}" rel="stylesheet">
+    <style>
+        div.summer {
+            margin: 0 40px;
+        }
+
+        div.summer > p.summer_div {
+            margin-left: 18%;
+        }
+        tr.trinfo > th, td{
+            text-align: center;
+            border-top: none;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="detail-div">
+            <ol class="breadcrumb">
+            </ol>
+        </div>
+
+        <div class="row">
+            <div class="panel panel-default col-md-10 m-t-20">
+                <div class="panel-body">
+                    <h3 class="text-center">{{ admission.trinfo.tinfo.tlevel.level + admission.trinfo.tinfo.tsubject.subject + "——" + "准考证" }}</h3>
+                    <hr>
+                    <table class="table">
+                        <thead>
+                        <tr class="trinfo">
+                            <th>名称</th>
+                            <th>信息</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="trinfo">
+                            <td>考试级别</td>
+                            <td>{{ admission.trinfo.tinfo.tlevel.level }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考试科目</td>
+                            <td>{{ admission.trinfo.tinfo.tsubject.subject }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考试地点</td>
+                            <td>{{ admission.trinfo.tinfo.area }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考场</td>
+                            <td>{{ admission.trinfo.tinfo.examroom }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考试时间</td>
+                            <td>{{ admission.trinfo.tinfo.t_time }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考场人数</td>
+                            <td>{{ admission.trinfo.tinfo.personnum }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>准考证号</td>
+                            <td>{{ admission.admission_id }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>座位号</td>
+                            <td>{{ seat }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>姓名</td>
+                            <td>{{ admission.user.name }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>性别</td>
+                            <td>{% if admission.user.gender %}男{% else %}女{% endif %}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>身份证</td>
+                            <td>{{ admission.user.id_card }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>头像</td>
+                            <td><img src="{{ url_for('static', filename='uploads/users/' + admission.user.face) }}" style="width: 20%"></td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>报名费</td>
+                            <td>{{ admission.trinfo.tinfo.price }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>参考书</td>
+                            <td>{{ admission.trinfo.tinfo.refbook.title }}&nbsp;&nbsp;<a href="{{ url_for('registration.refbook_detail', id=admission.trinfo.tinfo.refbook.id) }}" target="_blank">查看详情&gt;&gt;</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <a href="{{ url_for('registration.registration_query') }}" class="pull-left">返回上一页&gt;&gt;</a>
+
+                </div> <!-- panel-body -->
+            </div>
+            {% include 'registration/affairs_public.html' %}
+            <div class="BreakingNewsController easing" id="breakingnews">
+                <div class="bn-title"></div>
+                <ul>
+                    {% for latest_info in latest_infos %}
+                        <li>
+                            <a href="{{ url_for('registration.detail', id=latest_info.id) }}">{{ latest_info.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/BreakingNews.js') }}"></script>
+    <script>
+        $("#breakingnews").BreakingNews({
+            background: '#FFF',
+            title: '最新通知',
+            titlecolor: '#ff0013',
+            titlebgcolor: '#FFF',
+            linkcolor: '#333',
+            linkhovercolor: '#099',
+            fonttextsize: 16,
+            isbold: false,
+            width: '100%',
+            timer: 2000,
+            autoplay: true,
+            effect: 'slide'
+        });
+    </script>
+{% endblock %}

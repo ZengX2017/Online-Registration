@@ -1,6 +1,7 @@
 {% extends 'registration/registration.html' %}
 {% block css %}
     <link href="{{ url_for('static', filename='css/BreakingNews.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.min.css') }}" rel="stylesheet">
     <style>
         div.summer {
             margin: 0 40px;
@@ -8,6 +9,10 @@
 
         div.summer > p.summer_div {
             margin-left: 18%;
+        }
+        tr.trinfo > th, td{
+            text-align: center;
+            border-top: none;
         }
     </style>
 {% endblock %}
@@ -43,31 +48,72 @@
                     <hr>
                     <p class="text-center" style="margin: -10px 0 20px;">
                         【发布日期：{{ trinfo.tinfo.addtime.strftime("%Y-%m-%d") }}&nbsp;&nbsp;&nbsp;发布人：本站管理员】</p>
-                    <div class="summer">
-                        一、网上报名时间：
-                        <p class="summer_div"> {{ (trinfo.tinfo.t_time - time_diff * 4).strftime("%Y-%m-%d") }}
-                            —— {{ (trinfo.tinfo.t_time - time_diff).strftime("%Y-%m-%d") }}</p>
-                    </div>
-                    <div class="summer">
-                        二、准考证打印时间：
-                        <p class="summer_div"> 考前一周自行打印 </p>
-                    </div>
-                    <div class="summer">
-                        三、考试地点：
-                        <p class="summer_div"> {{ trinfo.tinfo.area + "---->"  + trinfo.tinfo.examroom }} </p>
-                    </div>
+                    <table class="table">
+                        <thead>
+                        <tr class="trinfo">
+                            <th>名称</th>
+                            <th>信息</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="trinfo">
+                            <td>考试级别</td>
+                            <td>{{ trinfo.tinfo.tlevel.level }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考试科目</td>
+                            <td>{{ trinfo.tinfo.tsubject.subject }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考试地点</td>
+                            <td>{{ trinfo.tinfo.area }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考场</td>
+                            <td>{{ trinfo.tinfo.examroom }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考试时间</td>
+                            <td>{{ trinfo.tinfo.t_time }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>考场人数</td>
+                            <td>{{ trinfo.tinfo.personnum }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>报名人数</td>
+                            <td>{{ trinfo.num }}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>报名状态</td>
+                            <td>{% if trinfo.status %}可报名{% else %}不可报名{% endif %}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>报名费</td>
+                            <td>{{ trinfo.tinfo.price}}</td>
+                        </tr>
+                        <tr class="trinfo">
+                            <td>参考书</td>
+                            <td>{{ trinfo.tinfo.refbook.title }}&nbsp;&nbsp;<a href="{{ url_for('registration.refbook_detail', id=trinfo.tinfo.refbook.id) }}" target="_blank">查看详情&gt;&gt;</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
                     <hr>
-                    <a href="#" target="_blank" class="pull-left">查看介绍&gt;&gt;</a>
-                    <a href="#" target="_blank" class="pull-right">网上报名&gt;&gt;</a>
+                    <a href="{{ url_for('registration.detail', id=trinfo.tinfo.tlevel.level + trinfo.tinfo.tsubject.subject) }}" target="_blank" class="pull-left">查看介绍&gt;&gt;</a>
+                    {% if trinfo.status %}
+                    <a class="pull-right" id="sa-warning">我要报名&gt;&gt;</a>
+                    {% endif %}
 
                 </div> <!-- panel-body -->
             </div>
             {% include 'registration/affairs_public.html' %}
             <div class="BreakingNewsController easing" id="breakingnews">
-            	<div class="bn-title"></div>
+                <div class="bn-title"></div>
                 <ul>
                     {% for latest_info in latest_infos %}
-                     <li><a href="{{ url_for('registration.detail', id=latest_info.id) }}">{{ latest_info.title }}</a></li>
+                        <li>
+                            <a href="{{ url_for('registration.detail', id=latest_info.id) }}">{{ latest_info.title }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -77,20 +123,48 @@
 {% endblock %}
 {% block js %}
     <script src="{{ url_for('static', filename='js/BreakingNews.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.init.js') }}"></script>
     <script>
         $("#breakingnews").BreakingNews({
-            background		:'#FFF',
-			title			:'最新通知',
-			titlecolor		:'#ff0013',
-			titlebgcolor	:'#FFF',
-			linkcolor		:'#333',
-			linkhovercolor	:'#099',
-			fonttextsize	:16,
-			isbold			:false,
-			width			:'100%',
-			timer			:2000,
-			autoplay		:true,
-			effect			:'slide'
+            background: '#FFF',
+            title: '最新通知',
+            titlecolor: '#ff0013',
+            titlebgcolor: '#FFF',
+            linkcolor: '#333',
+            linkhovercolor: '#099',
+            fonttextsize: 16,
+            isbold: false,
+            width: '100%',
+            timer: 2000,
+            autoplay: true,
+            effect: 'slide'
         });
+        $('#sa-warning').click(function () {
+        swal({
+            title: "确认报名?",
+            text: "您想要报名此次考试么？",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "是的，我要报名",
+            cancelButtonText: "取消",
+            closeOnConfirm: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                swal({
+                    title:"报名成功!",
+                    text:"请去个人中心查看详细信息！",
+                    type:"success",
+                    confirmButtonText: "OK"
+                }, function (flag) {
+                    if(flag){
+                        location.href = "{{ url_for('registration.admission_generate', trinfo_id=trinfo.id, user_id=session["user_id"]) }} ";
+                    }
+                });
+            }
+        });
+    });
+
     </script>
 {% endblock %}

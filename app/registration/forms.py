@@ -237,16 +237,15 @@ class ChangePwdForm(FlaskForm):
     def validate_pwd(self, field):
         from flask import session
         pwd = field.data
-        id = session["user_id"]
         user = User.query.filter_by(
-            id=id
+            id=session["user_id"]
         ).first()
         if not user.check_pwd(pwd):
             raise ValidationError("旧密码错误！")
 
 
-class Trinfo(FlaskForm):
-    level = StringField(
+class Admission(FlaskForm):
+    ad = StringField(
         label="级别",
         description="级别",
         render_kw={

@@ -55,7 +55,6 @@
                                 {% endif %}
                             {% endfor %}
                         </ul>
-
                     </div>
                 </div>
                 <div class="panel panel-default col-md-8">
@@ -69,9 +68,9 @@
                             </thead>
                             <tbody>
                             {% for tinfo in tinfos %}
-                                <!-- 考试时间在距离当前时间的30天内 -->
+                                <!-- 考试时间在距离当前时间的1-30天内 -->
                                 {% if newstag_name.find("近期") != -1 %}
-                                    {% if tinfo.t_time - now < time_diff %}
+                                    {% if tinfo.t_time - now < time_diff and tinfo.t_time - now > time_zero %}
                                         <tr class="text-left">
                                             <td>
                                                 <a href="{{ url_for('registration.tinfo_detail', id=tinfo.id) }}"
@@ -87,6 +86,17 @@
                                     {% endif %}
                                 {% else %}
                                     <tr class="text-left">
+                                        {% if tinfo.t_time < now %}
+                                        <td>
+                                            <a href="{{ url_for('registration.tinfo_detail', id=tinfo.id) }}" target="_blank">
+                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
+                                                {{ tinfo.tlevel.level | safe }}&nbsp;&nbsp;&nbsp;————<i
+                                                    class="fa fa-angle-right"></i>&nbsp;&nbsp;&nbsp;{{ tinfo.tsubject.subject | safe | truncate(20) }}
+                                                考试时间：{{ tinfo.t_time }}
+                                                <span class="pull-right"> <span class="badge">已过期</span>[{{ tinfo.addtime }}]</span>
+                                            </a>
+                                        </td>
+                                        {% else %}
                                         <td>
                                             <a href="{{ url_for('registration.tinfo_detail', id=tinfo.id) }}" target="_blank">
                                                 <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
@@ -96,6 +106,7 @@
                                                 <span class="pull-right"> [{{ tinfo.addtime }}]</span>
                                             </a>
                                         </td>
+                                        {% endif %}
                                     </tr>
                                 {% endif %}
                             {% endfor %}

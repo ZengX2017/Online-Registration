@@ -75,8 +75,6 @@ class User(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     userlogs = db.relationship('Userlog', backref='user', cascade='all, delete-orphan', lazy='dynamic',
                                passive_deletes=True)  # 会员日志外键
-    urinfos = db.relationship('Urinfo', backref='user', cascade='all, delete-orphan', lazy='dynamic',
-                              passive_deletes=True)
     admissions = db.relationship('Admission', backref='user', cascade='all, delete-orphan', lazy='dynamic',
                                  passive_deletes=True)
 
@@ -132,8 +130,6 @@ class Tlevel(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     tinfos = db.relationship("Tinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
                              passive_deletes=True)
-    urinfos = db.relationship("Urinfo", backref='tlevel', cascade='all, delete-orphan', lazy='dynamic',
-                              passive_deletes=True)
 
     def __repr__(self):
         return "<Tlevel %r>" % self.level
@@ -148,8 +144,6 @@ class Tsubject(db.Model):
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
     tinfos = db.relationship("Tinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
                              passive_deletes=True)
-    urinfos = db.relationship("Urinfo", backref='tsubject', cascade='all, delete-orphan', lazy='dynamic',
-                              passive_deletes=True)
 
     def __repr__(self):
         return "<Tsubject %r>" % self.subject
@@ -169,8 +163,6 @@ class Tinfo(db.Model):
     price = db.Column(db.Float)
     refbook_id = db.Column(db.Integer, db.ForeignKey('refbook.id', ondelete='CASCADE'))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-    admissions = db.relationship("Admission", backref='tinfo', cascade='all, delete-orphan', lazy='dynamic',
-                                 passive_deletes=True)
     trinfos = db.relationship("Trinfo", backref='tinfo', cascade='all, delete-orphan', lazy='dynamic',
                               passive_deletes=True)
 
@@ -187,24 +179,11 @@ class Trinfo(db.Model):
     status = db.Column(db.SmallInteger)  # 1表示可以报名，0表示不可以报名
     tinfo_id = db.Column(db.Integer, db.ForeignKey('tinfo.id', ondelete='CASCADE'))
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
+    admissions = db.relationship("Admission", backref='trinfo', cascade='all, delete-orphan', lazy='dynamic',
+                                 passive_deletes=True)
 
     def __repr__(self):
         return "<Trinfo %r %r>" % self.level_id.name, self.subject_id.name
-
-
-# 用户报名信息
-class Urinfo(db.Model):
-    __tablename__ = "urinfo"
-    __table_args__ = {"useexisting": True}
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    level_id = db.Column(db.Integer, db.ForeignKey('tlevel.id', ondelete='CASCADE'))
-    subject_id = db.Column(db.Integer, db.ForeignKey('tsubject.id', ondelete='CASCADE'))
-    price = db.Column(db.Float)
-    addtime = db.Column(db.DateTime, index=True, default=datetime.now)
-
-    def __repr__(self):
-        return "<Urinfo %r %r %r>" % self.user_id.name, self.level_id.name, self.subject_id.name
 
 
 # 准考证
@@ -214,7 +193,7 @@ class Admission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     admission_id = db.Column(db.String(18), unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
-    tinfo_id = db.Column(db.Integer, db.ForeignKey('tinfo.id', ondelete='CASCADE'))
+    trinfo_id = db.Column(db.Integer, db.ForeignKey('trinfo.id', ondelete='CASCADE'))
     status = db.Column(db.SmallInteger)  # 1表示可以打印，0表示不可以打印
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)
 

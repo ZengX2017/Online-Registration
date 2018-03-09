@@ -11,15 +11,15 @@
                 <i class="fa fa-user fa-lg" aria-hidden="true"></i>&nbsp; 个人中心
             </a>
             <a id="m-2" href="{{ url_for('registration.change_pwd') }}" class="list-group-item">
-                <i class="fa fa-lock fa-lg" aria-hidden="true"></i>&nbsp;&nbsp; 修改密码
+                <i class="fa fa-lock fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;修改密码
             </a>
-            <a id="m-3" href="#" class="list-group-item">
-                <i class="fa fa-comment" aria-hidden="true"></i>&nbsp; 报名查询
+            <a id="m-3" href="{{ url_for('registration.registration_query') }}" class="list-group-item">
+                <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;  报名查询
             </a>
-            <a id="m-4" href="{{ url_for('registration.admission') }}" class="list-group-item">
-                <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; 准考证打印
-            </a>
-            <a id="m-5" href="{{ url_for('registration.userlog') }}" class="list-group-item">
+{#            <a id="m-4" href="#" class="list-group-item">#}
+{#                <i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; 准考证打印#}
+{#            </a>#}
+            <a id="m-4" href="{{ url_for('registration.userlog') }}" class="list-group-item">
                 <i class="fa fa-heart" aria-hidden="true"></i>&nbsp; 登录日志
             </a>
         </ul>

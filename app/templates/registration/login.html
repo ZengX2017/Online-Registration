@@ -8,6 +8,14 @@
         <h1>登录/LOGIN</h1>
         <form role="form" class="form-border" method="post">
             <!-- 消息闪现提示 -->
+            {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    {{ msg }}
+                </div>
+            {% endfor %}
+            <!-- 消息闪现提示 -->
+            <!-- 消息闪现提示 -->
             {% for msg in get_flashed_messages(category_filter=["err"]) %}
                 <div class="alert alert-danger alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

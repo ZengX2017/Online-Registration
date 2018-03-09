@@ -409,6 +409,10 @@ class TinfoForm(FlaskForm):
         if (field.data is None) or (field.data == ""):
             raise ValidationError("请选择学校！")
 
+    def validate_personnum(self, field):
+        if field.data > 99 or field.data <= 0:
+            raise ValidationError("请输入正确的考试人数！")
+
 
 class TrinfoForm(FlaskForm):
     tinfo = SelectField(

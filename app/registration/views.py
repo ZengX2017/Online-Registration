@@ -3,11 +3,15 @@ __author__ = 'Adward_Z'
 
 from flask import render_template, redirect, url_for, flash, session, request, abort
 from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm
-from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook, Tinfo, Trinfo
-from app import db
+from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook, Tinfo, Trinfo, Admission
+from app import app, db
+from werkzeug.utils import secure_filename  # 安全修改文件名
 from werkzeug.security import generate_password_hash
 from . import registration
 import datetime
+import os
+import stat
+import uuid
 
 
 # 政务公开栏
@@ -64,6 +68,25 @@ def index_infos(name=None, length=None):
     return infos
 
 
+'''
+理解本方法（latest_infos）：
+    本方法为展示动态最新通知
+'''
+
+
+def latest_Infos(length=None):
+    latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
+    latest_infos = latest_infos[:length]  # 切片，找出前length条
+    return latest_infos
+
+
+# 修改文件名称
+def change_filename(filename):
+    fileinfo = os.path.splitext(filename)
+    filename = datetime.datetime.now().strftime("%Y%m%d%H%M%S") + str(uuid.uuid4().hex) + fileinfo[-1]
+    return filename
+
+
 # 首页
 @registration.route("/")
 def index():
@@ -75,8 +98,8 @@ def index():
 
     newstags = index_length(newstags, 5)
 
-    latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
-    latest_infos = latest_infos[:10]  # 切片，找出前10条
+    # 最新通知
+    latest_infos = latest_Infos(10)
 
     # 轮播图，NewsInfo，本来打算用Newsinfo.img.isnot(None)来找出img字段不为空的newsinfo，但是用此方法找出来的是所有的info，故舍弃
     banner = newsinfos.filter(NewsInfo.img.ilike("20%"))
@@ -158,10 +181,20 @@ def newscategory(name):
                            zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
+'''
+理解本方法（detail）：
+    本方法分2部分，一部分根据是大多数信息的id去newsinfo中找到并读出。第二部分也是新增的部分，为了提高代码的覆写率，
+在tinfo_detail中的查看介绍根据所传参数的标题去newsinfo里面找。
+'''
+
+
 # 资讯详情
-@registration.route("/detail/<int:id>/", methods=["GET"])
+@registration.route("/detail/<id>/", methods=["GET"])
 def detail(id=None):
-    newsinfo = NewsInfo.query.get_or_404(id)
+    if id.isdigit():
+        newsinfo = NewsInfo.query.get_or_404(int(id))
+    else:
+        newsinfo = NewsInfo.query.filter_by(title=id).first_or_404()
     newstag = newsinfo.newstag.name
     newscategory = newsinfo.newstag.newscategory.name
     newsinfo.view_num = newsinfo.view_num + 1
@@ -170,6 +203,13 @@ def detail(id=None):
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag,
                            newscategory=newscategory, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+
+
+'''
+理解本方法（tinfo）：
+    虽然本方法与newscategory方法几乎一致，但由于展示的数据不一样，newscategory方法展示的是newsinfo，本方法展示的是tinfo
+因此本方法独立出来。不仅如此，newscategory方法及其页面涵盖了将近80%的数据，不能为了故意降低代码的重复率而多做动作。
+'''
 
 
 # 考试信息相关
@@ -185,12 +225,13 @@ def tinfo(name):
     )  # 根据当前标签找出此标签下的所有内容
     now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
     time_diff = datetime.timedelta(days=30)
+    time_zero = datetime.timedelta(days=1)
     tinfos = index_length(tinfos, tinfos.count())
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/tinfo.html", newstag=newstag, newstag_name=newstag_name,
                            newscategory=newscategory, newstags=newstags, tinfos=tinfos, now=now,
-                           time_diff=time_diff, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           time_diff=time_diff, time_zero=time_zero, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 考试信息详情
@@ -199,15 +240,14 @@ def tinfo_detail(id=None):
     tinfo = Tinfo.query.get_or_404(id)
     time_diff = datetime.timedelta(days=7)
 
-    latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
-    latest_infos = latest_infos[:6]  # 切片，找出前6条
+    latest_infos = latest_Infos(6)
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/tinfo_detail.html", tinfo=tinfo, time_diff=time_diff, latest_infos=latest_infos
-                           , zwgkNc=zwgkNc,zwgkTags=zwgkTags)
+    return render_template("registration/tinfo_detail.html", tinfo=tinfo, time_diff=time_diff,
+                           latest_infos=latest_infos, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
-# 考试信息详情
+# 考试报名信息详情
 @registration.route("/trinfo/<int:id>/", methods=["GET"])
 def trinfo(id=None):
     trinfo = Trinfo.query.filter_by(tinfo_id=id).first_or_404()
@@ -216,12 +256,90 @@ def trinfo(id=None):
         flash("请您先登录！", "err")
         return redirect(url_for("registration.login"))
 
-    latest_infos = NewsInfo.query.order_by(NewsInfo.addtime.desc())  # 降序找出最新通知消息
-    latest_infos = latest_infos[:6]  # 切片，找出前6条
+    latest_infos = latest_Infos(6)
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/trinfo.html", trinfo=trinfo, time_diff=time_diff, latest_infos=latest_infos,
-                           zwgkNc=zwgkNc,zwgkTags=zwgkTags)
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+
+
+'''
+理解本方法（admission_generate）：
+    考试报名信息的id和用户id均由前台请求数据传过来，本方法的前提就是用户已登录，并且考试报名信息合理。
+因为trinfo中对用户的登录状态进行了判断，此方法是在trinfo方法中跳转过来实现的，故不用去判断考试报名信息和
+用户登录状态    
+'''
+
+
+# 准考证生成
+@registration.route("/admission/<trinfo_id>/<user_id>/")
+def admission_generate(trinfo_id=None, user_id=None):
+    user = User.query.get_or_404(int(user_id))
+    trinfo = Trinfo.query.get_or_404(int(trinfo_id))  # 找到当前考试报名信息
+
+    if not user.face or not user.id_card:
+        flash("请完善您的头像和身份证！", "err")
+        return redirect(url_for("registration.userinfo"))  # 完善个人信息
+
+    admission_verify = Admission.query.filter(
+        Admission.user_id == user_id,
+        Admission.trinfo_id == trinfo_id
+    ).count()
+    if admission_verify == 1:
+        flash("请不要重复报名本场考试！", "err")
+        return redirect(url_for("registration.tinfo_detail", id=trinfo.tinfo.id))
+        # 根据传过来的2个id查找Admission中有没有出现过此数据，等于1的话说明已经报名成功过，此时重定向至考试信息界面
+
+    dateinfo = trinfo.tinfo.t_time.strftime("%Y%m%d%H%M")  # 12位当前时间信息
+    examinfo = trinfo.tinfo.examroom[len(trinfo.tinfo.examroom)-3:]  # 取后3位数字
+    if (trinfo.num + 1) % trinfo.tinfo.personnum == 0:
+        seat = trinfo.tinfo.personnum
+    else:
+        if trinfo.num / 10 == 0:
+            seat = str(0) + str((trinfo.num + 1) % trinfo.tinfo.personnum)  # 座位号，1到personnum
+        else:
+            seat = str((trinfo.num + 1) % trinfo.tinfo.personnum)
+
+    admission = Admission(
+        admission_id=dateinfo + "0" + examinfo + str(seat),
+        trinfo_id=int(trinfo_id),
+        status=1,
+        user_id=int(user_id),
+    )  # 创建准考证
+    trinfo.num = trinfo.num + 1  # 报名人数+1
+    if trinfo.tinfo.personnum - trinfo.num == 0:  # 判断考试报名人数是否还有余，没有的话显示不可报名
+        trinfo.status = 0
+    db.session.add(admission)
+    db.session.commit()
+    db.session.add(trinfo)
+    db.session.commit()
+    return redirect(url_for("registration.userinfo"))
+
+
+# 报名查询
+@registration.route("/registration_query/", methods=["GET", "POST"])
+def registration_query():
+    admissions = Admission.query.join(User).filter(
+        Admission.user_id == session["user_id"]
+    ).order_by(
+        Admission.addtime.asc()
+    )
+    return render_template("registration/registration_query.html", admissions=admissions)
+
+
+# 准考证详情
+@registration.route("/registration_detail/<int:id>/", methods=["GET"])
+def registration_detail(id=None):
+    admission = Admission.query.get_or_404(id)  # 根据id找出准考证
+    # user = User.query.get_or_404(admission.user_id)  # 根据准考证找出当前用户，也可用session["user_id"]
+    # trinfo = Trinfo.query.get_or_404(admission.trinfo_id)  # 根据准考证找出当前考试报名信息
+    seat = admission.admission_id[len(admission.admission_id) - 2:]  # 座位号
+
+    latest_infos = latest_Infos(6)
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/registration_detail.html", admission=admission, seat=seat,
+                           latest_infos=latest_infos, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 用户登录
@@ -275,7 +393,6 @@ def register():
 
 
 # 个人中心
-# 头像没实现
 @registration.route("/userinfo/", methods=["GET", "POST"])
 def userinfo():
     form = UserInfoForm()
@@ -289,29 +406,35 @@ def userinfo():
         data = form.data
         ui = User.query.filter_by(id_card=data["id_card"]).count()
         up = User.query.filter_by(phone=data["phone"]).count()
+
         if user.id_card != data["id_card"] and ui == 1:
             flash("此身份证已经存在！请输入正确的身份证号码！", "err")
             return redirect(url_for("registration.userinfo"))
+
         if user.phone != data["phone"] and up == 1:
             flash("此手机号码已经存在！请输入正确的手机号码！", "err")
             return redirect(url_for("registration.userinfo"))
+
+        if not os.path.exists(app.config["UP_USER_INFO_DIR"]):  # 处理文件
+            os.makedirs(app.config["UP_USER_INFO_DIR"])
+            os.chmod(app.config["UP_USER_INFO_DIR"], stat.S_IRWXU)  # stat.S_IRWXU − Read, write, and execute by owner.
+
+        if form.face.data != "":
+            face_logo = secure_filename(form.face.data.filename)
+            user.face = change_filename(face_logo)
+            form.face.data.save(app.config["UP_USER_INFO_DIR"] + user.face)
         user.name = data["name"],
         user.gender = data["gender"]
         user.id_card = data["id_card"],
         user.phone = data["phone"],
         user.area = data["area"]
+        if data["id_card"]:
+            user.id_status = 1
         db.session.add(user)
         db.session.commit()
         flash("个人信息修改成功！", "OK")
         return redirect(url_for("registration.userinfo"))
     return render_template("registration/userinfo.html", form=form, user=user)
-
-
-# # 个人中心2 暂时不用
-# @registration.route("/userinfo_edit/", methods=["GET", "POST"])
-# def userinfo_edit():
-#     user = User.query.filter_by(name="UserTest").first()
-#     return render_template("registration/userinfo_edit.html", user=user)
 
 
 # 修改密码
@@ -320,7 +443,13 @@ def change_pwd():
     form = ChangePwdForm()
     user = User.query.filter_by(id=session['user_id']).first_or_404()
     if form.validate_on_submit():
-        pass
+        data = form.data
+        from werkzeug.security import generate_password_hash
+        user.pwd = generate_password_hash(data["new_pwd"])
+        db.session.add(user)
+        db.session.commit()
+        flash("修改密码成功，请重新登录！", "OK")
+        return redirect(url_for('registration.logout'))
     return render_template("registration/change_pwd.html", form=form, user=user)
 
 
@@ -333,14 +462,3 @@ def userlog():
         Userlog.addtime.asc()
     )
     return render_template("registration/userlog.html", page_data=page_data)
-
-
-# 登录日志
-@registration.route("/admission/", methods=["GET", "POST"])
-def admission():
-    page_data = Userlog.query.join(User).filter(
-        Userlog.user_id == User.id
-    ).order_by(
-        Userlog.addtime.asc()
-    )
-    return render_template("registration/admission.html", page_data=page_data)

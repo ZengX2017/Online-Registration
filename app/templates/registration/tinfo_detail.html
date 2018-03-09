@@ -15,13 +15,22 @@
         <div class="detail-div">
             <ol class="breadcrumb">
                 <li><a href="{{ url_for('registration.tinfo', name="近期考试报名") }}">考试报名</a></li>
-                <li class="active">{{ tinfo.tlevel.level + tinfo.tsubject.subject | truncate(20)}}</li>
+                <li class="active">{{ tinfo.tlevel.level + tinfo.tsubject.subject }}</li>
             </ol>
         </div>
 
         <div class="row">
             <div class="panel panel-default col-md-10 m-t-20">
                 <div class="panel-body">
+                    <!-- 消息闪现提示 -->
+                    {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-ban"></i>&nbsp;操作失败</h4>
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                    <!-- 消息闪现提示 -->
                     <h3 class="text-center">{{ tinfo.tlevel.level + tinfo.tsubject.subject | truncate(20)}}</h3>
                     <hr>
                     <p class="text-center" style="margin: -10px 0 20px;">
@@ -31,15 +40,20 @@
                         <p class="summer_div"> {{ (tinfo.t_time - time_diff * 4).strftime("%Y-%m-%d") }} —— {{ (tinfo.t_time - time_diff).strftime("%Y-%m-%d") }}</p>
                     </div>
                     <div class="summer">
-                        二、准考证打印时间：
+                        二、考试时间：
+                        <p class="summer_div"> {{ (tinfo.t_time) }}</p>
+                    </div>
+                    <div class="summer">
+                        三、准考证打印时间：
                         <p class="summer_div"> 考前一周自行打印 </p>
                     </div>
                     <div class="summer">
-                        三、考试地点：
+                        四、考试地点：
                         <p class="summer_div"> {{ tinfo.area + "---->"  + tinfo.examroom }} </p>
                     </div>
                     <hr>
-                        <a href="#" target="_blank" class="pull-left">查看介绍&gt;&gt;</a>
+                        <!-- 介绍为newsinfo的数据 -->
+                        <a href="{{ url_for('registration.detail', id=tinfo.tlevel.level + tinfo.tsubject.subject) }}" target="_blank" class="pull-left">查看介绍&gt;&gt;</a>
                         <a href="{{ url_for('registration.trinfo', id=tinfo.id) }}" target="_blank" class="pull-right">网上报名&gt;&gt;</a>
 
                 </div> <!-- panel-body -->
