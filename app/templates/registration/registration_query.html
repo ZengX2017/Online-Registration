@@ -30,6 +30,7 @@
                             <th class="text-center">考试名称</th>
 {#                            <th class="text-center">考试地点</th>#}
                             <th class="text-center">准考证号</th>
+                            <th class="text-center">打印状态</th>
                             <th class="text-center">操作事项</th>
                         </tr>
                         </thead>
@@ -40,9 +41,13 @@
                                 <td>{{ admission.trinfo.tinfo.tlevel.level + admission.trinfo.tinfo.tsubject.subject }}</td>
 {#                                <td>{{ admission.trinfo.tinfo.area + "-" + admission.trinfo.tinfo.examroom }}</td>#}
                                 <td>{{ admission.admission_id }}</td>
+                                <td>{% if admission.status %}可打印{% else %}不可打印{% endif %}</td>
                                 <td class="actions">
-                                    <a href="{{ url_for('registration.registration_detail', id=admission.id ) }}"><i class="fa fa-pencil"></i>&nbsp;查询</a>&nbsp;&nbsp;
-                                    <a href="#" class="print no-print"><i class="fa fa-print"></i>&nbsp;打印</a>
+                                    {% if admission.status %}
+                                    <a href="{{ url_for('registration.registration_detail', id=admission.id ) }}" class="print no-print"><i class="fa fa-print"></i>&nbsp;打印</a>
+                                    {% else %}
+                                    <a href="{{ url_for('registration.registration_detail', id=admission.id ) }}"><i class="fa fa-pencil"></i>&nbsp;查询</a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -54,7 +59,7 @@
     </div>
 {% endblock %}
 {% block js %}
-    <script src="{{ url_for('static', filename='js/jQuery.print.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/printThis.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
     <script>
@@ -81,27 +86,33 @@
             "pagingType": "full_numbers"
         });
         {#$(".print").on("click", function () {#}
-        {#    $('.print').printThis({#}
+        {#    $('.row').printThis({#}
+        {#        importCSS: true,#}
+        {#        importStyle: true,#}
+        {#        printContainer: true,#}
         {#        header: "<h1>准考证</h1>",#}
         {#        footer: null,#}
-        {#        pageTitle: "准考证"#}
+        {#        pageTitle: "准考证",#}
+        {#        base: "http://127.0.0.1:5000{{ url_for('registration.registration_detail', id=7) }}"#}
         {#    });#}
         {#);#}
-        $(".print").on("click", function () {
-            $('.print').print({
-                globalStyles: false,  //Use Global styles
-                mediaPrint: false,  //Add link with attrbute media=print
-                stylesheet: null,  //Custom stylesheet  eg."http://fonts.googleapis.com/css?family=Inconsolata",
-                noPrintSelector: ".no-print",  //Don't print this
-                iframe: true,  //Print in a hidden iframe
-                append: "<br/>Buh Bye!<br/>",  //Add this on bottom
-                prepend: "Hello World!!!<br/>",  //Add this at top
-                manuallyCopyFormValues: true,
-                deferred: $.Deferred().done(function () {
-                    console.log('Printing done', arguments);
-                })
-            });
-        });
+        <!-- jQuery.print.js -->
+        {#$(".print").on("click", function () {#}
+        {#    $('.print').print({#}
+        {#        globalStyles: true,  //Use Global styles#}
+        {#        mediaPrint: false,  //Add link with attrbute media=print#}
+        {#        stylesheet: null,  //Custom stylesheet  eg."http://fonts.googleapis.com/css?family=Inconsolata",#}
+        {#        noPrintSelector: ".no-print",  //Don't print this#}
+        {#        iframe: true,  //Print in a hidden iframe#}
+        {#        append: $('.panel-body').html(),  //Add this on bottom#}
+        {#        prepend: "Hello World!!!<br/>",  //Add this at top#}
+        {#        manuallyCopyFormValues: true,#}
+        {#        deferred: $.Deferred().done(function () {#}
+        {#            console.log('Printing done', arguments);#}
+        {#        })#}
+        {#    });#}
+        {#);#}
+        <!-- jQuery.print.js -->
         $(document).ready(function () {
             $("#m-3").addClass("active")
         });

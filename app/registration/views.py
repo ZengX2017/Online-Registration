@@ -251,7 +251,9 @@ def tinfo_detail(id=None):
 @registration.route("/trinfo/<int:id>/", methods=["GET"])
 def trinfo(id=None):
     trinfo = Trinfo.query.filter_by(tinfo_id=id).first_or_404()
-    time_diff = datetime.timedelta(days=7)
+    time_zero = datetime.timedelta(days=0)
+    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+
     if "user" not in session:
         flash("请您先登录！", "err")
         return redirect(url_for("registration.login"))
@@ -259,8 +261,8 @@ def trinfo(id=None):
     latest_infos = latest_Infos(6)
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/trinfo.html", trinfo=trinfo, time_diff=time_diff, latest_infos=latest_infos,
-                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+    return render_template("registration/trinfo.html", trinfo=trinfo, time_zero=time_zero, latest_infos=latest_infos,
+                           now=now, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 '''
@@ -316,6 +318,14 @@ def admission_generate(trinfo_id=None, user_id=None):
     return redirect(url_for("registration.userinfo"))
 
 
+'''
+理解此方法（registration_query）：
+    本方法展示的数据为准考证数据库里面的所有内容，先取出数据集合。然后根据当前时间和考试时间进行对比，如果考试时间
+比当前时间晚（小），即说明考试已经开始了，此时不能打印准考证。
+    注：为了跟公告对应，将时间差控制在7天（一周），若有需要再更改时间差。
+'''
+
+
 # 报名查询
 @registration.route("/registration_query/", methods=["GET", "POST"])
 def registration_query():
@@ -324,6 +334,14 @@ def registration_query():
     ).order_by(
         Admission.addtime.asc()
     )
+
+    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+
+    for admission in admissions:
+        if admission.trinfo.tinfo.t_time - now < datetime.timedelta(days=7):
+            admission.status = 0
+            db.session.add(admission)
+            db.session.commit()
     return render_template("registration/registration_query.html", admissions=admissions)
 
 

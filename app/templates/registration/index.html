@@ -68,7 +68,7 @@
                         {% for news in newstags %}
                             <a href="{{ url_for('registration.detail', id=news.id) }}" class="list-group-item">
                                 {{ news.title | safe | truncate(25) }}
-                                <span class="pull-right">[{{ news.addtime }}]</span>
+                                <span class="pull-right">[{{ news.addtime.strftime("%Y-%m-%d") }}]</span>
                                 {% if loop.index <= 2 %}
                                     <span class="badge">new</span>
                                 {% endif %}

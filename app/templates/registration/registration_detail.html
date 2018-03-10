@@ -1,6 +1,7 @@
 {% extends 'registration/registration.html' %}
 {% block css %}
     <link href="{{ url_for('static', filename='css/BreakingNews.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.min.css') }}" rel="stylesheet">
     <style>
         div.summer {
             margin: 0 40px;
@@ -87,15 +88,17 @@
                             <td>报名费</td>
                             <td>{{ admission.trinfo.tinfo.price }}</td>
                         </tr>
-                        <tr class="trinfo">
-                            <td>参考书</td>
-                            <td>{{ admission.trinfo.tinfo.refbook.title }}&nbsp;&nbsp;<a href="{{ url_for('registration.refbook_detail', id=admission.trinfo.tinfo.refbook.id) }}" target="_blank">查看详情&gt;&gt;</a></td>
-                        </tr>
+{#                        <tr class="trinfo">#}
+{#                            <td>参考书</td>#}
+{#                            <td>{{ admission.trinfo.tinfo.refbook.title }}&nbsp;&nbsp;<a href="{{ url_for('registration.refbook_detail', id=admission.trinfo.tinfo.refbook.id) }}" target="_blank">查看详情&gt;&gt;</a></td>#}
+{#                        </tr>#}
                         </tbody>
                     </table>
                     <hr>
                     <a href="{{ url_for('registration.registration_query') }}" class="pull-left">返回上一页&gt;&gt;</a>
-
+                    {% if admission.status %}
+                    <a href="#" class="print pull-right"><i class="fa fa-print"></i>&nbsp;打印</a>
+                    {% endif %}
                 </div> <!-- panel-body -->
             </div>
             {% include 'registration/affairs_public.html' %}
@@ -114,8 +117,23 @@
     </div>
 {% endblock %}
 {% block js %}
+    <script src="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/sweet-alert/sweet-alert.init.js') }}"></script>
     <script src="{{ url_for('static', filename='js/BreakingNews.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/printThis.js') }}"></script>
     <script>
+        $(document).ready(function () {
+            swal({
+            title: "请核对好个人信息！",
+            text: "发现错误请及时向我们反馈，谢谢配合！",
+            type: "warning",
+            {#showCancelButton: true,#}
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "我已了解",
+            {#cancelButtonText: "取消",#}
+            closeOnConfirm: false
+            });
+        });
         $("#breakingnews").BreakingNews({
             background: '#FFF',
             title: '最新通知',
@@ -129,6 +147,16 @@
             timer: 2000,
             autoplay: true,
             effect: 'slide'
+        });
+        $(".print").on("click", function () {
+            $('.table').printThis({
+                importCSS: true,
+                importStyle: true,
+                printContainer: true,
+                header: '<h3 class="text-center">{{ admission.trinfo.tinfo.tlevel.level + admission.trinfo.tinfo.tsubject.subject + "——准考证" }}</h3><br>',
+                footer: null,
+                pageTitle: '{{ admission.trinfo.tinfo.tlevel.level + admission.trinfo.tinfo.tsubject.subject + "——准考证" }}',
+            });
         });
     </script>
 {% endblock %}

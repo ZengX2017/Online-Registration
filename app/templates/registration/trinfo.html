@@ -86,7 +86,7 @@
                         </tr>
                         <tr class="trinfo">
                             <td>报名状态</td>
-                            <td>{% if trinfo.status %}可报名{% else %}不可报名{% endif %}</td>
+                            <td>{% if trinfo.status and trinfo.tinfo.t_time > now %}可报名{% else %}不可报名{% endif %}</td>
                         </tr>
                         <tr class="trinfo">
                             <td>报名费</td>
@@ -100,7 +100,7 @@
                     </table>
                     <hr>
                     <a href="{{ url_for('registration.detail', id=trinfo.tinfo.tlevel.level + trinfo.tinfo.tsubject.subject) }}" target="_blank" class="pull-left">查看介绍&gt;&gt;</a>
-                    {% if trinfo.status %}
+                    {% if trinfo.status and trinfo.tinfo.t_time > now %}
                     <a class="pull-right" id="sa-warning">我要报名&gt;&gt;</a>
                     {% endif %}
 

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50638
 File Encoding         : 65001
 
-Date: 2018-03-09 23:50:23
+Date: 2018-03-10 12:17:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -88,7 +88,7 @@ CREATE TABLE `admission` (
 -- ----------------------------
 -- Records of admission
 -- ----------------------------
-INSERT INTO `admission` VALUES ('7', '201803111100040701', '2', '1', '2018-03-09 19:37:10', '3');
+INSERT INTO `admission` VALUES ('7', '201803111100040701', '2', '0', '2018-03-09 19:37:10', '3');
 INSERT INTO `admission` VALUES ('8', '201807011300040601', '2', '1', '2018-03-09 19:37:30', '4');
 
 -- ----------------------------

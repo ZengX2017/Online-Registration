@@ -771,10 +771,13 @@ def tinfo_list():
 @login_req
 def trinfo_add():
     form = TrinfoForm()
+    # tinfo_ids = db.session.query(Trinfo.tinfo_id).all()
     form.tinfo.choices = [(tl.id, tl.area + "——>" + tl.examroom + "——>" + tl.t_time.strftime('%Y-%m-%d') +
                            "——>" + tl.tlevel.level + "——>" + tl.tsubject.subject) for tl in Tinfo.query.all()]
+    # if tl.id not in tinfo_ids[0]
     if form.validate_on_submit():
         data = form.data
+        tr_count = Trinfo.query.filter_by().count()
         trinfo = Trinfo(
             tinfo_id=data["tinfo"],
             status=1,
@@ -792,7 +795,9 @@ def trinfo_add():
 @login_req
 def trinfo_del(id=None):
     trinfo = Trinfo.query.filter_by(id=id).first_or_404()
-    if trinfo.status != 0:
+    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+
+    if trinfo.tinfo.t_time >= now:
         flash("考试报名信息仍有效，不可删除！", "err")
         return redirect(url_for("admin.trinfo_list"))
     db.session.delete(trinfo)
