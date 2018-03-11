@@ -59,8 +59,8 @@
                                 <label class="col-md-2 control-label" for="face">头像</label>
                                 <div class="col-md-10">
                                     {% if user.face %}
-                                        <img src="{{ url_for('static', filename='images/' + user.face) }}" alt="头像pic"
-                                             style="width: 300px;height: 250px;">
+                                        <img src="{{ url_for('static', filename='uploads/users/' + user.face) }}" alt="头像pic"
+                                             style="width: 250px;height: 250px;">
                                     {% else %}
                                         <img src="{{ url_for('static', filename='images/ads.png') }}" alt="头像pic"
                                              style="width: 300px;height: 250px;">

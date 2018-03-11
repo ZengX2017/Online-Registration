@@ -3,7 +3,7 @@ __author__ = 'Adward_Z'
 
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Email, Regexp
-from wtforms import StringField, PasswordField, SubmitField, SelectField, FileField, DateTimeField, FloatField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, FileField, TextAreaField
 from app.models import User
 
 
@@ -244,50 +244,39 @@ class ChangePwdForm(FlaskForm):
             raise ValidationError("旧密码错误！")
 
 
-class Admission(FlaskForm):
-    ad = StringField(
-        label="级别",
-        description="级别",
+class AdviceForm(FlaskForm):
+    content = TextAreaField(
+        label="内容",
+        validators=[
+            DataRequired("请输入内容！")
+        ],
+        description="内容",
+        render_kw={
+            "id": "summernote",
+            "class": "form-control",
+            "rows": 10
+        }
+    )
+    name = StringField(
+        label="姓名",
+        description="姓名",
         render_kw={
             "class": "form-control",
         }
     )
-    subject = StringField(
-        label="科目",
-        description="科目",
-        render_kw={
-            "class": "form-control",
-        }
-    )
-    area = StringField(
-        label="考试地点",
-        description="考试地点",
-        render_kw={
-            "class": "form-control",
-        }
-    )
-    t_time = DateTimeField(
-        label="考试时间",
-        description="考试时间",
-        render_kw={
-            "class": "form-control",
-        },
-    )
-    price = FloatField(
-        label="报考价格",
-        description="报考价格",
-        render_kw={
-            "class": "form-control",
-        }
-    )
-    ref_book = StringField(
-        label="参考书",
+    email = StringField(
+        label="邮箱",
+        validators=[
+            DataRequired("请输入您的邮箱！"),
+            Email(message=u"邮箱格式不正确，请重新输入！")
+        ],
+        description="邮箱",
         render_kw={
             "class": "form-control",
         }
     )
     submit = SubmitField(
-        "报名",
+        "提交",
         render_kw={
             "class": "btn btn-primary pull-right",
         }  # 附加选项

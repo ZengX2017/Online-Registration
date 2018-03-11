@@ -2,17 +2,25 @@
 __author__ = 'Adward_Z'
 
 from flask import render_template, redirect, url_for, flash, session, request, abort
-from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm
+from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm, AdviceForm
 from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook, Tinfo, Trinfo, Admission
-from app import app, db
+from app import app, db, mail
 from functools import wraps
 from werkzeug.utils import secure_filename  # 安全修改文件名
 from werkzeug.security import generate_password_hash
+from flask_mail import Message
+from threading import Thread
 from . import registration
 import datetime
 import os
 import stat
 import uuid
+
+
+# 异步发送邮件
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
 
 
 # 访问控制，登录装饰器
@@ -29,7 +37,6 @@ def login_req(f):
     return decorated_function
 
 
-# 政务公开栏
 '''
 理解本方法（affairs_public_tags）：
     因为政务公开栏挂在右侧，在网页中是用Jinja2的语法：include进行加载的，为了让数据从数据库读出来以及减少重复性，故写出了本方法。
@@ -38,6 +45,7 @@ def login_req(f):
 '''
 
 
+# 政务公开栏
 def affairs_public_tags():
     zwgkNc = NewsCategory.query.filter_by(name="政务公开").first_or_404()
     if not zwgkNc:
@@ -364,8 +372,6 @@ def registration_query():
 @login_req
 def registration_detail(id=None):
     admission = Admission.query.get_or_404(id)  # 根据id找出准考证
-    # user = User.query.get_or_404(admission.user_id)  # 根据准考证找出当前用户，也可用session["user_id"]
-    # trinfo = Trinfo.query.get_or_404(admission.trinfo_id)  # 根据准考证找出当前考试报名信息
     seat = admission.admission_id[len(admission.admission_id) - 2:]  # 座位号
 
     latest_infos = latest_Infos(6)
@@ -499,3 +505,27 @@ def userlog():
         Userlog.addtime.asc()
     )
     return render_template("registration/userlog.html", page_data=page_data)
+
+
+# 关于我们
+@registration.route("/about_us/", methods=["GET", "POST"])
+def about_us():
+    return render_template("registration/about.html")
+
+
+# 相关建议
+@registration.route("/advice/", methods=["GET", "POST"])
+def advice():
+    form = AdviceForm()
+    if form.validate_on_submit():
+        data = form.data
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        msg = Message("在 " + now + " 收到来自" + data["email"] + "的建议！",
+                      sender="adward@adwardz.top", recipients=["adward@adwardz.top"])
+        # msg.add_recipient(data["email"])  # 找回密码功能再用
+        msg.html = "<h1>邮件功能测试</h1><br>" + data["content"] + "<br><h1>" + data["name"] + "</h1>"
+        thr = Thread(target=send_async_email, args=[app, msg])
+        thr.start()
+        flash("您的建议我们已经收到，谢谢！", "OK")
+        return redirect(url_for("registration.advice"))
+    return render_template("registration/advice.html", form=form)

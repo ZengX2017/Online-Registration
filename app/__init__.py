@@ -3,6 +3,7 @@ __author__ = 'Adward_Z'
 
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 import pymysql
 import os
 
@@ -15,9 +16,19 @@ app.config["UP_BOOK_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file_
 app.config["UP_USER_INFO_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users/")
 app.config["UP_NEWS_INFO_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/newsinfos/")
 
+app.config.update(dict(
+    DEBUG=False,
+    MAIL_SERVER='smtp.mxhichina.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME='adward@adwardz.top',
+    MAIL_PASSWORD='ZX18244757056!ce',
+    # MAIL_DEFAULT_SENDER='From: <adward@adwardz.top>'
+))
+
 app.debug = True
 db = SQLAlchemy(app)
-
+mail = Mail(app)
 
 from app.registration import registration as regst_blueprint
 from app.admin import admin as admin_blueprint
