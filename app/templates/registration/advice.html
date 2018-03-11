@@ -60,7 +60,11 @@
                         <div class="form-group">
                             {{ form.email.label(class="col-md-2 control-label") }}
                             <div class="col-md-10">
+                                {% if "user" in session %}
+                                {{ form.email(value=session["user"]) }}
+                                {% else %}
                                 {{ form.email }}
+                                {% endif %}
                             </div>
                         </div>
                         {{ form.csrf_token }}

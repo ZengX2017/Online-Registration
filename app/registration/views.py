@@ -2,7 +2,7 @@
 __author__ = 'Adward_Z'
 
 from flask import render_template, redirect, url_for, flash, session, request, abort
-from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm, AdviceForm
+from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm, AdviceForm, ForgetPwdForm
 from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook, Tinfo, Trinfo, Admission
 from app import app, db, mail
 from functools import wraps
@@ -15,6 +15,7 @@ import datetime
 import os
 import stat
 import uuid
+import random
 
 
 # 异步发送邮件
@@ -164,7 +165,8 @@ def search():
     newsinfos = index_length(newsinfos, count)
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/search.html", newsinfos=newsinfos, info=info, count=count, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+    return render_template("registration/search.html", newsinfos=newsinfos, info=info, count=count, zwgkNc=zwgkNc,
+                           zwgkTags=zwgkTags)
 
 
 # 参考书详情
@@ -314,7 +316,7 @@ def admission_generate(trinfo_id=None, user_id=None):
         # 根据传过来的2个id查找Admission中有没有出现过此数据，等于1的话说明已经报名成功过，此时重定向至考试信息界面
 
     dateinfo = trinfo.tinfo.t_time.strftime("%Y%m%d%H%M")  # 12位当前时间信息
-    examinfo = trinfo.tinfo.examroom[len(trinfo.tinfo.examroom)-3:]  # 取后3位数字
+    examinfo = trinfo.tinfo.examroom[len(trinfo.tinfo.examroom) - 3:]  # 取后3位数字
     if (trinfo.num + 1) % trinfo.tinfo.personnum == 0:
         seat = trinfo.tinfo.personnum
     else:
@@ -432,6 +434,41 @@ def register():
     return render_template("registration/register.html", form=form)
 
 
+# 找回密码
+@registration.route("/forgetPwd/", methods=["GET", "POST"])
+def forgetPwd():
+    form = ForgetPwdForm()
+    if form.validate_on_submit():
+        data = form.data
+        user = User.query.filter_by(email=data["email"]).first()
+        user_count = User.query.filter_by(email=data["email"]).count()
+        if user_count == 0:
+            flash("此邮箱未注册！", "err")
+            return redirect(url_for('registration.forgetPwd'))
+        seed = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+=-"
+        sa = []
+        for i in range(8):
+            sa.append(random.choice(seed))
+        new_pwd = ''.join(sa)
+        user.pwd = generate_password_hash(new_pwd)  # 重置密码为随机的8位字符
+
+        db.session.add(user)
+        db.session.commit()
+        flash("您的密码重置成功，请去邮箱检查！", "OK")
+
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        msg = Message("密码重置提醒！", sender="adward@adwardz.top")
+        msg.add_recipient(data["email"])
+
+        msg.html = "<h1>尊敬的---" + data["email"] + "---用户！</h1><br>您的密码于" + now + "已重置，新密码为：" + new_pwd + \
+                   "，请登录后重新修改密码！<br><h1 style='float:right'>来自Adward_Z</h1>"
+        thr = Thread(target=send_async_email, args=[app, msg])
+        thr.start()
+        return redirect(url_for("registration.login"))
+
+    return render_template("registration/forgetPwd.html", form=form)
+
+
 # 个人中心
 @registration.route("/userinfo/", methods=["GET", "POST"])
 @login_req
@@ -486,7 +523,6 @@ def change_pwd():
     user = User.query.filter_by(id=session['user_id']).first_or_404()
     if form.validate_on_submit():
         data = form.data
-        from werkzeug.security import generate_password_hash
         user.pwd = generate_password_hash(data["new_pwd"])
         db.session.add(user)
         db.session.commit()
@@ -510,7 +546,8 @@ def userlog():
 # 关于我们
 @registration.route("/about_us/", methods=["GET", "POST"])
 def about_us():
-    return render_template("registration/about.html")
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/about.html", zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 相关建议
@@ -528,4 +565,6 @@ def advice():
         thr.start()
         flash("您的建议我们已经收到，谢谢！", "OK")
         return redirect(url_for("registration.advice"))
-    return render_template("registration/advice.html", form=form)
+
+    zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
+    return render_template("registration/advice.html", form=form, zwgkNc=zwgkNc, zwgkTags=zwgkTags)

@@ -1,15 +1,15 @@
 {% extends "registration/registration.html" %}
 {% block title %}
-    登录
+    重置密码
 {% endblock %}
 {% block content %}
     <div class="container">
     <div class="login_con">
-        <h1>登录/LOGIN</h1>
+        <h1>忘记密码/FORGET</h1>
         <form role="form" class="form-border" method="post">
             <!-- 消息闪现提示 -->
             {% for msg in get_flashed_messages(category_filter=["OK"]) %}
-                <div class="alert alert-success alert-dismissable">
+                <div class="alert alert-danger alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     {{ msg }}
                 </div>
@@ -32,32 +32,9 @@
                 </div>
             {% endfor %}
             <!-- 验证提示 -->
-            <!-- 验证提示 -->
-            {% for err in form.pwd.errors %}
-                <div class="alert alert-danger alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                    </button>
-                    {{ err }}
-                </div>
-            {% endfor %}
-            <!-- 验证提示 -->
             <div class="form-group">
                 <i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;{{ form.email.label }}
                 {{ form.email }}
-            </div>
-            <div class="form-group">
-                <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{ form.pwd.label }}
-                {{ form.pwd }}
-            </div>
-{#            <div class="form-group">#}
-{#                <label for="yzm"><i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;验证码</label>#}
-{#                <input type="text" class="form-control" id="yzm" placeholder="请输入图中的验证码">#}
-{#                <img src="images/yzm.png" alt="验证码pic">#}
-{#            </div>#}
-            <div class="fg-reg">
-                <a href="{{ url_for('registration.forgetPwd') }}" class="fg-reg-left">忘记密码</a>
-                &nbsp;
-                <a href="{{ url_for('registration.register') }}" class="fg-reg-right">免费注册</a>
             </div>
             {{ form.csrf_token }}
             <div class="text-center">

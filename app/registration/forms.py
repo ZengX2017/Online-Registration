@@ -281,3 +281,23 @@ class AdviceForm(FlaskForm):
             "class": "btn btn-primary pull-right",
         }  # 附加选项
     )
+
+
+class ForgetPwdForm(FlaskForm):
+    email = StringField(
+        label="邮箱",
+        validators=[
+            DataRequired("请输入您的邮箱！"),
+            Email(message=u"邮箱格式不正确，请重新输入！")
+        ],
+        description="邮箱",
+        render_kw={
+            "class": "form-control",
+        }
+    )
+    submit = SubmitField(
+        "提交",
+        render_kw={
+            "class": "btn btn-default",
+        }
+    )
