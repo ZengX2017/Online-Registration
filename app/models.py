@@ -183,7 +183,7 @@ class Trinfo(db.Model):
                                  passive_deletes=True)
 
     def __repr__(self):
-        return "<Trinfo %r %r>" % self.level_id.name, self.subject_id.name
+        return "<Trinfo %r>" % self.id
 
 
 # 准考证

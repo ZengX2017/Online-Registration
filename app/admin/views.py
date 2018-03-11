@@ -12,7 +12,7 @@ from functools import wraps
 from app.admin.forms import NewsCategoryForm, NewsTagForm, NewsInfoForm, TlevelForm, TsubjectForm, RefbookForm, \
     TinfoForm, LoginForm, ChangePwdForm, TrinfoForm
 from app.models import NewsCategory, NewsTag, NewsInfo, Admin, Tlevel, Tsubject, Refbook, Tinfo, Adminlog, \
-    Userlog, Oplog, User, Trinfo
+    Userlog, Oplog, User, Trinfo, Admission
 from app import app, db
 from . import admin
 
@@ -63,6 +63,11 @@ def index():
     oplog_list = Oplog.query.order_by(
         Oplog.addtime.asc()
     )
+    cost = 0
+    admissions = Admission.query.all()  # 目的是为了找出总费用
+    for admission in admissions:
+        cost = cost + Tinfo.query.get_or_404(Trinfo.query.get_or_404(admission.trinfo_id).tinfo_id).price
+
     user_count = User.query.count()
     oplog_book_list = index_length(oplog_list, "参考书", 3)
 
@@ -71,7 +76,7 @@ def index():
     oplog_test_list = index_length(oplog_list, "考试信息", 3)
 
     return render_template("admin/index.html", oplog_book_list=oplog_book_list, oplog_news_list=oplog_news_list,
-                           oplog_test_list=oplog_test_list, user_count=user_count)
+                           oplog_test_list=oplog_test_list, user_count=user_count, cost=cost)
 
 
 # 登录
@@ -771,10 +776,20 @@ def tinfo_list():
 @login_req
 def trinfo_add():
     form = TrinfoForm()
-    # tinfo_ids = db.session.query(Trinfo.tinfo_id).all()
-    form.tinfo.choices = [(tl.id, tl.area + "——>" + tl.examroom + "——>" + tl.t_time.strftime('%Y-%m-%d') +
-                           "——>" + tl.tlevel.level + "——>" + tl.tsubject.subject) for tl in Tinfo.query.all()]
-    # if tl.id not in tinfo_ids[0]
+    tinfo_ids = db.session.query(Trinfo.tinfo_id).all()
+    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+
+    id_list = []
+    for index in range(len(tinfo_ids)):
+        id_list.append(tinfo_ids[index][0])  # 将二元列表[(1,),...(index,)]转成一元列表[1,...,index]，目的是为了下一步判断方便
+
+    # 值得注意的点是：1.考试时间如果比当前时间小不应该显示；
+    #                 2.已经添加过的报名信息不应该显示。
+
+    form.tinfo.choices = [(tl.id, tl.area + "——>" + tl.examroom + "——>" + tl.t_time.strftime('%Y-%m-%d') + "——>" +
+                           tl.tlevel.level + "——>" + tl.tsubject.subject) for tl in Tinfo.query.all() if tl.t_time > now
+                          and tl.id not in id_list]
+
     if form.validate_on_submit():
         data = form.data
         tr_count = Trinfo.query.filter_by().count()

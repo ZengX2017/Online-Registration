@@ -5,6 +5,7 @@ from flask import render_template, redirect, url_for, flash, session, request, a
 from app.registration.forms import RegisterForm, LoginForm, UserInfoForm, ChangePwdForm
 from app.models import User, Userlog, NewsInfo, NewsTag, NewsCategory, Refbook, Tinfo, Trinfo, Admission
 from app import app, db
+from functools import wraps
 from werkzeug.utils import secure_filename  # 安全修改文件名
 from werkzeug.security import generate_password_hash
 from . import registration
@@ -12,6 +13,20 @@ import datetime
 import os
 import stat
 import uuid
+
+
+# 访问控制，登录装饰器
+def login_req(f):
+    """访问控制
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user" not in session:
+            return redirect(url_for("registration.login", next=request.url))
+        return f(*args, **kwargs)
+
+    return decorated_function
 
 
 # 政务公开栏
@@ -249,14 +264,11 @@ def tinfo_detail(id=None):
 
 # 考试报名信息详情
 @registration.route("/trinfo/<int:id>/", methods=["GET"])
+@login_req
 def trinfo(id=None):
     trinfo = Trinfo.query.filter_by(tinfo_id=id).first_or_404()
     time_zero = datetime.timedelta(days=0)
     now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
-
-    if "user" not in session:
-        flash("请您先登录！", "err")
-        return redirect(url_for("registration.login"))
 
     latest_infos = latest_Infos(6)
 
@@ -275,6 +287,7 @@ def trinfo(id=None):
 
 # 准考证生成
 @registration.route("/admission/<trinfo_id>/<user_id>/")
+@login_req
 def admission_generate(trinfo_id=None, user_id=None):
     user = User.query.get_or_404(int(user_id))
     trinfo = Trinfo.query.get_or_404(int(trinfo_id))  # 找到当前考试报名信息
@@ -328,6 +341,7 @@ def admission_generate(trinfo_id=None, user_id=None):
 
 # 报名查询
 @registration.route("/registration_query/", methods=["GET", "POST"])
+@login_req
 def registration_query():
     admissions = Admission.query.join(User).filter(
         Admission.user_id == session["user_id"]
@@ -347,6 +361,7 @@ def registration_query():
 
 # 准考证详情
 @registration.route("/registration_detail/<int:id>/", methods=["GET"])
+@login_req
 def registration_detail(id=None):
     admission = Admission.query.get_or_404(id)  # 根据id找出准考证
     # user = User.query.get_or_404(admission.user_id)  # 根据准考证找出当前用户，也可用session["user_id"]
@@ -384,6 +399,7 @@ def login():
 
 # 用户注销
 @registration.route("/logout/")
+@login_req
 def logout():
     session.pop("user", None)
     session.pop("user_id", None)
@@ -412,6 +428,7 @@ def register():
 
 # 个人中心
 @registration.route("/userinfo/", methods=["GET", "POST"])
+@login_req
 def userinfo():
     form = UserInfoForm()
     user = User.query.filter_by(id=session['user_id']).first_or_404()
@@ -457,6 +474,7 @@ def userinfo():
 
 # 修改密码
 @registration.route("/change_pwd/", methods=["GET", "POST"])
+@login_req
 def change_pwd():
     form = ChangePwdForm()
     user = User.query.filter_by(id=session['user_id']).first_or_404()
@@ -473,6 +491,7 @@ def change_pwd():
 
 # 登录日志
 @registration.route("/userlog/", methods=["GET", "POST"])
+@login_req
 def userlog():
     page_data = Userlog.query.join(User).filter(
         Userlog.user_id == session["user_id"]

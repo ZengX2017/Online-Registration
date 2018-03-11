@@ -1,6 +1,5 @@
 {% extends 'admin/admin.html' %}
 {% block css %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
 {% endblock %}
 {% block content %}
@@ -50,7 +49,6 @@
     <!-- Page content end -->
 {% endblock %}
 {% block js %}
-    <script src="{{ url_for('static', filename='assets/magnific-popup/magnific-popup.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
     <script>
