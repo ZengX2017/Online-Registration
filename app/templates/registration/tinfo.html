@@ -20,6 +20,14 @@
             margin-top: 15px;
             white-space: nowrap;
         }
+        div#filter{
+            margin-top: 16px;
+        }
+        @media (max-width: 767px) {
+            div#filter{
+                margin: 0 auto;
+            }
+        }
     </style>
 {% endblock %}
 {% block content %}
@@ -68,7 +76,7 @@
                             </thead>
                             <tbody>
                             {% for tinfo in tinfos %}
-                                <!-- 考试时间在距离当前时间的1-30天内 -->
+{#                                <!-- 考试时间在距离当前时间的1-30天内 -->#}
                                 {% if newstag_name.find("近期") != -1 %}
                                     {% if tinfo.t_time - now < time_diff and tinfo.t_time - now > time_zero %}
                                         <tr class="text-left">
@@ -125,6 +133,7 @@
     <script>
         <!-- 表格 -->
         $('#datatable-editable').DataTable({
+            dom: 't<"#filter.pull-left"f><"pull-right"p><"clear">',
             "oLanguage": {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
@@ -132,7 +141,7 @@
                 "sInfoEmpty": "没有数据",
                 "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
                 "sZeroRecords": "没有检索到数据",
-                "sSearch": "筛选：  ",
+                "sSearch": "查找：  ",
                 "oPaginate": {
                     "sFirst": "首页",
                     "sPrevious": "前一页",
@@ -143,7 +152,7 @@
             "iDisplayLength": 6,
             {#"lengthMenu": [5, 10, 15, 20],#}
             "lengthChange": false,  //隐藏左上角Length页面
-            "searching": false,     //隐藏右上角本地搜索
+            "searching": true,     //隐藏右上角本地搜索
             "info": false,  //隐藏左下角提示信息
             "pagingType": "full_numbers",
             "ordering": false  {#取消全局排序#}

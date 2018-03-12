@@ -460,8 +460,9 @@ def forgetPwd():
         msg = Message("密码重置提醒！", sender="adward@adwardz.top")
         msg.add_recipient(data["email"])
 
-        msg.html = "<h1>尊敬的---" + data["email"] + "---用户！</h1><br>您的密码于" + now + "已重置，新密码为：" + new_pwd + \
-                   "，请登录后重新修改密码！<br><h1 style='float:right'>来自Adward_Z</h1>"
+        msg.html = "<h1>尊敬的---<font color='red'>" + data["email"] + "</font>---用户！</h1><br>您的密码于" + now + \
+                   "已重置，新密码为：<font color='red'>" + new_pwd + \
+                   "</font>，请登录后重新修改密码！<br><h1 style='float:right'>来自Adward_Z</h1>"
         thr = Thread(target=send_async_email, args=[app, msg])
         thr.start()
         return redirect(url_for("registration.login"))
