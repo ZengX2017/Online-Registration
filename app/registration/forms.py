@@ -54,17 +54,13 @@ class RegisterForm(FlaskForm):
             "placeholder": "请再次输入您的密码",
         }
     )
-    # captcha = StringField(
-    #     label="验证码",
-    #     validators=[
-    #         DataRequired("请输入图中的验证码！"),
-    #     ],
-    #     description="验证码",
-    #     render_kw={
-    #         "class": "form-control",
-    #         "placeholder": "请输入图中的验证码",
-    #     }
-    # )
+    captcha = StringField(
+        label="验证码",
+        description="验证码",
+        render_kw={
+            "class": "form-control",
+        }
+    )
     submit = SubmitField(
         "注册",
         render_kw={
@@ -101,6 +97,13 @@ class LoginForm(FlaskForm):
         render_kw={
             "class": "form-control",
             "placeholder": "请输入您的密码",
+        }
+    )
+    captcha = StringField(
+        label="验证码",
+        description="验证码",
+        render_kw={
+            "class": "form-control",
         }
     )
     submit = SubmitField(

@@ -2,69 +2,87 @@
 {% block title %}
     登录
 {% endblock %}
+{% block css %}
+    <link href="{{ url_for('static', filename='css/jquery.slider.css') }}" rel="stylesheet"/>
+{% endblock %}
 {% block content %}
     <div class="container">
-    <div class="login_con">
-        <h1>登录/LOGIN</h1>
-        <form role="form" class="form-border" method="post">
-            <!-- 消息闪现提示 -->
-            {% for msg in get_flashed_messages(category_filter=["OK"]) %}
-                <div class="alert alert-success alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    {{ msg }}
+        <div class="login_con">
+            <h1>登录/LOGIN</h1>
+            <form role="form" class="form-border" method="post">
+                <!-- 消息闪现提示 -->
+                {% for msg in get_flashed_messages(category_filter=["OK"]) %}
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{ msg }}
+                    </div>
+                {% endfor %}
+                <!-- 消息闪现提示 -->
+                <!-- 消息闪现提示 -->
+                {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{ msg }}
+                    </div>
+                {% endfor %}
+                <!-- 消息闪现提示 -->
+                <!-- 验证提示 -->
+                {% for err in form.email.errors %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                        </button>
+                        {{ err }}
+                    </div>
+                {% endfor %}
+                <!-- 验证提示 -->
+                <!-- 验证提示 -->
+                {% for err in form.pwd.errors %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                        </button>
+                        {{ err }}
+                    </div>
+                {% endfor %}
+                <!-- 验证提示 -->
+                <div class="form-group">
+                    <i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;{{ form.email.label }}
+                    {{ form.email }}
                 </div>
-            {% endfor %}
-            <!-- 消息闪现提示 -->
-            <!-- 消息闪现提示 -->
-            {% for msg in get_flashed_messages(category_filter=["err"]) %}
-                <div class="alert alert-danger alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    {{ msg }}
+                <div class="form-group">
+                    <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{ form.pwd.label }}
+                    {{ form.pwd }}
                 </div>
-            {% endfor %}
-            <!-- 消息闪现提示 -->
-            <!-- 验证提示 -->
-            {% for err in form.email.errors %}
-                <div class="alert alert-danger alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                    </button>
-                    {{ err }}
+                <div class="form-group">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{ form.captcha.label }}
+                    {{ form.captcha(type="hidden") }}
+                    <div id="slider1" class="slider"></div>
                 </div>
-            {% endfor %}
-            <!-- 验证提示 -->
-            <!-- 验证提示 -->
-            {% for err in form.pwd.errors %}
-                <div class="alert alert-danger alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
-                    </button>
-                    {{ err }}
+                {#            <div class="form-group">#}
+                {#                <label for="yzm"><i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;验证码</label>#}
+                {#                <input type="text" class="form-control" id="yzm" placeholder="请输入图中的验证码">#}
+                {#                <img src="images/yzm.png" alt="验证码pic">#}
+                {#            </div>#}
+                <div class="fg-reg">
+                    <a href="{{ url_for('registration.forgetPwd') }}" class="fg-reg-left">忘记密码</a>
+                    &nbsp;
+                    <a href="{{ url_for('registration.register') }}" class="fg-reg-right">免费注册</a>
                 </div>
-            {% endfor %}
-            <!-- 验证提示 -->
-            <div class="form-group">
-                <i class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;{{ form.email.label }}
-                {{ form.email }}
-            </div>
-            <div class="form-group">
-                <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{ form.pwd.label }}
-                {{ form.pwd }}
-            </div>
-{#            <div class="form-group">#}
-{#                <label for="yzm"><i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;验证码</label>#}
-{#                <input type="text" class="form-control" id="yzm" placeholder="请输入图中的验证码">#}
-{#                <img src="images/yzm.png" alt="验证码pic">#}
-{#            </div>#}
-            <div class="fg-reg">
-                <a href="{{ url_for('registration.forgetPwd') }}" class="fg-reg-left">忘记密码</a>
-                &nbsp;
-                <a href="{{ url_for('registration.register') }}" class="fg-reg-right">免费注册</a>
-            </div>
-            {{ form.csrf_token }}
-            <div class="text-center">
-                {{ form.submit }}
-            </div>
-        </form>
+                {{ form.csrf_token }}
+                <div class="text-center">
+                    {{ form.submit }}
+                </div>
+            </form>
 
+        </div>
     </div>
-</div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/jquery.slider.min.js') }}"></script>
+    <script>
+        $("#slider1").slider({
+            callback: function (result) {
+                $("#captcha").val(result);
+            }
+        });
+    </script>
 {% endblock %}

@@ -111,6 +111,21 @@ def change_filename(filename):
     return filename
 
 
+'''
+理解本方法（nav_tags）：
+    本方法是为了将导航上的子项设置为动态项，目的是为了像政务公开那样显示数据。统一风格
+'''
+
+
+# nav动态标签
+def nav_tags(name):
+    tags_name = NewsCategory.query.filter_by(name=name).first_or_404()
+    item_tags = NewsTag.query.filter(
+        NewsTag.newscategory_id == tags_name.id
+    )
+    return item_tags
+
+
 # 首页
 @registration.route("/")
 def index():
@@ -121,6 +136,10 @@ def index():
     )  # 找出newsinfo表中隶属公告栏的数据
 
     newstags = index_length(newstags, 5)
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
 
     # 最新通知
     latest_infos = latest_Infos(10)
@@ -142,9 +161,10 @@ def index():
     reg_infos = index_infos("报名安排", 5)
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/index.html", newstags=newstags, zwgkNc=zwgkNc, zwgkTags=zwgkTags,
-                           latest_infos=latest_infos, banner=banner, primary=primary, middle=middle,
-                           advanced=advanced, tinfos=tinfos, reg_infos=reg_infos)
+    return render_template("registration/index.html", newstags=newstags, gzdt_tags=gzdt_tags, zwgkNc=zwgkNc,
+                           zwgkTags=zwgkTags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags, latest_infos=latest_infos,
+                           banner=banner, primary=primary, middle=middle, advanced=advanced, tinfos=tinfos,
+                           reg_infos=reg_infos)
 
 
 '''
@@ -164,17 +184,28 @@ def search():
     count = newsinfos.count()
     newsinfos = index_length(newsinfos, count)
 
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/search.html", newsinfos=newsinfos, info=info, count=count, zwgkNc=zwgkNc,
-                           zwgkTags=zwgkTags)
+                           gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags, zwgkTags=zwgkTags)
 
 
 # 参考书详情
 @registration.route("/refbook_detail/<int:id>", methods=["GET"])
 def refbook_detail(id=None):
     refbook = Refbook.query.get_or_404(id)
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/refbook_detail.html", refbook=refbook, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+    return render_template("registration/refbook_detail.html", refbook=refbook, gzdt_tags=gzdt_tags,
+                           ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 '''
@@ -198,12 +229,15 @@ def newscategory(name):
         NewsInfo.addtime.asc()
     )  # 根据当前标签找出此标签下的所有内容
 
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
     newsinfos = index_length(newsinfos, newsinfos.count())
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/newscategory.html", newstag=newstag, newstag_name=newstag_name,
-                           newscategory=newscategory, newstags=newstags, newsinfos=newsinfos,
-                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           newscategory=newscategory, newstags=newstags, newsinfos=newsinfos, ksgs_tags=ksgs_tags,
+                           gzdt_tags=gzdt_tags, djjs_tags=djjs_tags, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 '''
@@ -225,9 +259,14 @@ def detail(id=None):
     newsinfo.view_num = newsinfo.view_num + 1
     db.session.add(newsinfo)
     db.session.commit()
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag,
-                           newscategory=newscategory, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+    return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags, gzdt_tags=gzdt_tags, newscategory=newscategory, zwgkNc=zwgkNc,
+                           zwgkTags=zwgkTags)
 
 
 '''
@@ -253,10 +292,14 @@ def tinfo(name):
     time_zero = datetime.timedelta(days=1)
     tinfos = index_length(tinfos, tinfos.count())
 
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/tinfo.html", newstag=newstag, newstag_name=newstag_name,
                            newscategory=newscategory, newstags=newstags, tinfos=tinfos, now=now,
-                           time_diff=time_diff, time_zero=time_zero, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           time_diff=time_diff, time_zero=time_zero, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 考试信息详情
@@ -267,9 +310,13 @@ def tinfo_detail(id=None):
 
     latest_infos = latest_Infos(6)
 
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/tinfo_detail.html", tinfo=tinfo, time_diff=time_diff,
-                           latest_infos=latest_infos, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           latest_infos=latest_infos, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 考试报名信息详情
@@ -282,9 +329,13 @@ def trinfo(id=None):
 
     latest_infos = latest_Infos(6)
 
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/trinfo.html", trinfo=trinfo, time_zero=time_zero, latest_infos=latest_infos,
-                           now=now, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           now=now, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 '''
@@ -366,7 +417,12 @@ def registration_query():
             admission.status = 0
             db.session.add(admission)
             db.session.commit()
-    return render_template("registration/registration_query.html", admissions=admissions)
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/registration_query.html", admissions=admissions, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags)
 
 
 # 准考证详情
@@ -378,9 +434,13 @@ def registration_detail(id=None):
 
     latest_infos = latest_Infos(6)
 
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/registration_detail.html", admission=admission, seat=seat,
-                           latest_infos=latest_infos, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           latest_infos=latest_infos, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 用户登录
@@ -393,6 +453,11 @@ def login():
         if not user.check_pwd(data["pwd"]):
             flash("密码错误！", "err")
             return redirect(url_for("registration.login"))
+
+        if not data["captcha"]:
+            flash("请拖动滑块！", "err")
+            return redirect(url_for("registration.login"))
+
         session["user"] = user.email
         session["user_id"] = user.id
         userlog = Userlog(
@@ -402,7 +467,12 @@ def login():
         db.session.add(userlog)
         db.session.commit()
         return redirect(request.args.get("next") or url_for("registration.userinfo"))  # 登录后返回之前位置实现失败
-    return render_template("registration/login.html", form=form)
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/login.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags)
 
 
 # 用户注销
@@ -420,6 +490,10 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         data = form.data
+        if not data["captcha"]:
+            flash("请拖动滑块！", "err")
+            return redirect(url_for("registration.register"))
+
         user = User(
             name=data["name"],
             email=data["email"],
@@ -431,7 +505,12 @@ def register():
         db.session.commit()
         flash("注册成功！", "OK")
         return redirect(url_for("registration.login"))
-    return render_template("registration/register.html", form=form)
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/register.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags)
 
 
 # 找回密码
@@ -467,7 +546,11 @@ def forgetPwd():
         thr.start()
         return redirect(url_for("registration.login"))
 
-    return render_template("registration/forgetPwd.html", form=form)
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/forgetPwd.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags)
 
 
 # 个人中心
@@ -513,7 +596,12 @@ def userinfo():
         db.session.commit()
         flash("个人信息修改成功！", "OK")
         return redirect(url_for("registration.userinfo"))
-    return render_template("registration/userinfo.html", form=form, user=user)
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/userinfo.html", form=form, user=user, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags)
 
 
 # 修改密码
@@ -529,7 +617,12 @@ def change_pwd():
         db.session.commit()
         flash("修改密码成功，请重新登录！", "OK")
         return redirect(url_for('registration.logout'))
-    return render_template("registration/change_pwd.html", form=form, user=user)
+
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/change_pwd.html", form=form, user=user, gzdt_tags=gzdt_tags,
+                           ksgs_tags=ksgs_tags, djjs_tags=djjs_tags)
 
 
 # 登录日志
@@ -541,14 +634,22 @@ def userlog():
     ).order_by(
         Userlog.addtime.asc()
     )
-    return render_template("registration/userlog.html", page_data=page_data)
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/userlog.html", page_data=page_data, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
+                           djjs_tags=djjs_tags)
 
 
 # 关于我们
 @registration.route("/about_us/", methods=["GET", "POST"])
 def about_us():
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/about.html", zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
+    return render_template("registration/about.html", gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
 
 
 # 相关建议
@@ -567,5 +668,9 @@ def advice():
         flash("您的建议我们已经收到，谢谢！", "OK")
         return redirect(url_for("registration.advice"))
 
+    gzdt_tags = nav_tags("工作动态")  # 工作动态
+    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/advice.html", form=form, zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+    return render_template("registration/advice.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)

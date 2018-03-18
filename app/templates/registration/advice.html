@@ -61,7 +61,7 @@
                             {{ form.email.label(class="col-md-2 control-label") }}
                             <div class="col-md-10">
                                 {% if "user" in session %}
-                                {{ form.email(value=session["user"]) }}
+                                {{ form.email(value=session["user"], readonly=readonly) }}
                                 {% else %}
                                 {{ form.email }}
                                 {% endif %}

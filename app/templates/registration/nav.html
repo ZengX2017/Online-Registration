@@ -22,13 +22,16 @@
                        aria-expanded="false"><i class="fa fa-book fa-fw" aria-hidden="true"></i>&nbsp;工作动态 <span
                             class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('registration.newscategory', name="公告栏") }}">公告栏</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="工作计划") }}">工作计划</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="报名安排") }}">报名安排</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="考试安排") }}">考试安排</a></li>
+                        {% if gzdt_tags %}
+                            {% for gzdt_tag in gzdt_tags %}
+                                {% if loop.last %}
+                                    <li><a href="{{ url_for('registration.newscategory', name=gzdt_tag.name) }}">{{ gzdt_tag.name }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ url_for('registration.newscategory', name=gzdt_tag.name) }}">{{ gzdt_tag.name }}</a></li>
+                                    <li role="separator" class="divider"></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </li>
 
@@ -37,11 +40,16 @@
                        aria-expanded="false"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp;考试概述 <span
                             class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('registration.newscategory', name="考试介绍") }}">考试介绍</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="资格介绍") }}">资格介绍</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="考试教程和大纲") }}">考试教程和大纲</a></li>
+                        {% if ksgs_tags %}
+                           {% for ksgs_tag in ksgs_tags %}
+                                {% if loop.last %}
+                                    <li><a href="{{ url_for('registration.newscategory', name=ksgs_tag.name) }}">{{ ksgs_tag.name }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ url_for('registration.newscategory', name=ksgs_tag.name) }}">{{ ksgs_tag.name }}</a></li>
+                                    <li role="separator" class="divider"></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </li>
 
@@ -50,18 +58,23 @@
                        aria-expanded="false"><i class="fa fa-mortar-board" aria-hidden="true"></i>&nbsp;等级介绍 <span
                             class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('registration.newscategory', name="初级") }}">初级</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="中级") }}">中级</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="{{ url_for('registration.newscategory', name="高级") }}">高级</a></li>
+                        {% if djjs_tags %}
+                           {% for djjs_tag in djjs_tags %}
+                                {% if loop.last %}
+                                    <li><a href="{{ url_for('registration.newscategory', name=djjs_tag.name) }}">{{ djjs_tag.name }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ url_for('registration.newscategory', name=djjs_tag.name) }}">{{ djjs_tag.name }}</a></li>
+                                    <li role="separator" class="divider"></li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </ul>
                 </li>
 
             </ul>
             <form class="navbar-form navbar-left" role="form" id="myform">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="搜索" id="info" style="width: 70%;">
+                    <input type="text" class="form-control" placeholder="参考书搜索" id="info" style="width: 70%;">
                     <span class="input-group-btn" style="float: left">
                         <a type="submit" class="btn btn-default" id="search"><span class="fa fa-search"/></a>
                     </span>

@@ -2,6 +2,9 @@
 {% block title %}
     注册
 {% endblock %}
+{% block css %}
+    <link href="{{ url_for('static', filename='css/jquery.slider.css') }}" rel="stylesheet"/>
+{% endblock %}
 {% block content %}
     <div class="container">
     <div class="login_con">
@@ -67,6 +70,11 @@
                 <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;&nbsp;{{ form.re_pwd.label }}
                 {{ form.re_pwd }}
             </div>
+            <div class="form-group">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{ form.captcha.label }}
+                    {{ form.captcha(type="hidden") }}
+                    <div id="slider1" class="slider"></div>
+                </div>
 {#            <div class="form-group">#}
 {#                <i class="fa fa-picture-o" aria-hidden="true"></i>&nbsp;&nbsp;{{ form.captcha.label }}#}
 {#                {{ form.captcha }}#}
@@ -78,4 +86,14 @@
 
     </div>
 </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ url_for('static', filename='js/jquery.slider.min.js') }}"></script>
+    <script>
+        $("#slider1").slider({
+            callback: function (result) {
+                $("#captcha").val(result);
+            }
+        });
+    </script>
 {% endblock %}
