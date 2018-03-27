@@ -848,7 +848,8 @@ def trinfo_list():
     page_data = Trinfo.query.order_by(
         Trinfo.addtime.asc()
     )
-    return render_template("admin/trinfo_list.html", page_data=page_data)
+    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+    return render_template("admin/trinfo_list.html", page_data=page_data, now=now)
 
 
 '''

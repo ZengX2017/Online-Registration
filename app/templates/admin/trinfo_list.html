@@ -51,7 +51,7 @@
                             {{ value.tinfo.tlevel.level + "——" +  value.tinfo.tsubject.subject + "——>" + value.tinfo.t_time.strftime('%Y-%m-%d %H:%M:%S') }} </td>
                         <td>{{ value.tinfo.personnum }}</td>
                         <td>{{ value.num }}</td>
-                        <td>{% if value.status %}可报名{% else %}不可报名{% endif %}</td>
+                        <td>{% if value.status and value.tinfo.t_time > now %}可报名{% else %}不可报名{% endif %}</td>
                         <td>{{ value.addtime }}</td>
                         <td class="actions">
                             <a href="{{ url_for('admin.trinfo_edit', id=value.id) }}"><i class="fa fa-pencil"></i></a>

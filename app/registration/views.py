@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename  # 安全修改文件名
 from werkzeug.security import generate_password_hash
 from flask_mail import Message
 from threading import Thread
+from sqlalchemy import distinct
 from . import registration
 import datetime
 import os
@@ -154,8 +155,21 @@ def index():
     advanced = index_infos("高级", 6)
 
     # 考试信息
-    tinfos = Tinfo.query.filter(Tinfo.refbook_id.isnot(None))
+    tinfos = Tinfo.query.order_by(
+        Tinfo.t_time.asc()
+    )
     tinfos = index_length(tinfos, 5)
+    distinct_list = []  # 去重列表
+    tinfo = []  # 去重后得到的对象列表
+    for va in tinfos:  # for循环为去重操作
+        tu = (va.level_id, va.subject_id)
+        if tu not in distinct_list:
+            distinct_list.append(tu)
+            tinfo.append(va)
+    tinfos = tinfo
+
+    # tinfos = Tinfo.query.filter(Tinfo.refbook_id.isnot(None))
+    # tinfos = index_length(tinfos, 5)
 
     # 尾部信息
     reg_infos = index_infos("报名安排", 5)
@@ -287,10 +301,20 @@ def tinfo(name):
     tinfos = Tinfo.query.order_by(
         Tinfo.t_time.asc()
     )  # 根据当前标签找出此标签下的所有内容
+    tinfos = index_length(tinfos, tinfos.count())
     now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
     time_diff = datetime.timedelta(days=30)
-    time_zero = datetime.timedelta(days=1)
-    tinfos = index_length(tinfos, tinfos.count())
+    time_zero = datetime.timedelta(days=7)
+
+    distinct_list = []  # 去重列表
+    tinfo = []  # 去重后得到的对象列表
+    for va in tinfos:  # for循环为去重操作
+        tu = (va.level_id, va.subject_id)
+        if tu not in distinct_list:
+            distinct_list.append(tu)
+            tinfo.append(va)
+
+    tinfos = tinfo
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
     ksgs_tags = nav_tags("考试概述")  # 考试概述
@@ -306,7 +330,19 @@ def tinfo(name):
 @registration.route("/tinfo_detail/<int:id>/", methods=["GET"])
 def tinfo_detail(id=None):
     tinfo = Tinfo.query.get_or_404(id)
+    level = tinfo.tlevel.level
+    subject = tinfo.tsubject.subject
+    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
     time_diff = datetime.timedelta(days=7)
+
+    tinfo = Tinfo.query.filter(
+        Tinfo.level_id == tinfo.level_id,
+        Tinfo.subject_id == tinfo.subject_id
+    ).order_by(
+        Tinfo.t_time.asc()
+    )
+
+    tinfo = index_length(tinfo, tinfo.count())
 
     latest_infos = latest_Infos(6)
 
@@ -314,9 +350,9 @@ def tinfo_detail(id=None):
     ksgs_tags = nav_tags("考试概述")  # 考试概述
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/tinfo_detail.html", tinfo=tinfo, time_diff=time_diff,
+    return render_template("registration/tinfo_detail.html", tinfo=tinfo, time_diff=time_diff, now=now,
                            latest_infos=latest_infos, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
-                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags, level=level, subject=subject)
 
 
 # 考试报名信息详情
@@ -324,7 +360,7 @@ def tinfo_detail(id=None):
 @login_req
 def trinfo(id=None):
     trinfo = Trinfo.query.filter_by(tinfo_id=id).first_or_404()
-    time_zero = datetime.timedelta(days=0)
+    time_diff = datetime.timedelta(days=7)
     now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
 
     latest_infos = latest_Infos(6)
@@ -333,9 +369,9 @@ def trinfo(id=None):
     ksgs_tags = nav_tags("考试概述")  # 考试概述
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    return render_template("registration/trinfo.html", trinfo=trinfo, time_zero=time_zero, latest_infos=latest_infos,
+    return render_template("registration/trinfo.html", trinfo=trinfo, latest_infos=latest_infos,
                            now=now, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
-                           zwgkNc=zwgkNc, zwgkTags=zwgkTags)
+                           zwgkNc=zwgkNc, zwgkTags=zwgkTags, time_diff=time_diff)
 
 
 '''

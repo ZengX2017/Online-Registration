@@ -1,12 +1,51 @@
 {% extends 'registration/registration.html' %}
 {% block css %}
     <link href="{{ url_for('static', filename='css/BreakingNews.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
     <style>
-        div.summer{
+        div.summer {
             margin: 0 40px;
         }
-        div.summer > p.summer_div{
+
+        div.summer > p.summer_div {
             margin-left: 18%;
+        }
+
+        hr.hr_style {
+            margin-top: -3px;
+        }
+
+        .table-striped > tbody > tr:nth-of-type(odd) {
+            background-color: #ffffff;
+        }
+
+        .table-bordered {
+            border: none;
+        }
+
+        table.table-bordered th:last-child, table.table-bordered td:last-child {
+            border-top-width: 0;
+            border-right-width: 0;
+        }
+
+        div.dataTables_paginate ul.pagination {
+            margin: 2px 0;
+            margin-top: 15px;
+            white-space: nowrap;
+        }
+
+        div#filter {
+            margin-top: 16px;
+        }
+
+        @media (max-width: 767px) {
+            div#filter {
+                margin: 0 auto;
+            }
+
+            a.a_style {
+                margin-top: 22px;
+            }
         }
     </style>
 {% endblock %}
@@ -15,7 +54,7 @@
         <div class="detail-div">
             <ol class="breadcrumb">
                 <li><a href="{{ url_for('registration.tinfo', name="近期考试报名") }}">考试报名</a></li>
-                <li class="active">{{ tinfo.tlevel.level + tinfo.tsubject.subject }}</li>
+                <li class="active">{{ level + subject }}</li>
             </ol>
         </div>
 
@@ -31,39 +70,44 @@
                         </div>
                     {% endfor %}
                     <!-- 消息闪现提示 -->
-                    <h3 class="text-center">{{ tinfo.tlevel.level + tinfo.tsubject.subject | truncate(20)}}</h3>
+                    <h3 class="text-center">{{ level + subject }}考点信息</h3>
                     <hr>
-                    <p class="text-center" style="margin: -10px 0 20px;">
-                        【发布日期：{{ tinfo.addtime.strftime("%Y-%m-%d") }}&nbsp;&nbsp;&nbsp;发布人：本站管理员】</p>
-                    <div class="summer">
-                        一、网上报名时间：
-                        <p class="summer_div"> {{ (tinfo.t_time - time_diff * 4).strftime("%Y-%m-%d") }} —— {{ (tinfo.t_time - time_diff).strftime("%Y-%m-%d") }}</p>
-                    </div>
-                    <div class="summer">
-                        二、考试时间：
-                        <p class="summer_div"> {{ (tinfo.t_time) }}</p>
-                    </div>
-                    <div class="summer">
-                        三、准考证打印时间：
-                        <p class="summer_div"> 考前一周自行打印 </p>
-                    </div>
-                    <div class="summer">
-                        四、考试地点：
-                        <p class="summer_div"> {{ tinfo.area + "---->"  + tinfo.examroom }} </p>
-                    </div>
-                    <hr>
-                        <!-- 介绍为newsinfo的数据 -->
-                        <a href="{{ url_for('registration.detail', id=tinfo.tlevel.level + tinfo.tsubject.subject) }}" target="_blank" class="pull-left">查看介绍&gt;&gt;</a>
-                        <a href="{{ url_for('registration.trinfo', id=tinfo.id) }}" target="_blank" class="pull-right">网上报名&gt;&gt;</a>
-
+                    <table class="table table-bordered table-striped" id="datatable-editable">
+                        <thead>
+                        <tr>
+                            <th class="text-center" style="display: none">g</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for value in tinfo %}
+                            <tr class="text-left">
+                                <td>
+                                    <a href="{{ url_for('registration.trinfo', id=value.id) }}" target="_blank">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
+                                        {{ value.area | safe }}&nbsp;—&nbsp;{{ value.examroom | safe | truncate(20) }}&nbsp;—&nbsp;{{ value.t_time }}
+                                        {% if value.t_time - now < time_diff %}
+                                            <span class="pull-right"> <span class="badge">已过期</span></span>
+                                        {% endif %}
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <hr class="hr_style">
+                    <!-- 介绍为newsinfo的数据 -->
+                    <a href="{{ url_for('registration.detail', id=level + subject) }}" target="_blank"
+                       class="pull-left a_style">查看介绍&gt;&gt;</a>
                 </div> <!-- panel-body -->
             </div>
             {% include 'registration/affairs_public.html' %}
             <div class="BreakingNewsController easing" id="breakingnews">
-            	<div class="bn-title"></div>
+                <div class="bn-title"></div>
                 <ul>
                     {% for latest_info in latest_infos %}
-                     <li><a href="{{ url_for('registration.detail', id=latest_info.id) }}">{{ latest_info.title }}</a></li>
+                        <li>
+                            <a href="{{ url_for('registration.detail', id=latest_info.id) }}">{{ latest_info.title }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -73,20 +117,48 @@
 {% endblock %}
 {% block js %}
     <script src="{{ url_for('static', filename='js/BreakingNews.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/datatables/dataTables.bootstrap.js') }}"></script>
     <script>
         $("#breakingnews").BreakingNews({
-            background		:'#FFF',
-			title			:'最新通知',
-			titlecolor		:'#ff0013',
-			titlebgcolor	:'#FFF',
-			linkcolor		:'#333',
-			linkhovercolor	:'#099',
-			fonttextsize	:16,
-			isbold			:false,
-			width			:'100%',
-			timer			:2000,
-			autoplay		:true,
-			effect			:'slide'
+            background: '#FFF',
+            title: '最新通知',
+            titlecolor: '#ff0013',
+            titlebgcolor: '#FFF',
+            linkcolor: '#333',
+            linkhovercolor: '#099',
+            fonttextsize: 16,
+            isbold: false,
+            width: '100%',
+            timer: 2000,
+            autoplay: true,
+            effect: 'slide'
+        });
+        <!-- 表格 -->
+        $('#datatable-editable').DataTable({
+            dom: 't<"#filter.pull-left"f><"pull-right"p><"clear">',
+            "oLanguage": {
+                "sLengthMenu": "每页显示 _MENU_ 条记录",
+                "sZeroRecords": "抱歉， 没有找到",
+                "sInfo": "从第 _START_ 条到第 _END_ 条/共 _TOTAL_ 条数据",
+                "sInfoEmpty": "没有数据",
+                "sInfoFiltered": "(从 _MAX_ 条数据中检索)",
+                "sZeroRecords": "没有检索到数据",
+                "sSearch": "查找：  ",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                }
+            },
+            "iDisplayLength": 5,
+            {#"lengthMenu": [5, 10, 15, 20],#}
+            "lengthChange": false,  //隐藏左上角Length页面
+            "searching": false,     //隐藏右上角本地搜索
+            "info": false,  //隐藏左下角提示信息
+            "pagingType": "full_numbers",
+            "ordering": false  {#取消全局排序#}
         });
     </script>
 {% endblock %}

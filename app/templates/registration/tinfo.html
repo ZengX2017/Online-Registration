@@ -5,16 +5,13 @@
         .table-striped > tbody > tr:nth-of-type(odd) {
             background-color: #ffffff;
         }
-
         .table-bordered {
             border: none;
         }
-
         table.table-bordered th:last-child, table.table-bordered td:last-child {
             border-top-width: 0;
             border-right-width: 0;
         }
-
         div.dataTables_paginate ul.pagination {
             margin: 2px 0;
             margin-top: 15px;
@@ -85,33 +82,21 @@
                                                    target="_blank">
                                                     <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
                                                     {{ tinfo.tlevel.level | safe }}&nbsp;—&nbsp;{{ tinfo.tsubject.subject | safe | truncate(20) }}
-                                                    考试时间：{{ tinfo.t_time }}
-                                                    <span class="pull-right"> [{{ tinfo.addtime }}]</span>
+{#                                                    <span style="color:#ac0011">注：考试报名提前一周</span>#}
+                                                    <span class="pull-right"> [{{ tinfo.addtime.strftime("%Y-%m-%d") }}]</span>
                                                 </a>
                                             </td>
                                         </tr>
                                     {% endif %}
                                 {% else %}
                                     <tr class="text-left">
-                                        {% if tinfo.t_time < now %}
                                         <td>
                                             <a href="{{ url_for('registration.tinfo_detail', id=tinfo.id) }}" target="_blank">
                                                 <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
                                                 {{ tinfo.tlevel.level | safe }}&nbsp;—&nbsp;{{ tinfo.tsubject.subject | safe | truncate(20) }}
-                                                考试时间：{{ tinfo.t_time }}
-                                                <span class="pull-right"> <span class="badge">已过期</span>[{{ tinfo.addtime }}]</span>
+                                                <span class="pull-right"> [{{ tinfo.addtime.strftime("%Y-%m-%d") }}]</span>
                                             </a>
                                         </td>
-                                        {% else %}
-                                        <td>
-                                            <a href="{{ url_for('registration.tinfo_detail', id=tinfo.id) }}" target="_blank">
-                                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
-                                                {{ tinfo.tlevel.level | safe }}&nbsp;—&nbsp;{{ tinfo.tsubject.subject | safe | truncate(20) }}
-                                                考试时间：{{ tinfo.t_time }}
-                                                <span class="pull-right"> [{{ tinfo.addtime }}]</span>
-                                            </a>
-                                        </td>
-                                        {% endif %}
                                     </tr>
                                 {% endif %}
                             {% endfor %}

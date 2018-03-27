@@ -344,73 +344,72 @@ NewsTag.id == newstag.id
 
         <!--左侧栏-->
         <div class="panel panel-default col-md-10">
-                <div class="panel-heading">{{ refbook.title | truncate(20) }}</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">书名：</label>
-                            <div class="col-md-10">
-                                <input class="form-control" value="{{ refbook.title }}" disabled>
-                            </div>
+            <div class="panel-heading">{{ refbook.title | truncate(20) }}</div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">书名：</label>
+                        <div class="col-md-10">
+                            <input class="form-control" value="{{ refbook.title }}" disabled>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">作者：</label>
-                            <div class="col-md-10">
-                                <input class="form-control" value="{{ refbook.author }}" disabled>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">作者：</label>
+                        <div class="col-md-10">
+                            <input class="form-control" value="{{ refbook.author }}" disabled>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">ISBN：</label>
-                            <div class="col-md-10">
-                                <input class="form-control" value="{{ refbook.ISBN }}" disabled>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">ISBN：</label>
+                        <div class="col-md-10">
+                            <input class="form-control" value="{{ refbook.ISBN }}" disabled>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">出版社：</label>
-                            <div class="col-md-10">
-                                <input class="form-control" value="{{ refbook.public }}" disabled>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">出版社：</label>
+                        <div class="col-md-10">
+                            <input class="form-control" value="{{ refbook.public }}" disabled>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">页码：</label>
-                            <div class="col-md-10">
-                                <input class="form-control" value="{{ refbook.pages }}" disabled>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">页码：</label>
+                        <div class="col-md-10">
+                            <input class="form-control" value="{{ refbook.pages }}" disabled>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">封面：</label>
-                            <div class="col-md-10">
-                                <img src="{{ url_for('static', filename='uploads/books/'+refbook.logo) }}" alt="图书封面pic"
-                                     style="width: 100%">
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">封面：</label>
+                        <div class="col-md-10">
+                            <img src="{{ url_for('static', filename='uploads/books/'+refbook.logo) }}" alt="图书封面pic"
+                                 style="width: 100%">
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">价格：</label>
-                            <div class="col-md-10">
-                                <input class="form-control" value="{{ refbook.price }}" disabled>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">价格：</label>
+                        <div class="col-md-10">
+                            <input class="form-control" value="{{ refbook.price }}" disabled>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">出版日期：</label>
-                            <div class="col-md-10">
-                                <input class="form-control" value="{{ refbook.pubdate }}" disabled>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">出版日期：</label>
+                        <div class="col-md-10">
+                            <input class="form-control" value="{{ refbook.pubdate }}" disabled>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">图书简介：</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control" rows="10" disabled>{{ refbook.info }}</textarea>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">图书简介：</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="10" disabled>{{ refbook.info }}</textarea>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
+        </div>
 
         {% include 'registration/affairs_public.html' %}
     </div>
 {% endblock %}
 <!-- refbook_detail.html -->
-
 
 
 <!-- 为了统一风格，动态显示标签，对nav.html进行大幅度修改，原内容如下 -->
@@ -507,3 +506,49 @@ NewsTag.id == newstag.id
     </div>
 </nav>
 <!-- nav.html -->
+
+<!-- tinfo.html -->
+<td>
+    <a data-toggle="modal" data-target="#myModal{{ tinfo.id }}">
+        <i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;
+        {{ tinfo.tlevel.level | safe }}&nbsp;—&nbsp;{{ tinfo.tsubject.subject | safe | truncate(20) }}
+        <span class="pull-right"> [{{ tinfo.addtime.strftime('%Y-%m-%d') }}]</span>
+    </a>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal{{ tinfo.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"
+                        id="myModalLabel">{{ tinfo.tlevel.level | safe + tinfo.tsubject.subject | safe | truncate(20) }}</h4>
+                </div>
+                {% for tlist in tinfo_list %}
+                    {% if tinfo.level_id == tlist.level_id and tinfo.subject_id == tlist.subject_id %}
+                        {% if tlist.t_time - now <= time_zero %}
+                            <div class="modal-body">
+                                <a href="{{ url_for('registration.tinfo_detail', id=tlist.id) }}" target="_blank">
+                                    <i class="fa fa-angle-double-right"
+                                       aria-hidden="true"></i>&nbsp;{{ tlist.area + "——>" + tlist.examroom + "——>" + tlist.t_time.strftime("%Y-%m-%d %H:%M:%S") }}
+                                </a>
+                                <span class="badge">已过期</span>
+                            </div>
+                        {% else %}
+                            <div class="modal-body">
+                                <a href="{{ url_for('registration.tinfo_detail', id=tlist.id) }}" target="_blank">
+                                    <i class="fa fa-angle-double-right"
+                                       aria-hidden="true"></i>&nbsp;{{ tlist.area + "——>" + tlist.examroom + "——>" + tlist.t_time.strftime("%Y-%m-%d %H:%M:%S") }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</td>
+<!-- tinfo.html -->
