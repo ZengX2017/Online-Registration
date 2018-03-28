@@ -5,6 +5,7 @@ import os
 import datetime
 import uuid
 import stat
+import arrow
 
 from flask import render_template, redirect, url_for, flash, session, request, abort
 from werkzeug.utils import secure_filename  # 安全修改文件名
@@ -65,14 +66,41 @@ def index_length(oplog_list=None, name=None, length=None):  # 将数据集转为
 
 def time_chart(days=0):
     admissions = Admission.query.all()  # 取出所有准考证的记录
-    now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
-    time_diff = datetime.timedelta(days=int(days))  # 根据所传参数取得时间差
-    tt = (now - time_diff).strftime("%Y/%m/%d")  # 时间差后的当天日期
+    # datetime格式
+    # now = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+    # time_diff = datetime.timedelta(days=int(days))  # 根据所传参数取得时间差
+    # tt = (now - time_diff).strftime("%Y/%m/%d")  # 时间差后的当天日期
+
+    # arrow格式
+    now = arrow.now()
+    tt = now.shift(days=-int(days)).format("YYYY/MM/DD")  # 时间差后的当天日期
     cost = 0  # 时间差后的当天总费用，默认为0
     for va in admissions:  # 遍历准考证记录
-        # time = now - time_diff
         if tt == va.addtime.strftime("%Y/%m/%d"):  # 如果准考证中出现了与时间差后的当天日期相等的记录，则计算总费用
             cost = cost + va.trinfo.tinfo.price
+    cost = round(cost, 2)
+    chart_list = (tt, cost)  # 当前时间差的日期和总费用集合
+    return chart_list
+
+
+'''
+理解本方法（month_chart）：
+    本方法是为了将数据用图表显示在index首页而设计出来，根据n个循环（n个月即n次）来找出所传参数当天的报名总费用，
+然后将日期和费用值打包成元祖返回至调用处。（近n个月的数据情况）
+'''
+
+
+def month_chart(months=0):
+    admissions = Admission.query.all()  # 取出所有准考证的记录
+    # arrow格式
+    now = arrow.now()
+    tt = now.shift(months=-int(months)).format("YYYY/MM")  # 时间差后的当天日期
+
+    cost = 0  # 时间差后的当天总费用，默认为0
+    for va in admissions:  # 遍历准考证记录
+        if tt == va.addtime.strftime("%Y/%m"):  # 如果准考证中出现了与时间差后的当天日期相等的记录，则计算总费用
+            cost = cost + va.trinfo.tinfo.price
+    cost = round(cost, 2)
     chart_list = (tt, cost)  # 当前时间差的日期和总费用集合
     return chart_list
 
@@ -81,31 +109,28 @@ def time_chart(days=0):
 @admin.route("/")
 @login_req
 def index():
-    oplog_list = Oplog.query.order_by(
-        Oplog.addtime.asc()
-    )
     cost = 0
     admissions = Admission.query.all()  # 目的是为了找出总费用
     for admission in admissions:
         cost = cost + Tinfo.query.get_or_404(Trinfo.query.get_or_404(admission.trinfo_id).tinfo_id).price
+    cost = round(cost, 2)
 
     user_count = User.query.count()
 
-    time_diff = datetime.timedelta(days=1)
-
     chart_list = []
     for i in range(7):
-        chart_list.append(time_chart(7 - (i+1)))  # 首页图表用
+        chart_list.append(time_chart(7 - (i + 1)))  # 首页line图表用
 
-    oplog_book_list = index_length(oplog_list, "参考书", 3)
+    bar_list = []
+    for i in range(3):
+        bar_list.append(month_chart(3 - (i + 1)))  # 首页bar图表用
 
-    oplog_news_list = index_length(oplog_list, "新闻", 3)
+    pie_list = []
+    for i in range(12):
+        pie_list.append(month_chart(12 - (i + 1)))  # 首页pie图表用
 
-    oplog_test_list = index_length(oplog_list, "考试信息", 3)
-
-    return render_template("admin/index.html", oplog_book_list=oplog_book_list, oplog_news_list=oplog_news_list,
-                           oplog_test_list=oplog_test_list, user_count=user_count, cost=cost, time_diff=time_diff,
-                           chart_list=chart_list)
+    return render_template("admin/index.html", user_count=user_count, cost=cost, chart_list=chart_list,
+                           bar_list=bar_list, pie_list=pie_list)
 
 
 # 登录

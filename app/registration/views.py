@@ -407,8 +407,8 @@ def admission_generate(trinfo_id=None, user_id=None):
     if (trinfo.num + 1) % trinfo.tinfo.personnum == 0:
         seat = trinfo.tinfo.personnum
     else:
-        if trinfo.num / 10 == 0:
-            seat = str(0) + str((trinfo.num + 1) % trinfo.tinfo.personnum)  # 座位号，1到personnum
+        if trinfo.num // 10 == 0:  # 整除
+            seat = str(0) + "" + str((trinfo.num + 1) % trinfo.tinfo.personnum)  # 座位号，1到personnum
         else:
             seat = str((trinfo.num + 1) % trinfo.tinfo.personnum)
 
@@ -668,7 +668,7 @@ def userlog():
     page_data = Userlog.query.join(User).filter(
         Userlog.user_id == session["user_id"]
     ).order_by(
-        Userlog.addtime.asc()
+        Userlog.addtime.desc()
     )
     gzdt_tags = nav_tags("工作动态")  # 工作动态
     ksgs_tags = nav_tags("考试概述")  # 考试概述

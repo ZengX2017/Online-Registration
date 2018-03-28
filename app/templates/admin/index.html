@@ -25,6 +25,51 @@
             </div>
         </div> <!-- end row -->
 
+        <!-- other Chart -->
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="portlet"><!-- /primary heading -->
+                    <div class="portlet-heading">
+                        <h3 class="portlet-title text-dark">
+                            近1年的报名费用情况
+                        </h3>
+                        <div class="portlet-widgets">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#pie-default"><i
+                                    class="ion-minus-round"></i></a>
+                            <span class="divider"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="pie-default" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <div id="pie-Chart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="portlet"><!-- /primary heading -->
+                    <div class="portlet-heading">
+                        <h3 class="portlet-title text-dark">
+                            近3个月的报名费用情况
+                        </h3>
+                        <div class="portlet-widgets">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#bar-default"><i
+                                    class="ion-minus-round"></i></a>
+                            <span class="divider"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="bar-default" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <div id="bar-Chart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End other Chart-->
+
         <!-- Line Chart -->
         <div class="row">
             <div class="col-sm-12">
@@ -42,7 +87,7 @@
                     </div>
                     <div id="bg-default" class="panel-collapse collapse in">
                         <div class="portlet-body">
-                            <div id="myChart2" style="height: 300px;"></div>
+                            <div id="line-Chart" style="height: 300px;"></div>
                         </div>
                     </div>
                 </div>
@@ -55,68 +100,21 @@
                 <ul class="timeline">
                     <li>
                         <div class="timeline-badge success"><i class="fa fa-calendar"></i>
-                            {#                            <i class="fa fa-check"></i>#}
                         </div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4 class="timeline-title">新闻操作动态</h4>
+                                <h4 class="timeline-title">End</h4>
                                 <hr>
                             </div>
                             <div class="timeline-body">
-                                {% for oplog in oplog_news_list %}
-                                    <p>
-                                        <b>{{ loop.index }}.{{ oplog.admin.name }}</b>&nbsp;&nbsp;-->&nbsp;&nbsp;{{ oplog.opdetail }}<br>
-                                        <b>操作时间：</b>&nbsp;&nbsp;{{ oplog.addtime }}
-                                    </p>
-                                {% endfor %}
+                                <p>2018年3月21日星期三 13点41分，本系统基本结束</p>
                                 <hr>
-                                <a href="{{ url_for('admin.newsinfo_list') }}">More&gt;&gt;</a>
                             </div>
                         </div>
                     </li>
 
                     <li class="timeline-inverted">
-                        <div class="timeline-badge warning"><i class="fa fa-tags"></i>
-                        </div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">考试操作动态</h4>
-                                <hr>
-                            </div>
-                            <div class="timeline-body">
-                                {% for oplog in oplog_test_list %}
-                                    <p>
-                                        <b>{{ loop.index }}.{{ oplog.admin.name }}</b>&nbsp;&nbsp;-->&nbsp;&nbsp;{{ oplog.opdetail }}<br>
-                                        <b>操作时间：</b>&nbsp;&nbsp;{{ oplog.addtime }}
-                                    </p>
-                                {% endfor %}
-                                <hr>
-                                <a href="{{ url_for('admin.tinfo_list') }}">More&gt;&gt;</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="timeline-badge info"><i class="fa fa-book"></i>
-                        </div>
-                        <div class="timeline-panel">
-                            <div class="timeline-heading">
-                                <h4 class="timeline-title">参考书操作动态</h4>
-                                <hr>
-                            </div>
-                            <div class="timeline-body">
-                                {% for oplog in oplog_book_list %}
-                                    <p>
-                                        <b>{{ loop.index }}.{{ oplog.admin.name }}</b>&nbsp;&nbsp;-->&nbsp;&nbsp;{{ oplog.opdetail }}<br>
-                                        <b>操作时间：</b>&nbsp;&nbsp;{{ oplog.addtime }}
-                                    </p>
-                                {% endfor %}
-                                <hr>
-                                <a href="{{ url_for('admin.refbook_list') }}">More&gt;&gt;</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="timeline-inverted">
-                        <div class="timeline-badge success"><i class="fa fa-thumbs-up"></i>
+                        <div class="timeline-badge info"><i class="fa fa-thumbs-up"></i>
                         </div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
@@ -146,7 +144,104 @@
             $("#g-1").addClass("active");
         });
 
-        Highcharts.chart('myChart2', {
+        Highcharts.chart('pie-Chart', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: false
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: '费用占比',
+                colorByPoint: true,
+                data: [
+                    {% for pie in pie_list %}
+                        {% if loop.index %}
+                            {
+                                name: '{{ pie[0] }}',
+                                y: {{ pie[1] }},
+                                sliced: true,
+                                selected: true
+                            },
+                        {% else %}
+                            {
+                                name: '{{ pie[0] }}',
+                                y: {{ pie[1] }}
+                            },
+                        {% endif %}
+
+                    {% endfor %}
+                ]
+            }]
+        });
+
+        Highcharts.chart('bar-Chart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: [
+                    {% for bar in bar_list %}
+                        '{{ bar[0] }}',
+                    {% endfor %}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: false
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                series: {
+                    colorByPoint: true
+                }
+            },
+            series: [{
+                name: '费用',
+                data: [
+                    {% for bar in bar_list %}
+                        {{ bar[1] }},
+                    {% endfor %}
+                ]
+            }],
+
+        });
+
+        Highcharts.chart('line-Chart', {
             title: {
                 text: ''
             },

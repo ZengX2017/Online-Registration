@@ -7,4 +7,5 @@
 
 
 # 后台首页
-![后台首页](https://github.com/ZengX2017/Online-Registration/blob/master/screenshots/admin-index.png)
+![后台首页-1](https://github.com/ZengX2017/Online-Registration/blob/master/screenshots/admin-index-1.png)
+![后台首页-2](https://github.com/ZengX2017/Online-Registration/blob/master/screenshots/admin-index-2.png)
