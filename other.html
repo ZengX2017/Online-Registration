@@ -552,3 +552,61 @@ NewsTag.id == newstag.id
     </div>
 </td>
 <!-- tinfo.html -->
+
+<!-- admin/index.html -->
+<script>
+    <!-- Morris.js插件图表生成 -->
+    new Morris.Bar({
+        // ID of the element in which to draw the chart.
+        element: 'bar_chart',
+        // Chart data records -- each entry in this array corresponds to a point on
+        // the chart.
+        data: [
+            {% for chart in chart_list %}
+                {day: '{{ chart[0] }}', value: {{ chart[1] }}},
+            {% endfor %}
+        ],
+        // The name of the data record attribute that contains x-values.
+        xkey: 'day',
+        // A list of names of data record attributes that contain y-values.
+        ykeys: ['value'],
+        // Labels for the ykeys -- will be displayed when you hover over the
+        // chart.
+        labels: ['费用'],
+        barColors: ["#61adc0"],
+        hideHover: true
+    });
+    <!-- Morris.js插件图表生成 End -->
+
+    <!-- Echarts.js插件图表生成 -->
+    var myChart = echarts.init(document.getElementById('myChart'));
+    // 指定图表的配置项和数据
+    var option = {
+        tooltip: {},
+        legend: {
+            data: ['费用']
+        },
+        xAxis: {
+            data: [
+                {% for chart in chart_list %}
+                    "{{ chart[0] }}",
+                {% endfor %}
+            ]
+        },
+        yAxis: {},
+        series: [{
+            name: '费用',
+            type: 'bar',
+            data: [
+                {% for chart in chart_list %}
+                    "{{ chart[1] }}",
+                {% endfor %}
+            ]
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    <!-- Echarts.js插件图表生成 End -->
+
+</script>
+<!-- admin/index.html -->

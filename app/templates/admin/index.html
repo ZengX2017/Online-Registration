@@ -1,4 +1,7 @@
 {% extends 'admin/admin.html' %}
+{% block css %}
+    <link href="https://cdn.bootcss.com/highcharts/6.0.7/css/highcharts.css" rel="stylesheet">
+{% endblock %}
 {% block content %}
     <div class="wraper container-fluid">
         <div class="page-title">
@@ -21,6 +24,31 @@
                 </div>
             </div>
         </div> <!-- end row -->
+
+        <!-- Line Chart -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="portlet"><!-- /primary heading -->
+                    <div class="portlet-heading">
+                        <h3 class="portlet-title text-dark">
+                            近7天的报名费用情况
+                        </h3>
+                        <div class="portlet-widgets">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#bg-default"><i
+                                    class="ion-minus-round"></i></a>
+                            <span class="divider"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="bg-default" class="panel-collapse collapse in">
+                        <div class="portlet-body">
+                            <div id="myChart2" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- col -->
+        </div>
+        <!-- End Line Chart-->
 
         <div class="row">
             <div class="col-sm-12">
@@ -109,9 +137,64 @@
     </div>
 {% endblock %}
 {% block js %}
+    <script src="https://cdn.bootcss.com/highcharts/6.0.7/highcharts.js"></script>
+    <script src="https://cdn.bootcss.com/highcharts/6.0.7/js/modules/series-label.js"></script>
+    <script src="https://cdn.bootcss.com/highcharts/6.0.7/js/modules/exporting.js"></script>
+
     <script>
         $(document).ready(function () {
             $("#g-1").addClass("active");
+        });
+
+        Highcharts.chart('myChart2', {
+            title: {
+                text: ''
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: [
+                    {% for chart in chart_list %}
+                        '{{ chart[0] }}',
+                    {% endfor %}
+                ]
+            },
+            yAxis: {
+                title: {
+                    text: false
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            series: [{
+                name: '费用',
+                data: [
+                    {% for chart in chart_list %}
+                        {{ chart[1] }},
+                    {% endfor %}
+                ]
+            }],
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
         });
     </script>
 {% endblock %}
