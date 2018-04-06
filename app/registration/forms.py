@@ -113,6 +113,12 @@ class LoginForm(FlaskForm):
         }
     )
 
+    def validate_email(self, field):
+        email = field.data
+        user = User.query.filter_by(email=email).count()
+        if user == 0:
+            raise ValidationError("账号不存在！")
+
 
 class UserInfoForm(FlaskForm):
     name = StringField(
