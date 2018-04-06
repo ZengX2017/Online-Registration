@@ -8,6 +8,7 @@
     <title>{% block title %}在线报名{% endblock %}</title>
 
     <!-- Bootstrap -->
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon" />
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/rg_style.css') }}" rel="stylesheet">
@@ -61,8 +62,8 @@
         <div class="col-md-4 col-md-offset-4 col-xs-12">
             <ul class="li-align">
                 <h2 class="text-center"><i class="fa fa-phone fa-fw" aria-hidden="true"></i>&nbsp;联系我们</h2>
-{#                <p></p>#}
-{#                <h4><a href="#"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;联系我们</a></h4>#}
+                <p></p>
+                <h4><a href="tencent://message/?uin=914823588&Site=&Menu=yes"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;联系我们</a></h4>
                 <p></p>
                 <h4><a href="{{ url_for('registration.advice') }}"><i class="fa fa-angle-double-right"></i>&nbsp;&nbsp;相关建议</a></h4>
                 <p></p>

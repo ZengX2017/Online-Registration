@@ -3,14 +3,6 @@
     <link href="{{ url_for('static', filename='css/BreakingNews.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/jquery-datatables-editable/datatables.css') }}"/>
     <style>
-        div.summer {
-            margin: 0 40px;
-        }
-
-        div.summer > p.summer_div {
-            margin-left: 18%;
-        }
-
         hr.hr_style {
             margin-top: -3px;
         }
@@ -136,7 +128,7 @@
         });
         <!-- 表格 -->
         $('#datatable-editable').DataTable({
-            dom: 't<"#filter.pull-left"f><"pull-right"p><"clear">',
+            dom: 't<"#filter.text-center"f><"pull-right"p><"clear">',
             "oLanguage": {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "抱歉， 没有找到",
@@ -155,7 +147,7 @@
             "iDisplayLength": 5,
             {#"lengthMenu": [5, 10, 15, 20],#}
             "lengthChange": false,  //隐藏左上角Length页面
-            "searching": false,     //隐藏右上角本地搜索
+            "searching": true,     //隐藏右上角本地搜索
             "info": false,  //隐藏左下角提示信息
             "pagingType": "full_numbers",
             "ordering": false  {#取消全局排序#}

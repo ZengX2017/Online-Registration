@@ -172,9 +172,9 @@ ul.panel-ul>a.list-group-item{
         margin: -30px auto 0;
         width: auto;
     }
-    hr{
-        display: none;
-    }
+    /*hr{*/
+        /*display: none;*/
+    /*}*/
 }
 /*panelEnd*/
 

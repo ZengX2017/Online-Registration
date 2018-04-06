@@ -118,10 +118,10 @@ class NewsInfoForm(FlaskForm):
         }  # 附加选项
     )
 
-    # def validate_title(self, field):
-    #     title = field.data
-    #     if "软件" not in title and "计算机" not in title:
-    #         raise ValidationError("请输入正确的标题！")
+    def validate_title(self, field):
+        title = field.data
+        if "软件" not in title and "计算机" not in title and "考试" not in title:
+            raise ValidationError("请输入正确的标题！")
 
 
 class TlevelForm(FlaskForm):

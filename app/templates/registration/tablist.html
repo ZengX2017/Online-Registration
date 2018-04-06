@@ -17,7 +17,7 @@
             <div class="row feature">
                 {% for pri in primary %}
                     <div class="padding-enlg"><a href="{{ url_for("registration.detail", id=pri.id) }}">{{ pri.title | safe | truncate(25) }}
-                        <span class="pull-right">{{ pri.addtime }}</span></a></div>
+                        <span class="pull-right">{{ pri.addtime.strftime("%Y-%m-%d") }}</span></a></div>
                 {% endfor %}
                 <a href="{{ url_for('registration.newscategory', name="初级") }}" class="pull-right">More&gt;&gt;</a>
             </div>

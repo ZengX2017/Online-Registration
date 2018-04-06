@@ -55,7 +55,7 @@
 {% block content %}
     <!--内容-->
     <div class="container" style="margin-top: -20px;padding-bottom: 20px;">
-        <img src="{{ url_for('static', filename='images/topimg.png') }}" alt="顶部图片" class="center-img">
+        <img src="{{ url_for('static', filename='images/imgtop.png') }}" alt="顶部图片" class="center-img">
         <div class="row">
             {% include 'registration/banner.html' %}
 
@@ -119,17 +119,17 @@
                         <a href="{{ url_for('registration.newscategory', name='考试介绍') }}" class="list-group-item">
                             <h5 class="list-group-item-heading">考试介绍</h5>
                             <h6 class="list-group-item-text">
-                               <!-- 72个字符 --> 计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）...</h6>
+                               计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软...</h6>
                         </a>
                         <a href="{{ url_for('registration.newscategory', name='资格介绍') }}" class="list-group-item">
                             <h5 class="list-group-item-heading">资格介绍</h5>
                             <h6 class="list-group-item-text">
-                                计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软...</h6>
+                                计算机软件资格考试分为3个资格级别，分别为初级，中级和高级，其中每个级别都有对应的相应...</h6>
                         </a>
                         <a href="{{ url_for('registration.newscategory', name='考试教程和大纲') }}" class="list-group-item">
                             <h5 class="list-group-item-heading">考试教程和大纲</h5>
                             <h6 class="list-group-item-text">
-                                计算机技术与软件专业技术资格（水平）考试（以下简称计算机软件资格考试）是原中国计算机软...</h6>
+                                计算机软件资格考试的每个考试科目都有相应的考试教程和大纲，同时辅以指导书...</h6>
                         </a>
                     </ul>
 
@@ -163,7 +163,7 @@
                         {% for reg_info in reg_infos %}
                            <li><a href="{{ url_for('registration.detail', id=reg_info.id) }}">
                             <h4>{{ reg_info.title | safe | truncate(25) }}</h4>
-                            <span>{{ reg_info.addtime }}</span></a></li>
+                            <span>{{ reg_info.addtime.strftime("%Y-%m-%d") }}</span></a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -184,6 +184,6 @@
 		    animation: 'fade',
 		    mousePause: false,
 		    showItems: 4
-	    });
+        });
     </script>
 {% endblock %}

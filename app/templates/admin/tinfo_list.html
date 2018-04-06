@@ -33,7 +33,6 @@
                         <th class="text-center">考试区域</th>
                         <th class="text-center">考试地点</th>
                         <th class="text-center">考试时间</th>
-                        <th class="text-center">添加时间</th>
                         <th class="text-center">操作事项</th>
                     </tr>
                     </thead>
@@ -46,7 +45,6 @@
                         <td>{{ value.area }}</td>
                         <td>{{ value.examroom }}</td>
                         <td>{{ value.t_time }}</td>
-                        <td>{{ value.addtime }}</td>
                         <td class="actions">
                             <a href="{{ url_for('admin.tinfo_edit', id=value.id) }}"><i class="fa fa-pencil"></i></a>
                             <a href="{{ url_for('admin.tinfo_del', id=value.id) }}"><i class="fa fa-trash-o"></i></a>
@@ -90,7 +88,7 @@
             },
             "iDisplayLength": 10,
             "lengthMenu": [5, 10, 20, 50],
-            {#"searching": false,#}
+            "searching": false,
             "pagingType": "full_numbers"
         });
         $(document).ready(function () {

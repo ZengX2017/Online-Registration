@@ -42,9 +42,9 @@
 
                     </div>
                     <input type="hidden" value="{{ newsinfo.content }}" id="article_content">
-                    {% if newsinfo.img %}
-                        <img src="{{ url_for('static', filename='uploads/newsinfos/'+newsinfo.img) }}" alt="新闻资讯pic" style="width: 100%">
-                    {% endif %}
+{#                    {% if newsinfo.img %}#}
+{#                        <img src="{{ url_for('static', filename='uploads/newsinfos/'+newsinfo.img) }}" alt="新闻资讯pic" style="width: 100%">#}
+{#                    {% endif %}#}
                     <hr>
                     <span style="color:#aca8a8">{{ newsinfo.remark }}</span>
                 </div> <!-- panel-body -->

@@ -50,7 +50,7 @@
                                         <img src="{{ url_for('static', filename='uploads/books/' + newsinfo.logo) }}"
                                              alt="图书封面pic" class="img-block" style="width:250px;height: 250px;">
                                         <div class="caption text-center">
-                                            <h3>{{ newsinfo.title | safe | truncate(8) }}</h3>
+                                            <h3>{{ newsinfo.title | truncate(5) }}</h3>
                                             <p>{{ newsinfo.info | truncate(20) }}</p>
                                             <p class="text-right"><a href="{{ url_for('registration.refbook_detail', id=newsinfo.id) }}">查看更多&nbsp;<i
                                                     class="fa fa-angle-double-right"
@@ -91,7 +91,7 @@
                     "sLast": "尾页"
                 }
             },
-            "iDisplayLength": 9,
+            "iDisplayLength": 6,
             {#"lengthMenu": [5, 10, 15, 20],#}
             "lengthChange": false,  //隐藏左上角Length页面
             "searching": false,     //隐藏右上角本地搜索

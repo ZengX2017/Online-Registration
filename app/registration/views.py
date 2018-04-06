@@ -139,7 +139,7 @@ def index():
     newstags = index_length(newstags, 5)
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
 
     # 最新通知
@@ -199,7 +199,7 @@ def search():
     newsinfos = index_length(newsinfos, count)
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
@@ -213,7 +213,7 @@ def refbook_detail(id=None):
     refbook = Refbook.query.get_or_404(id)
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
 
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
@@ -244,7 +244,7 @@ def newscategory(name):
     )  # 根据当前标签找出此标签下的所有内容
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     newsinfos = index_length(newsinfos, newsinfos.count())
 
@@ -275,7 +275,7 @@ def detail(id=None):
     db.session.commit()
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/detail.html", newsinfo=newsinfo, newstag=newstag, ksgs_tags=ksgs_tags,
@@ -317,7 +317,7 @@ def tinfo(name):
     tinfos = tinfo
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/tinfo.html", newstag=newstag, newstag_name=newstag_name,
@@ -347,7 +347,7 @@ def tinfo_detail(id=None):
     latest_infos = latest_Infos(6)
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/tinfo_detail.html", tinfo=tinfo, time_diff=time_diff, now=now,
@@ -366,7 +366,7 @@ def trinfo(id=None):
     latest_infos = latest_Infos(6)
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/trinfo.html", trinfo=trinfo, latest_infos=latest_infos,
@@ -455,7 +455,7 @@ def registration_query():
             db.session.commit()
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/registration_query.html", admissions=admissions, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
                            djjs_tags=djjs_tags)
@@ -471,7 +471,7 @@ def registration_detail(id=None):
     latest_infos = latest_Infos(6)
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/registration_detail.html", admission=admission, seat=seat,
@@ -490,9 +490,9 @@ def login():
             flash("密码错误！", "err")
             return redirect(url_for("registration.login"))
 
-        if not data["captcha"]:
-            flash("请拖动滑块！", "err")
-            return redirect(url_for("registration.login"))
+        # if not data["captcha"]:
+        #     flash("请拖动滑块！", "err")
+        #     return redirect(url_for("registration.login"))
 
         session["user"] = user.email
         session["user_id"] = user.id
@@ -505,7 +505,7 @@ def login():
         return redirect(request.args.get("next") or url_for("registration.userinfo"))  # 登录后返回之前位置实现失败
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/login.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
                            djjs_tags=djjs_tags)
@@ -526,15 +526,15 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         data = form.data
-        if not data["captcha"]:
-            flash("请拖动滑块！", "err")
-            return redirect(url_for("registration.register"))
+        # if not data["captcha"]:
+        #     flash("请拖动滑块！", "err")
+        #     return redirect(url_for("registration.register"))
 
         user = User(
             name=data["name"],
             email=data["email"],
             pwd=generate_password_hash(data["pwd"]),
-            gender=0,
+            gender=1,
             id_status=0
         )
         db.session.add(user)
@@ -543,7 +543,7 @@ def register():
         return redirect(url_for("registration.login"))
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/register.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
                            djjs_tags=djjs_tags)
@@ -583,7 +583,7 @@ def forgetPwd():
         return redirect(url_for("registration.login"))
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/forgetPwd.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
                            djjs_tags=djjs_tags)
@@ -634,7 +634,7 @@ def userinfo():
         return redirect(url_for("registration.userinfo"))
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/userinfo.html", form=form, user=user, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
                            djjs_tags=djjs_tags)
@@ -655,7 +655,7 @@ def change_pwd():
         return redirect(url_for('registration.logout'))
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/change_pwd.html", form=form, user=user, gzdt_tags=gzdt_tags,
                            ksgs_tags=ksgs_tags, djjs_tags=djjs_tags)
@@ -671,7 +671,7 @@ def userlog():
         Userlog.addtime.desc()
     )
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/userlog.html", page_data=page_data, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags,
                            djjs_tags=djjs_tags)
@@ -682,7 +682,7 @@ def userlog():
 def about_us():
     gzdt_tags = nav_tags("工作动态")  # 工作动态
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     return render_template("registration/about.html", gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
                            zwgkNc=zwgkNc, zwgkTags=zwgkTags)
@@ -705,7 +705,7 @@ def advice():
         return redirect(url_for("registration.advice"))
 
     gzdt_tags = nav_tags("工作动态")  # 工作动态
-    ksgs_tags = nav_tags("考试概述")  # 考试概述
+    ksgs_tags = nav_tags("考试报名")  # 考试报名
     djjs_tags = nav_tags("等级介绍")  # 等级介绍
     zwgkNc, zwgkTags = affairs_public_tags()  # 激活右侧政务公开导航栏
     return render_template("registration/advice.html", form=form, gzdt_tags=gzdt_tags, ksgs_tags=ksgs_tags, djjs_tags=djjs_tags,
