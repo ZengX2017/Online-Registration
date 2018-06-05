@@ -21,8 +21,8 @@ app.config.update(dict(
     MAIL_SERVER='smtp.mxhichina.com',
     MAIL_PORT=465,
     MAIL_USE_SSL=True,
-    MAIL_USERNAME='adward@adwardz.top',
-    MAIL_PASSWORD='ZX18244757056!ce',
+    MAIL_USERNAME='adward@adwardz.top', # 邮箱账号
+    MAIL_PASSWORD='******', # 邮箱密码
     # MAIL_DEFAULT_SENDER='From: <adward@adwardz.top>'
 ))
 
